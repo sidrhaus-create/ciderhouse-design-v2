@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Components preview",
   description:
     "Accessible typed UI component previews for the Cider House foundation.",
+  robots: { index: false, follow: false },
 };
 
 const accordionItems = [

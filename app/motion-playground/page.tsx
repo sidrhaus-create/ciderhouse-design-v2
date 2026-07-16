@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Motion playground",
   description:
     "Native-scroll and reduced-motion prototypes for the Cider House foundation.",
+  robots: { index: false, follow: false },
 };
 
 export default function MotionPlaygroundPage() {

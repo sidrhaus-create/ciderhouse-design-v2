@@ -1,8 +1,8 @@
-const fallbackUrl = "http://localhost:3000";
+const productionUrl = "https://ciderhouse.ru";
 
 export const siteConfig = {
   name: "Cider House",
   description:
-    "Foundation preview for the Cider House multi-page digital brand platform.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? fallbackUrl,
+    "Сидры и медовухи естественного брожения с яркими вкусами и собственным производством в России.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? productionUrl,
 } as const;

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Design system",
   description:
     "Cider House foundation tokens for color, typography, spacing, layout, and motion.",
+  robots: { index: false, follow: false },
 };
 
 const colors = [

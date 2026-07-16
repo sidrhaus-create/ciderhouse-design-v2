@@ -1,6 +1,6 @@
-# Cider House — project foundation
+# Cider House — production-oriented homepage
 
-Production-oriented Next.js foundation for the Cider House digital rebrand. This stage intentionally does **not** implement the final homepage. It provides the responsive application shell, design tokens, typed content contracts, reusable UI primitives, and isolated motion prototypes required before homepage art direction begins.
+Production-oriented Next.js implementation for the Cider House digital rebrand. The `/` route is the real homepage candidate; the design-system, component, and motion routes remain available as non-indexable internal previews.
 
 ## Requirements
 
@@ -33,7 +33,7 @@ On macOS or Linux, replace the `copy` command with:
 cp .env.example .env.local
 ```
 
-No secret is required for the foundation routes. The age gate is disabled by default until legal copy is approved; set `NEXT_PUBLIC_ENABLE_AGE_GATE=true` in `.env.local` to review its full-page state model.
+No secret is required. The age gate is enabled by default, stores confirmation in local storage, and keeps the underage destination configurable through `NEXT_PUBLIC_UNDERAGE_DESTINATION`. Its legal copy still requires final review.
 
 ## Verification commands
 
@@ -58,13 +58,13 @@ To apply repository formatting:
 pnpm format
 ```
 
-## Foundation routes
+## Routes
 
-- `/` — review dashboard, not the final homepage
+- `/` — production-oriented Cider House homepage
 - `/design-system` — colors, typography, spacing, layout, and control states
 - `/components-preview` — cards, approved product-lock preview, forms, tabs, accordion, dialog, drawer, and status states
 - `/motion-playground` — safe reveal, continuous ticker, reduced-motion fallback, and restrained ScrollTrigger proof
-- `/robots.txt` and `/sitemap.xml` — route-level SEO foundation; preview stage remains non-indexable
+- `/robots.txt` and `/sitemap.xml` — homepage indexation with preview routes excluded
 - custom 404 — foundation boundary state
 
 ## Architecture
@@ -74,6 +74,7 @@ app/                  App Router routes, metadata, global tokens/styles
 components/layout/    Responsive header and footer
 components/ui/        Typed reusable UI primitives
 components/motion/    Route-scoped motion prototypes
+components/home/      Homepage-only native-scroll motion controller
 components/previews/  Interactive component demonstrations
 data/                 Editable local sample data, explicitly placeholder
 types/                Product, brand, article, and store contracts
@@ -82,6 +83,8 @@ public/assets/         Approved brand/product/media files only
 ```
 
 Server Components are the default. Client Components are limited to interactive navigation, overlays, tabs, form/status previews, age-gate state, product error handling, and motion demos. Native scrolling is never intercepted.
+
+Homepage copy, sources, approval states, statistics, production stages, FAQ, social URLs, and CTAs live in `data/homepage-content.ts`. Reconciliation decisions are documented in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
 
 ## Asset and content safety
 
@@ -96,6 +99,6 @@ Server Components are the default. Client Components are limited to interactive 
 
 See `public/assets/ASSET-STATUS.md` for the current asset register and `docs/01-ASSET-CHECKLIST.md` for the required production inventory.
 
-## Before production
+## Before launch
 
-Replace every record or UI label marked `placeholder`, `provisional`, `pending`, or `review required`. Obtain legal approval for the age-gate and alcohol-related notices, add official licensed webfonts and SVG marks, complete SKU metadata, and define production SEO/analytics consent settings.
+Resolve every record marked `requires-approval`, obtain legal approval for the age gate and alcohol-related notices, add the missing approved product/video/photo assets and licensed webfonts, complete SKU metadata, and define production analytics consent settings.

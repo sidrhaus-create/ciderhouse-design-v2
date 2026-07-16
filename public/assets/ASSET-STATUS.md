@@ -1,6 +1,8 @@
-# Asset status - brandbook extraction stage
+# Asset status - homepage production candidate
 
 Last reviewed: 2026-07-16. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`.
+
+Homepage usage: the hero, Mister Bee product world, and production story use only the three approved Mister Bee product-lock PNGs. No live-site image was copied into production assets. Double Tree, White Phoenix, and 0% product scenes remain asset-light until approved product files exist.
 
 ## Approved
 
@@ -28,7 +30,6 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | White Phoenix logo | `brand/family-logos/white-phoenix-logo-raster-source.png` | Original PDF image stream extracted without resampling; the PDF contains no vector version. Suitable for reference/preview, but not a substitute for a clean vector master. |
 | Double Tree logo | `brand/family-logos/double-tree-logo-raster-source.png` | Original PDF image stream and transparency mask extracted without resampling; the PDF contains no vector version. |
 | Interface typography | Tokenized Arial/Helvetica fallback | The brandbook names fonts but supplies no licensed files and no master-site typography family. |
-| Foundation favicon | `app/icon.svg` | Foundation-stage identifier, not an extracted brand favicon. |
 | Product/brand/article/store content | `data/preview-content.ts` | Clearly labelled foundation placeholder data. |
 
 ## Missing from the inspected attachment set
@@ -58,9 +59,9 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | --- | --- |
 | White Phoenix and Double Tree raster logo extractions | Use clean approved vector masters if they become available; never auto-trace the PNGs. |
 | Temporary system font stack | Connect complete licensed webfonts through `next/font/local` only after files and rights are verified. |
-| `app/icon.svg` | Replace with an approved favicon/application-icon set derived from an authorized identity source. |
 | `data/products.template.csv` example row | Replace with approved SKU metadata; never publish the example. |
-| `data/preview-content.ts` and `data/legal.placeholder.ts` | Replace placeholder facts and legal language with approved content. |
+| `data/preview-content.ts` | Replace foundation-only preview facts before those records are reused outside preview routes. |
+| `data/legal.placeholder.ts` | Production-candidate age-gate copy is implemented but still requires final legal approval. |
 | Preview-only canonical/SEO configuration | Supply production origin, share images, indexation decisions, and redirects before launch. |
 | Three Mister Bee foundation filenames | Map to approved stable SKU filenames when the product data source is finalized; preserve source pixels. |
 

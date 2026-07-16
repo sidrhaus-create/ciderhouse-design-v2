@@ -9,17 +9,22 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Cider House — Foundation",
-    template: "%s · Cider House Foundation",
+    default: "Cider House — сидр и медовуха",
+    template: "%s · Cider House",
   },
   description: siteConfig.description,
-  applicationName: "Cider House Foundation",
+  applicationName: "Cider House",
+  icons: {
+    icon: "/assets/brand/master-logo/cider-house-logo-badge-white-on-purple.svg",
+    shortcut:
+      "/assets/brand/master-logo/cider-house-logo-badge-white-on-purple.svg",
+  },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
   openGraph: {
-    title: "Cider House — Foundation",
+    title: "Cider House — сидр и медовуха",
     description: siteConfig.description,
     siteName: siteConfig.name,
     type: "website",
@@ -36,7 +41,7 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const ageGateEnabled = process.env.NEXT_PUBLIC_ENABLE_AGE_GATE === "true";
+  const ageGateEnabled = process.env.NEXT_PUBLIC_ENABLE_AGE_GATE !== "false";
 
   return (
     <html lang="ru">
