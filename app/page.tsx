@@ -160,9 +160,8 @@ export default function Homepage() {
                     src={world.logo}
                     width={world.id === "double-tree" ? 190 : 1136}
                   />
-                ) : (
-                  <h3 className="home-world__title">{world.title}</h3>
-                )}
+                ) : null}
+                <h3 className="home-world__title">{world.title}</h3>
                 {"images" in world ? (
                   <div className="home-world__products">
                     {world.images.map((src) => (
@@ -175,6 +174,43 @@ export default function Homepage() {
                         width={182}
                       />
                     ))}
+                  </div>
+                ) : null}
+                {world.id === "double-tree" ? (
+                  <div aria-hidden="true" className="home-world__brand-poster">
+                    <Image
+                      alt=""
+                      height={1000}
+                      src="/assets/brand/symbols/cider-house-colibri-black.svg"
+                      width={585}
+                    />
+                    <span>Европейская классика сидра</span>
+                  </div>
+                ) : null}
+                {world.id === "white-phoenix" ? (
+                  <div aria-hidden="true" className="home-world__brand-poster">
+                    <span>Естественное брожение</span>
+                    <strong>WHITE PHOENIX</strong>
+                  </div>
+                ) : null}
+                {world.id === "zero" ? (
+                  <div className="home-world__zero-identity">
+                    <Image
+                      alt="Логотип White Phoenix"
+                      height={600}
+                      src="/assets/brand/family-logos/white-phoenix-logo-raster-source.png"
+                      width={1136}
+                    />
+                    <strong aria-hidden="true">0%</strong>
+                    <div aria-label="Вкусы безалкогольной линейки">
+                      {homepageContent.zeroFeature.tastes.map(
+                        (taste, index) => (
+                          <span key={taste}>
+                            {String(index + 1).padStart(2, "0")} · {taste}
+                          </span>
+                        ),
+                      )}
+                    </div>
                   </div>
                 ) : null}
               </div>
@@ -220,16 +256,35 @@ export default function Homepage() {
               {homepageContent.zeroFeature.cta.label}
             </ButtonLink>
           </div>
-          <div
-            className="home-zero-feature__tastes"
-            aria-label="Три вкуса коллекции"
-          >
-            {homepageContent.zeroFeature.tastes.map((taste, index) => (
-              <div key={taste}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{taste}</strong>
-              </div>
-            ))}
+          <div className="home-zero-feature__showcase">
+            <div className="home-zero-feature__visual">
+              <Image
+                alt="Логотип White Phoenix"
+                height={600}
+                src="/assets/brand/family-logos/white-phoenix-logo-raster-source.png"
+                width={1136}
+              />
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="home-zero-feature__symbol"
+                height={1000}
+                src="/assets/brand/symbols/cider-house-colibri-white.svg"
+                width={609}
+              />
+              <span aria-hidden="true">0%</span>
+            </div>
+            <div
+              className="home-zero-feature__tastes"
+              aria-label="Три вкуса коллекции"
+            >
+              {homepageContent.zeroFeature.tastes.map((taste, index) => (
+                <div key={taste}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{taste}</strong>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

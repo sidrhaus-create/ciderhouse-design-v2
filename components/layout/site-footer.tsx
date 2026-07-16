@@ -70,8 +70,21 @@ function HomepageFooter() {
         </Link>
         <p className="home-footer__age">18+</p>
       </div>
+      <div className="container container--wide home-footer__primary">
+        <div>
+          <p className="home-footer__eyebrow">Продукция рядом</p>
+          <p className="home-footer__primary-title">
+            Найди Cider House
+            <br />в своём городе
+          </p>
+        </div>
+        <Link className="home-footer__primary-action" href="/where-to-buy">
+          Где купить <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
       <div className="container container--wide home-footer__grid">
         <nav aria-label="Навигация в подвале" className="home-footer__nav">
+          <p className="home-footer__group-title">Разделы</p>
           {navigation.map((item) => (
             <Link href={item.href} key={item.href}>
               {item.label}
@@ -79,11 +92,13 @@ function HomepageFooter() {
           ))}
         </nav>
         <div className="home-footer__contacts">
+          <p className="home-footer__group-title">Контакты</p>
           <a href={contacts.phoneHref}>{contacts.phone}</a>
           <a href={contacts.emailHref}>{contacts.email}</a>
           <a href={contacts.generalEmailHref}>{contacts.generalEmail}</a>
         </div>
         <div className="home-footer__social">
+          <p className="home-footer__group-title">Социальные сети</p>
           {social.links.map((item) => (
             <a
               href={item.href}
