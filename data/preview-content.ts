@@ -35,7 +35,22 @@ export const previewBrands: Brand[] = [
     name: "White Phoenix",
     shortDescription:
       "Placeholder brand summary — approved copy is still required.",
-    accentToken: "--color-accent-white-phoenix-provisional",
+    accentToken: "--color-brand-primary",
+    logo: "/assets/brand/family-logos/white-phoenix-logo-raster-source.png",
+    status: "draft",
+    seo: {
+      title: "Placeholder — replace before production",
+      description: "Placeholder — replace before production",
+    },
+  },
+  {
+    id: "foundation-double-tree-placeholder",
+    slug: "double-tree",
+    name: "Double Tree",
+    shortDescription:
+      "Placeholder brand summary — approved copy is still required.",
+    accentToken: "--color-brand-primary",
+    logo: "/assets/brand/family-logos/double-tree-logo-raster-source.png",
     status: "draft",
     seo: {
       title: "Placeholder — replace before production",

@@ -33,7 +33,7 @@ Create CSS-variable tokens for:
 - z-index layers;
 - motion durations/easing.
 
-Use `#5D2F6A` as the primary confirmed brand color and `#0C0B1A` as the dark foundation. Treat other values as provisional when official assets are missing.
+Use the brandbook-confirmed Pantone 7663 C / `#6B3077` as the master primary, with `#FFFFFF` and `#000000` as official secondary colors. Treat interface support values as functional tokens rather than additional brand colors, and do not invent missing family accents.
 
 3. Application shell
 Implement:

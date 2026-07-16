@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { foundationNavigation } from "@/lib/navigation";
 import { Container } from "@/components/ui/container";
@@ -12,7 +13,13 @@ export function SiteFooter() {
             className="wordmark wordmark--inverse"
             href="/"
           >
-            CIDER<span>HOUSE</span>
+            <Image
+              alt=""
+              className="wordmark__image"
+              height={1000}
+              src="/assets/brand/master-logo/cider-house-logo-horizontal-white.svg"
+              width={3775}
+            />
           </Link>
           <p className="site-footer__statement">
             Системная основа цифровой платформы. Не финальная главная страница.

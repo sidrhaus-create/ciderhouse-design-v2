@@ -88,8 +88,10 @@ Server Components are the default. Client Components are limited to interactive 
 - Only files under `public/assets/products` may be used as product packaging.
 - Product assets must render with `object-fit: contain`; do not crop, recolor, redraw, or overlay packaging.
 - `data/preview-content.ts` is foundation-only placeholder data and must not be published as product truth.
-- The supplied licensed font files and official SVG logos are still missing. The current text wordmark and system font tokens are temporary.
-- The brandbook confirms `#6B3077`, white, and black. The project lock keeps `#5D2F6A` as primary until brand governance resolves the difference.
+- The supplied brandbook's native master-logo and colibri paths are extracted under `public/assets/brand`; the shell uses those SVGs directly.
+- The brandbook establishes `#6B3077` as master primary, with white and black as official secondary colors.
+- White Phoenix and Double Tree are raster-only inside the PDF and are retained as source PNGs without prohibited vector tracing.
+- No licensed font files were supplied. The current system font tokens remain temporary; the brandbook names `Sauna-SmallCaps` for White Phoenix and `Cera PRO Medium` for Double Tree.
 - The two supplied AI-generated fruit-container concepts are excluded from production assets.
 
 See `public/assets/ASSET-STATUS.md` for the current asset register and `docs/01-ASSET-CHECKLIST.md` for the required production inventory.

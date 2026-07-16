@@ -1,64 +1,77 @@
-# Asset status — foundation verification
+# Asset status - brandbook extraction stage
 
-Last reviewed: 2026-07-16. This register follows the four status labels required by `docs/01-ASSET-CHECKLIST.md`.
-
-Status applies only to repository use. “Approved” below means the file was supplied directly for the foundation product-lock preview; it does not supply missing SKU facts, usage rights, or launch approval for other contexts.
+Last reviewed: 2026-07-16. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`.
 
 ## Approved
 
-| Required asset | Repository path or source | Scope and notes |
+| Asset | Repository file | Verification and permitted scope |
 | --- | --- | --- |
-| Mister Bee bottle, front 01 | `products/mister-bee/mister-bee-foundation-01-front.png` | Supplied directly; byte-identical copy; foundation product-lock preview only. |
-| Mister Bee bottle, front 02 | `products/mister-bee/mister-bee-foundation-02-front.png` | Supplied directly; byte-identical copy; foundation product-lock preview only. |
-| Mister Bee bottle, front 03 | `products/mister-bee/mister-bee-foundation-03-front.png` | Supplied directly; byte-identical copy; foundation product-lock preview only. |
-| Brandbook reference | External supplied `БРЕНДБУК.pdf` | Reviewed for master-brand color/logo references. Distribution and production-source status are not confirmed, so it is not copied into public assets. |
+| Original brandbook | `brand/guidelines/cider-house-brandbook-original.pdf` | Byte-identical copy of supplied `БРЕНДБУК.pdf`; SHA-256 `44A7851357708FDF2C4372ABEC791805320B9CF9B9140E1A2421065FE52D5694`. |
+| Master horizontal logo, black | `brand/master-logo/cider-house-logo-horizontal-black.svg` | Direct native-path export from the PDF; approved for light backgrounds. |
+| Master horizontal logo, white | `brand/master-logo/cider-house-logo-horizontal-white.svg` | Direct native-path export from the PDF; approved for dark or official-purple backgrounds. |
+| Master badge, black | `brand/master-logo/cider-house-logo-badge-black.svg` | Direct native-path export from the PDF. |
+| Master badge, white on purple | `brand/master-logo/cider-house-logo-badge-white-on-purple.svg` | Direct native-path export retaining the PDF's official `#6B3077` square. |
+| Colibri, black | `brand/symbols/cider-house-colibri-black.svg` | Direct native-path export from the PDF. |
+| Colibri, white | `brand/symbols/cider-house-colibri-white.svg` | Direct native-path export from the PDF. |
+| Mister Bee Classic bottle | `products/mister-bee/mister-bee-foundation-01-front.png` | Byte-identical copy of supplied product-lock image. |
+| Mister Bee Lemon bottle | `products/mister-bee/mister-bee-foundation-02-front.png` | Byte-identical copy of supplied product-lock image. |
+| Mister Bee Pomegranate Grape bottle | `products/mister-bee/mister-bee-foundation-03-front.png` | Byte-identical copy of supplied product-lock image. |
 
-The three bottle files must remain uncropped, unrecolored, undistorted, and unretouched. Their labels and visible packaging must never be used to infer product claims.
+The extracted SVGs preserve existing PDF vector operators. They were not traced, redrawn, simplified, retyped, or recolored.
+
+All six SVGs parsed successfully, rendered at high density without clipping or non-uniform scaling, and matched the corresponding brandbook artwork in visual comparison. Both foundation preview routes and every extracted asset URL returned HTTP 200 during local verification.
 
 ## Temporary
 
-| Required asset | Current temporary treatment | Replacement requirement |
+| Asset | Repository file or treatment | Reason |
 | --- | --- | --- |
-| Master Cider House logo | Text-only `CIDERHOUSE` wordmark in the application shell | Replace with approved master SVG and monochrome variants. |
-| Colibri/brand symbol | Not rendered | No temporary drawing is permitted; use the approved SVG when supplied. |
-| Preview favicon | `app/icon.svg`, foundation-only “01” mark | Replace with an approved brand favicon/icon set. |
-| Approved fonts | Tokenized Arial/Helvetica system stack | Replace with licensed WOFF2 files and documented weights/styles. Brandbook references Sauna SmallCaps for White Phoenix and Cera PRO Medium for Double Tree; files and licences were not supplied. |
-| Product content mapping | Foundation-only Mister Bee record in `data/preview-content.ts` | Replace with approved SKU IDs, names, facts, asset mappings, and SEO fields. |
+| White Phoenix logo | `brand/family-logos/white-phoenix-logo-raster-source.png` | Original PDF image stream extracted without resampling; the PDF contains no vector version. Suitable for reference/preview, but not a substitute for a clean vector master. |
+| Double Tree logo | `brand/family-logos/double-tree-logo-raster-source.png` | Original PDF image stream and transparency mask extracted without resampling; the PDF contains no vector version. |
+| Interface typography | Tokenized Arial/Helvetica fallback | The brandbook names fonts but supplies no licensed files and no master-site typography family. |
+| Foundation favicon | `app/icon.svg` | Foundation-stage identifier, not an extracted brand favicon. |
+| Product/brand/article/store content | `data/preview-content.ts` | Clearly labelled foundation placeholder data. |
 
-## Missing
+## Missing from the inspected attachment set
 
-| Required asset | Exact missing input |
+“Missing” here means not available as a standalone safely extractable production file in the attachments already supplied. It is not a request to resend the same attachments.
+
+| Required asset | Exact status after inspection |
 | --- | --- |
-| Master Cider House logo | Approved full-color SVG, reversed SVG, black SVG, white SVG, clear-space/minimum-size guidance. |
-| Colibri/brand symbol | Approved standalone SVG plus monochrome/reversed variants. |
-| Double Tree logo | Approved SVG source and usage guidance. |
-| White Phoenix logo | Approved SVG source and usage guidance. |
-| Mister Bee logo | Approved SVG source and usage guidance. |
-| 0% logo | Approved White Phoenix 0%/non-alcoholic collection SVG and naming guidance. |
-| Approved fonts | Licensed WOFF2 files, licence terms, family names, weights, styles, fallback guidance, and preload guidance. |
-| Complete product bottle assets | For every SKU: approved front, 3/4, back, cap/top, separate shadow, high-resolution source, liquid-color reference, label reference, and metadata row. Double Tree, White Phoenix, 0%, cans, and kegs currently have no approved repository assets. |
-| Desktop hero video | Approved 16:9 MP4 and WebM masters, written scroll behaviour, first/final reference frames, and confirmation of no embedded black bars or baked-in UI text. |
-| Desktop hero poster | Approved desktop poster/fallback image matching the intended final frame. |
-| Mobile hero video | Approved 9:16 MP4 and WebM masters with independently art-directed safe areas, written scroll behaviour, and no embedded black bars. |
-| Mobile hero poster | Approved mobile poster/fallback image matching the intended final frame. |
-| Production photos | Approved high-resolution production/facility/process photography with captions, credits, usage rights, focal points, and alt-text guidance. |
-| Partner logos | Approved SVG/PNG logo set, canonical partner names, outbound URLs, usage restrictions, and ordering. |
-| Supporting brand assets | Approved patterns, graffiti, icons, illustration system, family textures, lifestyle imagery, social imagery, and Open Graph images. |
+| Licensed White Phoenix font | `Sauna-SmallCaps` is named in the PDF, but no complete `.woff2`, `.woff`, `.ttf`, or `.otf` file is present. |
+| Licensed Double Tree font | `Cera PRO Medium` is named in the PDF, but no complete font file is present. |
+| Master website typography | No master display/body family, weights, or licensed files are identified in the PDF. |
+| White Phoenix vector logo | Raster source only in the PDF; an SVG cannot be created without prohibited tracing. |
+| Double Tree vector logo | Raster source only in the PDF; an SVG cannot be created without prohibited tracing. |
+| Mister Bee standalone logo | The identity is integrated into bottle-label artwork; no clean standalone master exists in the inspected attachments. |
+| 0% standalone logo | No separate 0% logo object or source file exists in the inspected attachments. |
+| Logo clear-space/minimum-size specification | Not documented in the supplied brandbook artboard. |
+| Master patterns/textures/icons | No standalone pattern, texture, icon set, or illustration construction source exists in the PDF. |
+| Desktop hero video and poster | No video, poster, first/final frame, or scroll specification is present among the inspected attachments. |
+| Mobile hero video and poster | No mobile video/poster source or mobile safe-area specification is present. |
+| Production photography | No production/facility/process photography is present. |
+| Partner logos | No partner-logo files or partner metadata are present. |
+| Complete product asset coverage | Only three Mister Bee front-view bottle PNGs are supplied; no approved 3/4, back, cap/top, shadow, source, or other-family SKU files are present. |
 
 ## Replace-before-production
 
-| Current item | Required action before production |
+| Current item | Required action |
 | --- | --- |
-| Foundation text wordmark and “LOGO PENDING” preview | Replace with approved master and family SVG files; do not redraw them in code. |
-| `app/icon.svg` foundation icon | Replace with approved favicon and application icon assets. |
-| Provisional family accent tokens | Replace only after official product-family palette approval. |
-| System font stack | Replace with licensed, approved webfonts; keep a documented fallback stack. |
-| `mister-bee-foundation-*` filenames and preview mapping | Map approved files to stable SKU-based names after official SKU data is supplied. Preserve the supplied source pixels unless an approved higher-resolution source replaces them. |
-| `data/products.template.csv` example row | Replace with approved product metadata; do not publish the example record. |
-| `data/preview-content.ts` and `data/legal.placeholder.ts` | Replace placeholder product/brand/article/store facts and legal copy with approved content. |
-| Preview-only SEO and canonical configuration | Supply the production origin, share images, indexation decision, and redirect inventory before launch. |
+| White Phoenix and Double Tree raster logo extractions | Use clean approved vector masters if they become available; never auto-trace the PNGs. |
+| Temporary system font stack | Connect complete licensed webfonts through `next/font/local` only after files and rights are verified. |
+| `app/icon.svg` | Replace with an approved favicon/application-icon set derived from an authorized identity source. |
+| `data/products.template.csv` example row | Replace with approved SKU metadata; never publish the example. |
+| `data/preview-content.ts` and `data/legal.placeholder.ts` | Replace placeholder facts and legal language with approved content. |
+| Preview-only canonical/SEO configuration | Supply production origin, share images, indexation decisions, and redirects before launch. |
+| Three Mister Bee foundation filenames | Map to approved stable SKU filenames when the product data source is finalized; preserve source pixels. |
+
+## Official color resolution
+
+- Master primary: Purple, Pantone 7663 C, `#6B3077`, RGB 107/48/119, CMYK 70/93/16/5.
+- Secondary: White `#FFFFFF` and Black `#000000`.
+- The former `#5D2F6A` value does not appear in the supplied brandbook and is not the active master-primary token.
+- No official additional purple shades or product-family accent colors are documented in the supplied PDF.
 
 ## Explicitly excluded
 
-- The two supplied `ChatGPT Image...` fruit-container concepts are AI-generated references and are not approved product packaging or production assets.
-- No packaging may be generated, redrawn, extrapolated, or reconstructed from the brandbook or visible labels.
+- The two supplied `ChatGPT Image...` fruit-vessel images remain visual concept references only. They are not approved packaging, logos, or production photography and are not copied into production asset folders.
+- Mister Bee label illustrations are protected packaging art, not a source for standalone logos, patterns, icons, or claims.

@@ -73,18 +73,20 @@ export default function ComponentsPreviewPage() {
         <Container size="wide">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Cards + product lock</span>
+              <span className="eyebrow">Cards + source integrity</span>
               <Heading as="h2" size="heading-1">
-                Real asset, placeholder facts
+                Approved product + extracted references
               </Heading>
             </div>
             <Text tone="muted">
-              The supplied PNG remains fully visible and unchanged.
+              The bottle remains unchanged. Family logos are untraced raster
+              sources extracted from the brandbook.
             </Text>
           </div>
-          <Grid className="component-card-grid" columns={3}>
+          <Grid className="component-card-grid" columns={4}>
             <ProductCard placeholder product={previewProducts[0]!} />
             <BrandCard brand={previewBrands[0]!} placeholder />
+            <BrandCard brand={previewBrands[1]!} placeholder />
             <EmptyCard message="Empty-state: no approved items match this preview filter." />
           </Grid>
         </Container>

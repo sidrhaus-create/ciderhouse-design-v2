@@ -1,31 +1,24 @@
 :root {
   color-scheme: light;
 
-  /* Confirmed and documented brand foundation */
-  --color-brand-primary: #5d2f6a;
-  --color-brand-purple-2: #6b3077;
-  --color-brand-purple-3: #774282;
-  --color-brand-purple-4: #601d70;
-  --color-ink: #0c0b1a;
-  --color-black: #000000;
-  --color-paper: #f7f2f4;
-  --color-white: #ffffff;
+  /* Official brandbook palette */
+  --color-brand-primary: #6b3077;
+  --color-brand-secondary-white: #ffffff;
+  --color-brand-secondary-black: #000000;
+  --color-ink: var(--color-brand-secondary-black);
+  --color-black: var(--color-brand-secondary-black);
+  --color-paper: var(--color-brand-secondary-white);
+  --color-white: var(--color-brand-secondary-white);
 
   /* Provisional neutral support */
   --color-paper-muted: #eee7eb;
   --color-paper-deep: #ded4da;
   --color-ink-muted: #55505f;
-  --color-line: rgba(12, 11, 26, 0.18);
+  --color-line: rgba(0, 0, 0, 0.18);
   --color-line-inverse: rgba(255, 255, 255, 0.24);
   --color-success: #236b4b;
   --color-error: #9d2837;
   --color-focus: #f4b740;
-
-  /* Placeholder family accents: replace after official approval */
-  --color-accent-double-tree-provisional: #b48a55;
-  --color-accent-white-phoenix-provisional: #9aa9c7;
-  --color-accent-mister-bee-provisional: #d7a92e;
-  --color-accent-zero-provisional: #62a86f;
 
   /* Temporary system stack until licensed brand webfonts are supplied */
   --font-sans: Arial, Helvetica, sans-serif;
@@ -69,8 +62,8 @@
 
   --border-thin: 1px solid var(--color-line);
   --border-strong: 2px solid currentColor;
-  --shadow-card: 0 1.2rem 3.5rem rgba(12, 11, 26, 0.1);
-  --shadow-overlay: 0 2rem 8rem rgba(12, 11, 26, 0.42);
+  --shadow-card: 0 1.2rem 3.5rem rgba(0, 0, 0, 0.1);
+  --shadow-overlay: 0 2rem 8rem rgba(0, 0, 0, 0.42);
 
   --z-base: 0;
   --z-sticky: 20;
@@ -395,7 +388,7 @@ ol {
 }
 
 .button--primary:hover:not(:disabled) {
-  background: var(--color-brand-purple-2);
+  background: var(--color-black);
 }
 
 .button--secondary {
@@ -448,20 +441,17 @@ ol {
 
 .wordmark {
   display: inline-flex;
-  align-items: baseline;
-  font-size: clamp(1rem, 2.3vw, 1.35rem);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
+  align-items: center;
   text-decoration: none;
 }
 
-.wordmark span {
-  font-weight: 400;
+.wordmark__image {
+  width: auto;
+  height: clamp(2rem, 3vw, 2.35rem);
 }
 
-.wordmark--inverse {
-  color: var(--color-white);
+.wordmark--inverse .wordmark__image {
+  height: clamp(2.35rem, 4vw, 3.1rem);
 }
 
 .desktop-nav {
@@ -541,7 +531,7 @@ ol {
 .dialog::backdrop,
 .drawer::backdrop,
 .age-gate::backdrop {
-  background: rgba(12, 11, 26, 0.72);
+  background: rgba(0, 0, 0, 0.72);
 }
 
 .mobile-menu {
@@ -839,18 +829,6 @@ ol {
   background: var(--color-brand-primary);
 }
 
-.swatch--purple-2 {
-  background: var(--color-brand-purple-2);
-}
-
-.swatch--purple-3 {
-  background: var(--color-brand-purple-3);
-}
-
-.swatch--purple-4 {
-  background: var(--color-brand-purple-4);
-}
-
 .swatch--ink {
   background: var(--color-ink);
 }
@@ -867,35 +845,51 @@ ol {
   background: var(--color-black);
 }
 
-.accent-card {
+.brand-asset-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.brand-asset-card {
+  display: grid;
+  grid-template-rows: minmax(14rem, auto) auto;
+  border: var(--border-thin);
+  background: var(--color-white);
+}
+
+.brand-asset-card__stage {
+  display: grid;
   min-height: 14rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  place-items: center;
+  padding: var(--space-lg);
+  border-bottom: var(--border-thin);
+}
+
+.brand-asset-card__stage img {
+  width: min(100%, 22rem);
+  max-height: 12rem;
+  object-fit: contain;
+}
+
+.brand-asset-card__stage--purple {
+  background: var(--color-brand-primary);
+}
+
+.brand-asset-card__stage--ink {
+  background: var(--color-black);
+}
+
+.brand-asset-card__meta {
+  display: grid;
+  gap: var(--space-xs);
   padding: var(--space-md);
-  border: 1px solid rgba(12, 11, 26, 0.2);
-  color: var(--color-ink);
 }
 
-.accent-card > span {
+.brand-asset-card__meta code {
+  overflow-wrap: anywhere;
+  color: var(--color-ink-muted);
   font-size: var(--type-caption);
-  letter-spacing: 0.09em;
-}
-
-.accent--double-tree {
-  background: var(--color-accent-double-tree-provisional);
-}
-
-.accent--white-phoenix {
-  background: var(--color-accent-white-phoenix-provisional);
-}
-
-.accent--mister-bee {
-  background: var(--color-accent-mister-bee-provisional);
-}
-
-.accent--zero {
-  background: var(--color-accent-zero-provisional);
 }
 
 .type-specimen {
@@ -1058,22 +1052,17 @@ ol {
   gap: var(--space-xl);
 }
 
-.brand-card__mark {
+.brand-card__logo {
+  position: relative;
   display: grid;
-  width: clamp(7rem, 22vw, 11rem);
-  aspect-ratio: 1;
+  min-height: 13rem;
   place-items: center;
-  justify-self: end;
-  border: 2px solid var(--color-brand-primary);
-  border-radius: 50%;
-  color: var(--color-brand-primary);
   padding: 1rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  line-height: 1.2;
-  text-align: center;
-  text-transform: uppercase;
+}
+
+.brand-card__logo img {
+  object-fit: contain;
+  padding: 1rem;
 }
 
 .empty-card {
@@ -1571,6 +1560,7 @@ ol {
     padding: var(--space-xl);
   }
 
+  .brand-asset-grid,
   .grid--2,
   .grid--3,
   .grid--4 {
@@ -1582,7 +1572,7 @@ ol {
   }
 
   .swatch-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .section-heading,

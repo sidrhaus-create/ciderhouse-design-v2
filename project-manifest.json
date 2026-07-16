@@ -1,8 +1,8 @@
 {
   "project": "Cider House Digital Rebrand",
   "stage": "foundation",
-  "primaryColor": "#5D2F6A",
-  "darkColor": "#0C0B1A",
+  "primaryColor": "#6B3077",
+  "secondaryColors": ["#FFFFFF", "#000000"],
   "firstPrompt": "prompts/01-foundation.md",
   "nextPromptAfterApproval": "prompts/02-homepage.md",
   "warning": "Do not publish placeholder product data."

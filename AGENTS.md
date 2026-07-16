@@ -11,9 +11,9 @@ Build a premium, modern, multi-page digital brand platform for Cider House. The 
 - Do not use AI-generated packaging in production pages.
 
 ## Brand direction
-- Primary brand color: `#5D2F6A`.
-- Supporting purple tones may include `#6B3077`, `#774282`, and `#601D70`.
-- Dark foundation: `#0C0B1A`.
+- Primary brand color: Pantone 7663 C / `#6B3077`.
+- Official secondary colors: white `#FFFFFF` and black `#000000`.
+- Do not treat the former provisional values `#5D2F6A`, `#774282`, `#601D70`, or `#0C0B1A` as official brandbook colors.
 - Use line-specific accents only when documented in `docs/03-DESIGN-SYSTEM.md`.
 - Visual direction: premium cinematic digital design, editorial typography, expressive motion, modern youth culture, subtle retro/graffiti texture where appropriate.
 - Avoid generic beverage templates, excessive gradients, glassmorphism everywhere, random neon, and stock-looking layouts.

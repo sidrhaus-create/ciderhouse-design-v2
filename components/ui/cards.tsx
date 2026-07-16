@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Brand, Product } from "@/types/content";
 import { ProductAsset } from "./product-asset";
 import { Heading, Text } from "./typography";
@@ -45,9 +46,16 @@ type BrandCardProps = {
 export function BrandCard({ brand, placeholder = false }: BrandCardProps) {
   return (
     <article className="brand-card">
-      <div aria-hidden="true" className="brand-card__mark">
-        LOGO PENDING
-      </div>
+      {brand.logo ? (
+        <div className="brand-card__logo">
+          <Image
+            alt={`${brand.name} logo extracted from the supplied brandbook`}
+            fill
+            sizes="(max-width: 767px) 75vw, 28vw"
+            src={brand.logo}
+          />
+        </div>
+      ) : null}
       <div>
         {placeholder ? (
           <span className="status-chip">Placeholder copy</span>

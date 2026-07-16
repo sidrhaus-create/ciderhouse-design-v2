@@ -33,6 +33,7 @@ pnpm-debug.log*
 /test-results/
 /playwright-report/
 /.qa/
+/tmp/
 
 # operating system and editor files
 .DS_Store

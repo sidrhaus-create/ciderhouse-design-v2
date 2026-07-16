@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Button, ButtonLink, TextLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Grid } from "@/components/ui/grid";
 import { Section } from "@/components/ui/section";
 import { Heading, Text } from "@/components/ui/typography";
 
@@ -13,60 +13,68 @@ export const metadata: Metadata = {
 
 const colors = [
   {
-    name: "Brand primary",
-    value: "#5D2F6A",
-    status: "confirmed",
+    name: "Master primary",
+    value: "#6B3077",
+    status: "Pantone 7663 C · RGB 107 48 119",
     className: "swatch--primary",
   },
   {
-    name: "Brand purple 2",
-    value: "#6B3077",
-    status: "brandbook",
-    className: "swatch--purple-2",
-  },
-  {
-    name: "Brand purple 3",
-    value: "#774282",
-    status: "documented",
-    className: "swatch--purple-3",
-  },
-  {
-    name: "Brand purple 4",
-    value: "#601D70",
-    status: "documented",
-    className: "swatch--purple-4",
-  },
-  {
-    name: "Ink",
-    value: "#0C0B1A",
-    status: "confirmed",
-    className: "swatch--ink",
-  },
-  {
-    name: "Paper",
-    value: "#F7F2F4",
-    status: "documented",
-    className: "swatch--paper",
-  },
-  {
-    name: "White",
+    name: "Secondary white",
     value: "#FFFFFF",
-    status: "brandbook",
+    status: "RGB 255 255 255 · CMYK 0 0 0 0",
     className: "swatch--white",
   },
   {
-    name: "Black",
+    name: "Secondary black",
     value: "#000000",
-    status: "brandbook",
+    status: "RGB 0 0 0 · CMYK 91 79 62 97",
     className: "swatch--black",
   },
 ] as const;
 
-const accents = [
-  { name: "Double Tree", className: "accent--double-tree" },
-  { name: "White Phoenix", className: "accent--white-phoenix" },
-  { name: "Mister Bee", className: "accent--mister-bee" },
-  { name: "0% collection", className: "accent--zero" },
+const brandAssets = [
+  {
+    name: "Horizontal master · black",
+    path: "/assets/brand/master-logo/cider-house-logo-horizontal-black.svg",
+    width: 3094,
+    height: 1000,
+    stage: "",
+  },
+  {
+    name: "Horizontal master · white",
+    path: "/assets/brand/master-logo/cider-house-logo-horizontal-white.svg",
+    width: 3775,
+    height: 1000,
+    stage: "brand-asset-card__stage--purple",
+  },
+  {
+    name: "Master badge · black",
+    path: "/assets/brand/master-logo/cider-house-logo-badge-black.svg",
+    width: 227,
+    height: 227,
+    stage: "",
+  },
+  {
+    name: "Master badge · white on purple",
+    path: "/assets/brand/master-logo/cider-house-logo-badge-white-on-purple.svg",
+    width: 280,
+    height: 280,
+    stage: "",
+  },
+  {
+    name: "Colibri · black",
+    path: "/assets/brand/symbols/cider-house-colibri-black.svg",
+    width: 585,
+    height: 1000,
+    stage: "",
+  },
+  {
+    name: "Colibri · white",
+    path: "/assets/brand/symbols/cider-house-colibri-white.svg",
+    width: 609,
+    height: 1000,
+    stage: "brand-asset-card__stage--ink",
+  },
 ] as const;
 
 const typeSamples = [
@@ -89,8 +97,8 @@ export default function DesignSystemPage() {
             Design system
           </Heading>
           <Text size="body-lg" tone="inverse">
-            Confirmed brand foundations are separated from provisional working
-            tokens, so later asset approval does not require component rewrites.
+            Official identity paths and colors extracted from the supplied
+            brandbook, with unresolved typography kept explicitly temporary.
           </Text>
         </Container>
       </Section>
@@ -101,11 +109,12 @@ export default function DesignSystemPage() {
             <div>
               <span className="eyebrow">Color</span>
               <Heading as="h2" size="heading-1">
-                Core palette
+                Official palette
               </Heading>
             </div>
             <Text tone="muted">
-              Status labels show the source and confidence of each value.
+              These are the only official palette values documented in the
+              supplied brandbook.
             </Text>
           </div>
           <div className="swatch-grid">
@@ -130,26 +139,36 @@ export default function DesignSystemPage() {
         <Container size="wide">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Family worlds</span>
+              <span className="eyebrow">Extracted identity</span>
               <Heading as="h2" size="heading-2">
-                Provisional accent slots
+                Native vector assets
               </Heading>
             </div>
-            <span className="status-chip">Replace after official approval</span>
+            <Text tone="muted">
+              Exported from existing PDF paths without tracing, redrawing,
+              retyping, simplification, or recoloring.
+            </Text>
           </div>
-          <Grid className="accent-grid" columns={4}>
-            {accents.map((accent) => (
-              <article
-                className={`accent-card ${accent.className}`}
-                key={accent.name}
-              >
-                <span>PROVISIONAL</span>
-                <Heading as="h3" size="heading-3">
-                  {accent.name}
-                </Heading>
+          <div className="brand-asset-grid">
+            {brandAssets.map((asset) => (
+              <article className="brand-asset-card" key={asset.path}>
+                <div className={`brand-asset-card__stage ${asset.stage}`}>
+                  <Image
+                    alt={`${asset.name} extracted from the supplied brandbook`}
+                    height={asset.height}
+                    src={asset.path}
+                    width={asset.width}
+                  />
+                </div>
+                <div className="brand-asset-card__meta">
+                  <Heading as="h3" size="heading-3">
+                    {asset.name}
+                  </Heading>
+                  <code>{asset.path}</code>
+                </div>
               </article>
             ))}
-          </Grid>
+          </div>
         </Container>
       </Section>
 
@@ -159,12 +178,43 @@ export default function DesignSystemPage() {
             <div>
               <span className="eyebrow">Typography</span>
               <Heading as="h2" size="heading-1">
-                Fluid hierarchy
+                Documented names + temporary hierarchy
               </Heading>
             </div>
-            <span className="status-chip">Temporary system font</span>
+            <span className="status-chip">Production font files missing</span>
           </div>
           <div className="type-specimen">
+            <div className="type-specimen__row">
+              <code>White Phoenix</code>
+              <div>
+                <Heading as="h3" size="heading-3">
+                  Sauna-SmallCaps
+                </Heading>
+                <Text tone="muted">
+                  Official family font name. No separate weight or licensed font
+                  file is supplied.
+                </Text>
+              </div>
+            </div>
+            <div className="type-specimen__row">
+              <code>Double Tree</code>
+              <div>
+                <Heading as="h3" size="heading-3">
+                  Cera PRO Medium
+                </Heading>
+                <Text tone="muted">
+                  Official family font name and Medium weight. No licensed font
+                  file is supplied.
+                </Text>
+              </div>
+            </div>
+            <div className="type-specimen__row">
+              <code>Website fallback</code>
+              <Text tone="muted">
+                Arial / Helvetica remains a clearly temporary interface stack.
+                The PDF does not identify master website display or body fonts.
+              </Text>
+            </div>
             {typeSamples.map((item) => (
               <div className="type-specimen__row" key={item.token}>
                 <code>{item.token}</code>
@@ -215,9 +265,9 @@ export default function DesignSystemPage() {
             <Button variant="secondary">Secondary action</Button>
             <Button disabled>Disabled action</Button>
             <ButtonLink href="/components-preview" variant="inverse">
-              Linked action ↗
+              Linked action →
             </ButtonLink>
-            <TextLink href="/motion-playground">Text link ↗</TextLink>
+            <TextLink href="/motion-playground">Text link →</TextLink>
           </div>
         </Container>
       </Section>

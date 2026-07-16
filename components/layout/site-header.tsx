@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef } from "react";
@@ -36,7 +37,14 @@ export function SiteHeader() {
           className="wordmark"
           href="/"
         >
-          CIDER<span>HOUSE</span>
+          <Image
+            alt=""
+            className="wordmark__image"
+            height={1000}
+            priority
+            src="/assets/brand/master-logo/cider-house-logo-horizontal-black.svg"
+            width={3094}
+          />
         </Link>
         <nav aria-label="Навигация по foundation" className="desktop-nav">
           {foundationNavigation.map((item) => (
