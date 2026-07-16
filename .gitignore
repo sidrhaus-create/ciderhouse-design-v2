@@ -1,0 +1,44 @@
+# dependencies
+/node_modules
+/.pnpm-store
+
+# framework and build output
+/.next/
+/out/
+/build
+/dist
+/coverage
+/.cache
+/.turbo
+
+# local environment files
+.env*
+!.env.example
+
+# logs and runtime files
+*.log
+*.pid
+*.pid.lock
+*.seed
+*.tmp
+*.temp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.codex-server.stdout.log
+.codex-server.stderr.log
+
+# test and QA artifacts
+/test-results/
+/playwright-report/
+/.qa/
+
+# operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# typescript
+*.tsbuildinfo

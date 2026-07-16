@@ -1,0 +1,10 @@
+.next
+node_modules
+.pnpm-store
+pnpm-lock.yaml
+AGENTS.md
+docs
+prompts
+data/*.csv
+public/assets
+project-manifest.json
