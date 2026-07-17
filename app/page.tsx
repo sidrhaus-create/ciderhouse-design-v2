@@ -56,6 +56,7 @@ export default function Homepage() {
           alt=""
           aria-hidden="true"
           className="home-hero__colibri"
+          data-home-hero-symbol
           height={1000}
           priority
           src="/assets/brand/symbols/cider-house-colibri-white.svg"
@@ -142,31 +143,36 @@ export default function Homepage() {
           <article
             className={`home-world home-world--${world.id}`}
             data-home-reveal
+            data-home-world
             id={`world-${world.id}`}
             key={world.id}
           >
             <div className="container container--wide home-world__layout">
-              <div className="home-world__meta">
+              <div className="home-world__meta" data-home-world-meta>
                 <span>{world.index}</span>
                 <span>{world.label}</span>
               </div>
-              <div className="home-world__identity">
+              <div className="home-world__identity" data-home-world-visual>
                 {"logo" in world ? (
                   <Image
                     alt={`Логотип ${world.title}`}
                     className="home-world__logo"
+                    data-home-world-logo
                     height={world.id === "double-tree" ? 126 : 600}
                     sizes="(max-width: 768px) 70vw, 34vw"
                     src={world.logo}
                     width={world.id === "double-tree" ? 190 : 1136}
                   />
                 ) : null}
-                <h3 className="home-world__title">{world.title}</h3>
+                <h3 className="home-world__title" data-home-world-title>
+                  {world.title}
+                </h3>
                 {"images" in world ? (
                   <div className="home-world__products">
                     {world.images.map((src) => (
                       <Image
                         alt="Одобренная бутылка Mister Bee; упаковка показана без изменений"
+                        data-home-product-lock
                         height={870}
                         key={src}
                         sizes="(max-width: 768px) 28vw, 12vw"
@@ -214,7 +220,7 @@ export default function Homepage() {
                   </div>
                 ) : null}
               </div>
-              <div className="home-world__copy">
+              <div className="home-world__copy" data-home-world-copy>
                 <p>{world.description}</p>
                 <span>{world.detail}</span>
                 <Link className="home-arrow-link" href={world.href}>
@@ -230,6 +236,7 @@ export default function Homepage() {
         aria-labelledby="zero-feature-title"
         className="home-zero-feature"
         data-home-reveal
+        data-home-zero-feature
         id="zero-collection"
       >
         <div aria-hidden="true" className="home-zero-feature__type">
@@ -256,8 +263,8 @@ export default function Homepage() {
               {homepageContent.zeroFeature.cta.label}
             </ButtonLink>
           </div>
-          <div className="home-zero-feature__showcase">
-            <div className="home-zero-feature__visual">
+          <div className="home-zero-feature__showcase" data-home-zero-showcase>
+            <div className="home-zero-feature__visual" data-home-zero-visual>
               <Image
                 alt="Логотип White Phoenix"
                 height={600}
@@ -279,7 +286,7 @@ export default function Homepage() {
               aria-label="Три вкуса коллекции"
             >
               {homepageContent.zeroFeature.tastes.map((taste, index) => (
-                <div key={taste}>
+                <div data-home-zero-taste key={taste}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{taste}</strong>
                 </div>
@@ -292,8 +299,18 @@ export default function Homepage() {
       <section
         aria-labelledby="home-story-title"
         className="home-story"
+        data-home-story
         id="about"
       >
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="home-story__symbol"
+          data-home-story-symbol
+          height={1000}
+          src="/assets/brand/symbols/cider-house-colibri-black.svg"
+          width={585}
+        />
         <div className="container container--wide home-story__layout">
           <div data-home-reveal>
             <p className="home-kicker">{homepageContent.story.eyebrow}</p>
@@ -349,12 +366,28 @@ export default function Homepage() {
               src="/assets/products/mister-bee/mister-bee-foundation-01-front.png"
               width={182}
             />
+            <div
+              aria-label="Прогресс: восемь этапов производства"
+              className="home-production__progress"
+            >
+              <span>01</span>
+              <div aria-hidden="true">
+                <i data-production-progress />
+              </div>
+              <span>
+                {String(homepageContent.production.stages.length).padStart(
+                  2,
+                  "0",
+                )}
+              </span>
+            </div>
           </div>
           <div className="home-production__steps">
             {homepageContent.production.stages.map((stage) => (
               <article
                 className="home-production-step"
                 data-production-step
+                data-stage-index={stage.index}
                 key={stage.index}
               >
                 <span>{stage.index}</span>
@@ -390,6 +423,18 @@ export default function Homepage() {
           </div>
           <div className="home-city-field" aria-label="Города присутствия">
             <div aria-hidden="true" className="home-city-field__lines" />
+            <span aria-hidden="true" className="home-city-field__region">
+              Россия
+            </span>
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="home-city-field__symbol"
+              data-home-city-symbol
+              height={1000}
+              src="/assets/brand/symbols/cider-house-colibri-white.svg"
+              width={609}
+            />
             {homepageContent.whereToBuy.cities.map((city, index) => (
               <span className={`home-city home-city--${index + 1}`} key={city}>
                 {city}
@@ -418,8 +463,12 @@ export default function Homepage() {
           </div>
           <div className="home-partnership__content">
             <ul>
-              {homepageContent.partnership.audiences.map((audience) => (
-                <li key={audience}>{audience}</li>
+              {homepageContent.partnership.audiences.map((audience, index) => (
+                <li data-home-partner-audience key={audience}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{audience}</strong>
+                  <span aria-hidden="true">↗</span>
+                </li>
               ))}
             </ul>
             <p>{homepageContent.partnership.body}</p>
@@ -454,6 +503,8 @@ export default function Homepage() {
         <div className="container container--wide home-social__links">
           {homepageContent.social.links.map((item, index) => (
             <a
+              className={`home-social-card home-social-card--${index + 1}`}
+              data-home-social-card
               href={item.href}
               key={item.href}
               rel="noreferrer"
@@ -492,26 +543,45 @@ export default function Homepage() {
           src="/assets/brand/symbols/cider-house-colibri-white.svg"
           width={609}
         />
-        <div className="container container--wide" data-home-reveal>
-          <p className="home-kicker home-kicker--light">Cider House</p>
-          <h2 className="home-section-title" id="final-cta-title">
-            {homepageContent.finalCta.title}
-          </h2>
-          <div className="home-actions">
-            {homepageContent.finalCta.actions.map((action, index) => (
-              <ButtonLink
-                className={
-                  index === 0
-                    ? "home-button home-button--light"
-                    : "home-button home-button--outline-light"
-                }
-                href={action.href}
-                key={action.href}
-                variant={index === 0 ? "inverse" : "secondary"}
-              >
-                {action.label}
-              </ButtonLink>
-            ))}
+        <div
+          className="container container--wide home-final-cta__layout"
+          data-home-reveal
+        >
+          <div className="home-final-cta__copy">
+            <p className="home-kicker home-kicker--light">Cider House</p>
+            <h2 className="home-section-title" id="final-cta-title">
+              {homepageContent.finalCta.title}
+            </h2>
+            <div className="home-actions">
+              {homepageContent.finalCta.actions.map((action, index) => (
+                <ButtonLink
+                  className={
+                    index === 0
+                      ? "home-button home-button--light"
+                      : "home-button home-button--outline-light"
+                  }
+                  href={action.href}
+                  key={action.href}
+                  variant={index === 0 ? "inverse" : "secondary"}
+                >
+                  {action.label}
+                </ButtonLink>
+              ))}
+            </div>
+          </div>
+          <div
+            aria-label="Одобренная бутылка Mister Bee"
+            className="home-final-cta__product"
+            data-home-final-product
+          >
+            <span aria-hidden="true">CIDER HOUSE · 18+</span>
+            <Image
+              alt="Классическая медовуха Mister Bee; упаковка показана без изменений"
+              height={870}
+              sizes="(max-width: 768px) 45vw, 18vw"
+              src="/assets/products/mister-bee/mister-bee-foundation-01-front.png"
+              width={182}
+            />
           </div>
         </div>
       </section>
