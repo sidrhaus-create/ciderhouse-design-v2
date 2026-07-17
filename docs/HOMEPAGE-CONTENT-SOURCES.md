@@ -1,6 +1,6 @@
 # Homepage content sources
 
-Last reviewed: 2026-07-16.
+Last reviewed: 2026-07-17.
 
 This audit records how the current `ciderhouse.ru` content was reconciled for the new homepage. The live website is treated as a content source, not as a layout, motion, or code source. Final editable copy lives in `data/homepage-content.ts`.
 
@@ -47,7 +47,7 @@ The underage action does not force a hard-coded external redirect. An optional d
 | --- | --- | --- | --- | --- |
 | <https://ciderhouse.ru/> | “Мы создаем НАСТОЯЩИЙ сидр!” and production/natural-raw-material copy | “Мы создаём настоящий сидр” plus the brief-supplied supporting copy | Shortened and rewritten | No |
 
-Only the three repository-approved Mister Bee product-lock PNGs are used. The live-site 0% composite and all legacy Tilda images are excluded from production assets.
+The three repository-approved Mister Bee product-lock PNGs remain the hero source. The official live-site 0% composite is now also stored locally and used only in the two 0% product scenes. No browser screenshots, reconstructed bottles, or unrelated legacy Tilda images are used.
 
 ## 4. Product worlds
 
@@ -67,7 +67,7 @@ The supplied brandbook defines no official product-family accent palette. Produc
 | <https://ciderhouse.ru/> | Live promotional artwork shows `Cherry`, `Green Apple`, and `Pomegranate Raspberry`; page text says three tastes | “Вишня”, “Зелёное яблоко”, “Гранат–малина” | Names localized from current official marketing artwork | Yes - names, brand ownership, and legal classification require confirmation |
 | Implementation brief | “Вкус сидра. Свобода выбора.” and supplied White Phoenix supporting paragraph | Same supplied headline and supporting paragraph | Copied | Yes - final collection copy and family assignment |
 
-No 0% bottle file exists in `public/assets/products`, so no live-site or AI bottle image is used. The section remains product-data driven and ready for approved assets.
+The official live homepage publishes one transparent 1680 × 1645 PNG containing all three exact bottles and its original 0% graphic. That complete source is stored unchanged as `/assets/products/zero/cider-house-zero-collection-official.png`. The source does not expose the bottles as separate files, so they are not split, traced, background-removed, or reconstructed.
 
 ## 6. Brand statement / about
 
@@ -143,14 +143,96 @@ Homepage-approved repository assets used:
 - official Cider House horizontal black and white SVG logos;
 - official colibri SVG;
 - extracted White Phoenix and Double Tree raster logo references, explicitly marked temporary in `ASSET-STATUS.md`;
-- three approved Mister Bee transparent product-lock PNGs.
+- three approved Mister Bee transparent product-lock PNGs;
+- the official live-site 0% three-bottle transparent composition.
 
 Still missing:
 
-- approved Double Tree, White Phoenix, and 0% product PNG/WebP assets;
+- locally ingested original Double Tree and White Phoenix bottle masters;
+- separate original files for the three 0% bottles (the official site publishes only the combined composition);
 - clean vector White Phoenix and Double Tree logo masters;
 - standalone Mister Bee and 0% logos;
 - approved production photography;
 - approved desktop/mobile hero video and posters;
 - licensed master website fonts and family fonts;
 - partner logos and approved social imagery.
+
+## Official product image inventory - 2026-07-17
+
+The following URLs are the `data-original` or direct image URLs exposed by the current official homepage and catalog. They are source records, not permission to redraw or alter packaging. The local environment successfully acquired only the official 0% group source; the catalog originals remain documented but not copied because both available download paths were blocked during this pass.
+
+### White Phoenix catalog bottle cutouts
+
+| Official SKU label | Original image URL | Local status |
+| --- | --- | --- |
+| Дыня-мята | <https://static.tildacdn.com/tild3333-3964-4464-b566-663465326666/8.png> | Source found; not ingested |
+| Кокос-цитрус | <https://static.tildacdn.com/tild3665-3432-4433-a464-366139373436/3.png> | Source found; not ingested |
+| Грейпфрут-маракуйя | <https://static.tildacdn.com/tild3364-3639-4165-b938-316463336636/4.png> | Source found; not ingested |
+| Клубника | <https://static.tildacdn.com/tild3366-6539-4330-a662-366630306662/1.png> | Source found; not ingested |
+| Сицилийский апельсин | <https://static.tildacdn.com/tild3563-6364-4266-b064-303839313330/9.png> | Source found; not ingested |
+| Виноград-мандарин | <https://static.tildacdn.com/tild3338-3065-4132-a166-323039383331/7.png> | Source found; not ingested |
+| Тёмная вишня | <https://static.tildacdn.com/tild3739-6237-4163-b532-306264313038/2.png> | Source found; not ingested |
+| Манго-чили | <https://static.tildacdn.com/tild6362-3063-4361-b632-306439653135/11.png> | Source found; not ingested |
+| Манго-цитрус | <https://static.tildacdn.com/tild6236-6663-4236-b030-633539363965/10.png> | Source found; not ingested |
+| Гранат-малина | <https://static.tildacdn.com/tild3533-3665-4037-b537-393634373930/6.png> | Source found; not ingested |
+| Персик-абрикос | <https://static.tildacdn.com/tild3733-3531-4139-a536-313737353936/white_phoenix_peach.png> | Source found; not ingested |
+| Персик-банан | <https://static.tildacdn.com/tild3034-3333-4666-b533-663362316131/_.png> | Source found; not ingested |
+| Облепиха-лимон | <https://static.tildacdn.com/tild3762-3639-4061-b036-343135626337/white_phoenix.png> | Source found; not ingested |
+| Питахайя-киви | <https://static.tildacdn.com/tild3033-3965-4864-b935-633563376564/__1.png> | Source found; not ingested |
+| Вишня-маракуйя | <https://static.tildacdn.com/tild6230-3561-4638-b666-366134383236/___1.png> | Source found; not ingested |
+
+### Mister Bee catalog bottle cutouts
+
+| Official SKU label | Original image URL | Local status |
+| --- | --- | --- |
+| Тропический банан-вишня | <https://static.tildacdn.com/tild6338-3733-4430-a463-346531303835/__3.png> | Source found; not ingested |
+| Яркая клюква | <https://static.tildacdn.com/tild6139-3063-4961-a463-373063613766/__2.png> | Source found; not ingested |
+| Сочная слива | <https://static.tildacdn.com/tild6631-6231-4764-a461-613733326464/__1.png> | Source found; not ingested |
+| Ароматная фейхоа | <https://static.tildacdn.com/tild3339-3139-4563-b363-656166343834/__4.png> | Source found; not ingested |
+| Классическая медовуха | <https://static.tildacdn.com/tild3564-3234-4534-b132-323463366162/__6.png> | Source found; repository uses the separately supplied approved attachment |
+| Лимонная свежесть | <https://static.tildacdn.com/tild3732-3839-4336-b562-313233336461/__5.png> | Source found; repository uses the separately supplied approved attachment |
+| Терпкий гранат-виноград | <https://static.tildacdn.com/tild6535-6664-4363-b432-333233633038/__7.png> | Source found; repository uses the separately supplied approved attachment |
+
+### Double Tree 0.45 l catalog bottle cutouts
+
+| Official SKU label | Original image URL | Local status |
+| --- | --- | --- |
+| Груша | <https://static.tildacdn.com/tild6163-3533-4130-b636-663732396137/pic_13_-min.png> | Source found; not ingested |
+| Тёмная вишня | <https://static.tildacdn.com/tild3232-3163-4430-b636-643963646239/pic_11_-min.png> | Source found; not ingested |
+| Зелёное яблоко | <https://static.tildacdn.com/tild3062-3266-4234-b637-303136623061/pic_21_-min.png> | Source found; not ingested |
+| Красное яблоко | <https://static.tildacdn.com/tild6662-3633-4362-b965-303766323462/pic_19_-min.png> | Source found; not ingested |
+| Малина | <https://static.tildacdn.com/tild6365-6539-4235-b164-613363373263/pic_15_-min.png> | Source found; not ingested |
+| Лесные ягоды | <https://static.tildacdn.com/tild6536-3636-4430-b030-666266623265/-min.png> | Source found; not ingested |
+| Чёрная смородина | <https://static.tildacdn.com/tild3136-6334-4664-a131-626262623434/pic_23_-min.png> | Source found; not ingested |
+| Арбуз-мята | <https://static.tildacdn.com/tild6331-3439-4633-a262-373137633964/pic_05_-min.png> | Source found; not ingested |
+| Кокос-малина | <https://static.tildacdn.com/tild3438-3763-4639-b063-313866383035/pic_07_-min.png> | Source found; not ingested |
+| Гранат-мята | <https://static.tildacdn.com/tild6138-3233-4565-b866-396162353565/pic_03_-min.png> | Source found; not ingested |
+| Лимон-лайм | <https://static.tildacdn.com/tild3530-3337-4534-b035-313463376132/pic_01_-min.png> | Source found; not ingested |
+| Карибский киви | <https://static.tildacdn.com/tild6334-3562-4736-a666-633834396138/pic_09_-min.png> | Source found; not ingested |
+
+### Double Tree 0.75 l catalog bottle cutouts
+
+| Official SKU label | Original image URL | Local status |
+| --- | --- | --- |
+| Жёлтая груша | <https://static.tildacdn.com/tild3633-3533-4339-a639-313064353236/pic_05_-min.png> | Source found; not ingested |
+| Тёмная вишня | <https://static.tildacdn.com/tild3266-6461-4238-b661-306336316665/pic_09_-min.png> | Source found; not ingested |
+| Зелёное яблоко | <https://static.tildacdn.com/tild6263-3730-4938-b530-393261343639/pic_07_-min.png> | Source found; not ingested |
+| Красное яблоко | <https://static.tildacdn.com/tild6364-3839-4931-b766-393961346430/pic_03_-min.png> | Source found; not ingested |
+| Гранат-малина | <https://static.tildacdn.com/tild6465-3830-4966-a438-646138346133/pic_01_-min.png> | Source found; not ingested |
+
+### Non-alcoholic three-bottle source
+
+| Official source | Original image URL | Local status |
+| --- | --- | --- |
+| Cherry, Green Apple, Pomegranate Raspberry group; the published file includes the original neon `0%` device | <https://static.tildacdn.com/tild6631-3138-4664-b237-316135613837/000.png> | Approved local byte-for-byte copy: `public/assets/products/zero/cider-house-zero-collection-official.png`; 1680 × 1645; SHA-256 `4C7DDB277279ED12724FB7A91BC478921C3828C91F1CF0AF1846AE06ADA6557B` |
+
+The source artwork itself uses `0%` and `NON-ALCOHOLIC` packaging language. No separate official technical specification establishing `0.0%` or `≤0.5%` was found in the inspected pages, so the implementation does not add either unsupported numeric claim.
+
+### Additional official product photography found
+
+| Subject | Original image URL | Local status |
+| --- | --- | --- |
+| White Phoenix product photography | <https://static.tildacdn.com/tild3834-3836-4035-b061-356430396466/IMG_5738.jpg> | Source found; not ingested |
+| White Phoenix Grapefruit-Passionfruit photography | <https://static.tildacdn.com/tild3331-6466-4364-b830-313333656436/IMG_20240814_160748_.jpg> | Source found; not ingested |
+| Double Tree 0.75 l product photography | <https://static.tildacdn.com/tild6334-3934-4639-a335-373566333262/noroot.png> | Source found; not ingested |
+| Mixed White Phoenix and Double Tree photography | <https://static.tildacdn.com/tild3536-3166-4464-b933-313637393931/IMG_20240904_105410_.jpg> | Source found; not ingested |

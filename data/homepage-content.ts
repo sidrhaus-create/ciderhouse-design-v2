@@ -109,6 +109,12 @@ export const homepageContent = {
         "Три ярких вкуса и характер настоящего сидра — без алкоголя.",
       detail: "Вишня · Зелёное яблоко · Гранат–малина",
       href: "/brands/zero",
+      artwork: {
+        src: "/assets/products/zero/cider-house-zero-collection-official.png",
+        alt: "Официальная композиция безалкогольной коллекции: Вишня, Зелёное яблоко и Гранат–малина",
+        width: 1680,
+        height: 1645,
+      },
       status: "requires-approval",
       source: sources.home,
     },
@@ -119,6 +125,12 @@ export const homepageContent = {
     body: "Безалкогольная линейка White Phoenix создана для моментов, когда хочется сохранить вкус и остаться в своём ритме.",
     tastes: ["Вишня", "Зелёное яблоко", "Гранат–малина"],
     cta: { label: "Узнать больше", href: "/brands/zero" },
+    artwork: {
+      src: "/assets/products/zero/cider-house-zero-collection-official.png",
+      alt: "Три официальные бутылки безалкогольной коллекции Cider House: Вишня, Зелёное яблоко и Гранат–малина",
+      width: 1680,
+      height: 1645,
+    },
     status: "requires-approval",
     source: sources.home,
   },
@@ -334,6 +346,20 @@ export const homepageContent = {
     actions: [
       { label: "Смотреть ассортимент", href: "/catalog" },
       { label: "Где купить", href: "/where-to-buy" },
+    ],
+    assets: [
+      {
+        src: "/assets/products/mister-bee/mister-bee-foundation-02-front.png",
+        alt: "Бутылка медовухи Mister Bee Lemon",
+      },
+      {
+        src: "/assets/products/mister-bee/mister-bee-foundation-01-front.png",
+        alt: "Бутылка классической медовухи Mister Bee",
+      },
+      {
+        src: "/assets/products/mister-bee/mister-bee-foundation-03-front.png",
+        alt: "Бутылка медовухи Mister Bee Pomegranate Grape",
+      },
     ],
   },
   contacts: {

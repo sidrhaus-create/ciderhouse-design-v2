@@ -105,6 +105,7 @@ export default function Homepage() {
                   priority={asset.position === "center"}
                   sizes="(max-width: 768px) 38vw, (max-width: 1200px) 25vw, 18vw"
                   src={asset.src}
+                  unoptimized
                   width={182}
                 />
               </div>
@@ -177,6 +178,7 @@ export default function Homepage() {
                         key={src}
                         sizes="(max-width: 768px) 28vw, 12vw"
                         src={src}
+                        unoptimized
                         width={182}
                       />
                     ))}
@@ -202,12 +204,15 @@ export default function Homepage() {
                 {world.id === "zero" ? (
                   <div className="home-world__zero-identity">
                     <Image
-                      alt="Логотип White Phoenix"
-                      height={600}
-                      src="/assets/brand/family-logos/white-phoenix-logo-raster-source.png"
-                      width={1136}
+                      alt={world.artwork.alt}
+                      className="home-world__zero-products"
+                      data-home-zero-products
+                      height={world.artwork.height}
+                      sizes="(max-width: 768px) 88vw, 42vw"
+                      src={world.artwork.src}
+                      unoptimized
+                      width={world.artwork.width}
                     />
-                    <strong aria-hidden="true">0%</strong>
                     <div aria-label="Вкусы безалкогольной линейки">
                       {homepageContent.zeroFeature.tastes.map(
                         (taste, index) => (
@@ -266,10 +271,14 @@ export default function Homepage() {
           <div className="home-zero-feature__showcase" data-home-zero-showcase>
             <div className="home-zero-feature__visual" data-home-zero-visual>
               <Image
-                alt="Логотип White Phoenix"
-                height={600}
-                src="/assets/brand/family-logos/white-phoenix-logo-raster-source.png"
-                width={1136}
+                alt={homepageContent.zeroFeature.artwork.alt}
+                className="home-zero-feature__products"
+                data-home-zero-products
+                height={homepageContent.zeroFeature.artwork.height}
+                sizes="(max-width: 768px) 92vw, 42vw"
+                src={homepageContent.zeroFeature.artwork.src}
+                unoptimized
+                width={homepageContent.zeroFeature.artwork.width}
               />
               <Image
                 alt=""
@@ -279,7 +288,6 @@ export default function Homepage() {
                 src="/assets/brand/symbols/cider-house-colibri-white.svg"
                 width={609}
               />
-              <span aria-hidden="true">0%</span>
             </div>
             <div
               className="home-zero-feature__tastes"
@@ -364,6 +372,7 @@ export default function Homepage() {
               height={870}
               sizes="(max-width: 768px) 42vw, 18vw"
               src="/assets/products/mister-bee/mister-bee-foundation-01-front.png"
+              unoptimized
               width={182}
             />
             <div
@@ -575,13 +584,20 @@ export default function Homepage() {
             data-home-final-product
           >
             <span aria-hidden="true">CIDER HOUSE · 18+</span>
-            <Image
-              alt="Классическая медовуха Mister Bee; упаковка показана без изменений"
-              height={870}
-              sizes="(max-width: 768px) 45vw, 18vw"
-              src="/assets/products/mister-bee/mister-bee-foundation-01-front.png"
-              width={182}
-            />
+            <div className="home-final-cta__products">
+              {homepageContent.finalCta.assets.map((asset) => (
+                <Image
+                  alt={`${asset.alt}; упаковка показана без изменений`}
+                  data-home-final-bottle
+                  height={870}
+                  key={asset.src}
+                  sizes="(max-width: 768px) 24vw, 9vw"
+                  src={asset.src}
+                  unoptimized
+                  width={182}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

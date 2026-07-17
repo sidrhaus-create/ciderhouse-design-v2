@@ -1,8 +1,8 @@
 # Asset status - homepage production candidate
 
-Last reviewed: 2026-07-16. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`.
+Last reviewed: 2026-07-17. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`.
 
-Homepage usage: the hero, Mister Bee product world, and production story use only the three approved Mister Bee product-lock PNGs. No live-site image was copied into production assets. Double Tree, White Phoenix, and 0% product scenes remain asset-light until approved product files exist.
+Homepage usage: the hero, Mister Bee product world, production story, and final CTA use only the three approved Mister Bee product-lock PNGs. The two 0% scenes use one unchanged transparent product composition downloaded from the official Cider House homepage. Double Tree and White Phoenix retain their approved identity-led compositions until standalone product masters can be ingested safely.
 
 ## Approved
 
@@ -18,6 +18,7 @@ Homepage usage: the hero, Mister Bee product world, and production story use onl
 | Mister Bee Classic bottle | `products/mister-bee/mister-bee-foundation-01-front.png` | Byte-identical copy of supplied product-lock image. |
 | Mister Bee Lemon bottle | `products/mister-bee/mister-bee-foundation-02-front.png` | Byte-identical copy of supplied product-lock image. |
 | Mister Bee Pomegranate Grape bottle | `products/mister-bee/mister-bee-foundation-03-front.png` | Byte-identical copy of supplied product-lock image. |
+| Official Cider House 0% three-bottle composition | `products/zero/cider-house-zero-collection-official.png` | Unchanged transparent source from the [official homepage](https://ciderhouse.ru/): 1680×1645 ARGB PNG, SHA-256 `4C7DDB277279ED12724FB7A91BC478921C3828C91F1CF0AF1846AE06ADA6557B`. It contains Cherry, Green Apple, and Pomegranate Raspberry bottles plus the official 0% graphic. Approved only as a complete composition; do not split or reconstruct it. |
 
 The extracted SVGs preserve existing PDF vector operators. They were not traced, redrawn, simplified, retyped, or recolored.
 
@@ -51,7 +52,9 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | Mobile hero video and poster | No mobile video/poster source or mobile safe-area specification is present. |
 | Production photography | No production/facility/process photography is present. |
 | Partner logos | No partner-logo files or partner metadata are present. |
-| Complete product asset coverage | Only three Mister Bee front-view bottle PNGs are supplied; no approved 3/4, back, cap/top, shadow, source, or other-family SKU files are present. |
+| Local Double Tree and White Phoenix product masters | The official catalog exposes transparent front-view sources, documented SKU by SKU in `docs/HOMEPAGE-CONTENT-SOURCES.md`, but the current environment could not safely ingest those originals. No screenshot, derivative, trace, or substitute has been added. |
+| Individual 0% bottle masters | The official homepage exposes the three approved 0% bottles only as one transparent composition. No independent original files were found, so the composition has not been split or reconstructed. |
+| Additional product angles | No approved 3/4, back, cap/top, shadow, or source-editable product files are present for any family. |
 
 ## Replace-before-production
 
@@ -64,6 +67,16 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | `data/legal.placeholder.ts` | Production-candidate age-gate copy is implemented but still requires final legal approval. |
 | Preview-only canonical/SEO configuration | Supply production origin, share images, indexation decisions, and redirects before launch. |
 | Three Mister Bee foundation filenames | Map to approved stable SKU filenames when the product data source is finalized; preserve source pixels. |
+| Official Cider House 0% composition | Confirm final rights/usage approval and the product naming/classification copy before production; preserve the file unchanged. |
+| Remote Double Tree and White Phoenix catalog sources | Ingest the exact official originals listed in `docs/HOMEPAGE-CONTENT-SOURCES.md` when the download environment and usage approval allow it. |
+
+## Official live-site source inventory
+
+- The [official Cider House catalog](https://ciderhouse.ru/katalog) was inspected on 2026-07-17.
+- Exact original source URLs were recorded for 15 White Phoenix bottles, 7 Mister Bee bottles, 12 Double Tree 0.45 L bottles, and 5 Double Tree 0.75 L bottles.
+- Exact source URLs for four official product photographs were also recorded.
+- The complete URL-level inventory and the distinction between locally approved files and remote-only candidates are maintained in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
+- Remote-only candidates are not approved local production assets until their originals are downloaded without transformation and their usage is confirmed.
 
 ## Official color resolution
 

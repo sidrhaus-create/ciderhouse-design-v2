@@ -26,8 +26,10 @@ export function HomeMotion({ children }: { children: ReactNode }) {
             "[data-home-world-copy]",
             "[data-home-story-symbol]",
             "[data-home-zero-showcase]",
+            "[data-home-zero-products]",
             "[data-home-zero-taste]",
             "[data-home-final-product]",
+            "[data-home-final-bottle]",
             "[data-home-city-symbol]",
             "[data-home-social-card]",
             "[data-home-partner-audience]",
@@ -228,6 +230,10 @@ export function HomeMotion({ children }: { children: ReactNode }) {
             "[data-home-zero-feature]",
           );
           if (zeroFeature) {
+            const zeroProducts = zeroFeature.querySelector<HTMLElement>(
+              "[data-home-zero-products]",
+            );
+
             gsap.fromTo(
               "[data-home-zero-showcase]",
               { y: 46 },
@@ -243,6 +249,25 @@ export function HomeMotion({ children }: { children: ReactNode }) {
                 },
               },
             );
+
+            if (zeroProducts) {
+              gsap.fromTo(
+                zeroProducts,
+                { y: 18, scale: 0.985 },
+                {
+                  y: -8,
+                  scale: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: zeroFeature,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 0.34,
+                    invalidateOnRefresh: true,
+                  },
+                },
+              );
+            }
 
             gsap.utils
               .toArray<HTMLElement>("[data-home-zero-taste]")
@@ -410,6 +435,26 @@ export function HomeMotion({ children }: { children: ReactNode }) {
                 },
               },
             );
+
+            gsap.utils
+              .toArray<HTMLElement>("[data-home-final-bottle]")
+              .forEach((bottle, index) => {
+                gsap.fromTo(
+                  bottle,
+                  { yPercent: index === 1 ? 5 : 9 },
+                  {
+                    yPercent: index === 1 ? 0 : -3,
+                    ease: "none",
+                    scrollTrigger: {
+                      trigger: finalProduct,
+                      start: "top bottom",
+                      end: "bottom top",
+                      scrub: 0.32 + index * 0.06,
+                      invalidateOnRefresh: true,
+                    },
+                  },
+                );
+              });
           }
         },
       );
