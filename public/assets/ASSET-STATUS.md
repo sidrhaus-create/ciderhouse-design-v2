@@ -1,8 +1,8 @@
 # Asset status - homepage production candidate
 
-Last reviewed: 2026-07-17. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`.
+Last reviewed: 2026-07-17. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`. This pass ingested the official Double Tree and White Phoenix catalog bottle originals that a prior pass had located but could not download.
 
-Homepage usage: the hero, Mister Bee product world, production story, and final CTA use only the three approved Mister Bee product-lock PNGs. The two 0% scenes use one unchanged transparent product composition downloaded from the official Cider House homepage. Double Tree and White Phoenix retain their approved identity-led compositions until standalone product masters can be ingested safely.
+Homepage usage: the hero, Mister Bee product world, production story, and final CTA use the three approved Mister Bee product-lock PNGs. The two 0% scenes use one unchanged transparent product composition downloaded from the official Cider House homepage. Double Tree and White Phoenix now each show two original official bottle cutouts (in addition to their existing raster family logo) instead of a text-only placeholder poster.
 
 ## Approved
 
@@ -19,8 +19,14 @@ Homepage usage: the hero, Mister Bee product world, production story, and final 
 | Mister Bee Lemon bottle | `products/mister-bee/mister-bee-foundation-02-front.png` | Byte-identical copy of supplied product-lock image. |
 | Mister Bee Pomegranate Grape bottle | `products/mister-bee/mister-bee-foundation-03-front.png` | Byte-identical copy of supplied product-lock image. |
 | Official Cider House 0% three-bottle composition | `products/zero/cider-house-zero-collection-official.png` | Unchanged transparent source from the [official homepage](https://ciderhouse.ru/): 1680×1645 ARGB PNG, SHA-256 `4C7DDB277279ED12724FB7A91BC478921C3828C91F1CF0AF1846AE06ADA6557B`. It contains Cherry, Green Apple, and Pomegranate Raspberry bottles plus the official 0% graphic. Approved only as a complete composition; do not split or reconstruct it. |
+| Double Tree — Груша (0.45 л, homepage) | `products/double-tree/double-tree-045-pear-front.png` | Byte-for-byte copy of the official [catalog](https://ciderhouse.ru/katalog) source; 1680×2100 transparent PNG, SHA-256 `63576A8A52E3E5472AB2F1002EA24FFEFFABD76927939CFC73C14AC2CC4A8A0B`. |
+| Double Tree — Тёмная вишня (0.45 л, homepage) | `products/double-tree/double-tree-045-dark-cherry-front.png` | Byte-for-byte copy of the official [catalog](https://ciderhouse.ru/katalog) source; 1680×2100 transparent PNG, SHA-256 `A242615FF556F98CE4E5063995BA9E35307C853496B86CBF2BA3383CFDDE7202`. |
+| White Phoenix — Вишня-маракуйя (homepage) | `products/white-phoenix/white-phoenix-cherry-passionfruit-front.png` | Byte-for-byte copy of the official [homepage](https://ciderhouse.ru/) source; 1680×2100 transparent PNG, SHA-256 `67A275FB76F33ECD92D65B18709728C4900B0FB6C9A07A9C20AC229FD3435F61`. |
+| White Phoenix — Питахайя-киви (homepage) | `products/white-phoenix/white-phoenix-pitaya-kiwi-front.png` | Byte-for-byte copy of the official [homepage](https://ciderhouse.ru/) source; 1680×2100 transparent PNG, SHA-256 `7AEC4B2D69DB0F15C74CD4786908224AC7A29FC50E89D7596E9BADE38F9FF169`. |
+| 15 additional Double Tree bottle originals (10 more 0.45 l flavors + all 5 of the 0.75 l line) | `products/double-tree/double-tree-{045,075}-*-front.png` | Byte-for-byte official catalog originals, 1680×2100 transparent PNG each. Ingested for future catalog/product-page use; not yet wired into the homepage. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
+| 13 additional White Phoenix bottle originals | `products/white-phoenix/white-phoenix-*-front.png` | Byte-for-byte official catalog/homepage originals, transparent PNG, each 640×800 — that is the actual `data-original` resource the live site itself publishes for these thirteen SKUs, not a locally created thumbnail. Ingested for future catalog/product-page use; not yet wired into the homepage. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
 
-The extracted SVGs preserve existing PDF vector operators. They were not traced, redrawn, simplified, retyped, or recolored.
+The extracted SVGs preserve existing PDF vector operators. They were not traced, redrawn, simplified, retyped, or recolored. All 32 newly ingested Double Tree and White Phoenix files are unmodified downloads: no resize, crop, recolor, background edit, or format conversion was applied.
 
 All six SVGs parsed successfully, rendered at high density without clipping or non-uniform scaling, and matched the corresponding brandbook artwork in visual comparison. Both foundation preview routes and every extracted asset URL returned HTTP 200 during local verification.
 
@@ -52,7 +58,6 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | Mobile hero video and poster | No mobile video/poster source or mobile safe-area specification is present. |
 | Production photography | No production/facility/process photography is present. |
 | Partner logos | No partner-logo files or partner metadata are present. |
-| Local Double Tree and White Phoenix product masters | The official catalog exposes transparent front-view sources, documented SKU by SKU in `docs/HOMEPAGE-CONTENT-SOURCES.md`, but the current environment could not safely ingest those originals. No screenshot, derivative, trace, or substitute has been added. |
 | Individual 0% bottle masters | The official homepage exposes the three approved 0% bottles only as one transparent composition. No independent original files were found, so the composition has not been split or reconstructed. |
 | Additional product angles | No approved 3/4, back, cap/top, shadow, or source-editable product files are present for any family. |
 
@@ -68,15 +73,16 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | Preview-only canonical/SEO configuration | Supply production origin, share images, indexation decisions, and redirects before launch. |
 | Three Mister Bee foundation filenames | Map to approved stable SKU filenames when the product data source is finalized; preserve source pixels. |
 | Official Cider House 0% composition | Confirm final rights/usage approval and the product naming/classification copy before production; preserve the file unchanged. |
-| Remote Double Tree and White Phoenix catalog sources | Ingest the exact official originals listed in `docs/HOMEPAGE-CONTENT-SOURCES.md` when the download environment and usage approval allow it. |
+| Double Tree and White Phoenix bottle originals (32 files ingested this pass) | Confirm final usage/rights approval before production; files themselves require no further action and must remain unmodified. |
 
 ## Official live-site source inventory
 
 - The [official Cider House catalog](https://ciderhouse.ru/katalog) was inspected on 2026-07-17.
 - Exact original source URLs were recorded for 15 White Phoenix bottles, 7 Mister Bee bottles, 12 Double Tree 0.45 L bottles, and 5 Double Tree 0.75 L bottles.
 - Exact source URLs for four official product photographs were also recorded.
-- The complete URL-level inventory and the distinction between locally approved files and remote-only candidates are maintained in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
-- Remote-only candidates are not approved local production assets until their originals are downloaded without transformation and their usage is confirmed.
+- All 15 White Phoenix and all 17 Double Tree (12 × 0.45 L + 5 × 0.75 L) bottle originals were downloaded byte-for-byte on 2026-07-17 and are now local repository files under `public/assets/products/white-phoenix/` and `public/assets/products/double-tree/`. Two per brand are wired into the homepage; the rest are reserved for future catalog/product pages.
+- The complete URL-level inventory (source URL, repository filename, dimensions, local status) is maintained in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
+- The four official product photographs and the seven Mister Bee catalog cutouts remain source-found-but-not-ingested (Mister Bee already uses a separately supplied approved product-lock set instead).
 
 ## Official color resolution
 

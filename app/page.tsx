@@ -169,36 +169,30 @@ export default function Homepage() {
                   {world.title}
                 </h3>
                 {"images" in world ? (
-                  <div className="home-world__products">
-                    {world.images.map((src) => (
-                      <Image
-                        alt="Одобренная бутылка Mister Bee; упаковка показана без изменений"
-                        data-home-product-lock
-                        height={870}
-                        key={src}
-                        sizes="(max-width: 768px) 28vw, 12vw"
-                        src={src}
-                        unoptimized
-                        width={182}
-                      />
-                    ))}
-                  </div>
-                ) : null}
-                {world.id === "double-tree" ? (
-                  <div aria-hidden="true" className="home-world__brand-poster">
-                    <Image
-                      alt=""
-                      height={1000}
-                      src="/assets/brand/symbols/cider-house-colibri-black.svg"
-                      width={585}
-                    />
-                    <span>Европейская классика сидра</span>
-                  </div>
-                ) : null}
-                {world.id === "white-phoenix" ? (
-                  <div aria-hidden="true" className="home-world__brand-poster">
-                    <span>Естественное брожение</span>
-                    <strong>WHITE PHOENIX</strong>
+                  <div
+                    className={`home-world__products home-world__products--${world.id}`}
+                  >
+                    {world.images.map((src, index) => {
+                      const isNarrowBottle = world.id === "mister-bee";
+                      const flavor =
+                        "flavors" in world ? world.flavors[index] : undefined;
+                      return (
+                        <Image
+                          alt={`Бутылка ${world.title}${flavor ? ` ${flavor}` : ""}; упаковка показана без изменений`}
+                          data-home-product-lock
+                          height={isNarrowBottle ? 870 : 420}
+                          key={src}
+                          sizes={
+                            isNarrowBottle
+                              ? "(max-width: 768px) 28vw, 12vw"
+                              : "(max-width: 768px) 42vw, 18vw"
+                          }
+                          src={src}
+                          unoptimized
+                          width={isNarrowBottle ? 182 : 336}
+                        />
+                      );
+                    })}
                   </div>
                 ) : null}
                 {world.id === "zero" ? (
