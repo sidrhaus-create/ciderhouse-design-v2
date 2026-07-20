@@ -1,0 +1,409 @@
+/*
+  Isolated experimental prototype styles.
+  CSS Modules guarantee locally-scoped class names, so nothing here can
+  leak into or collide with production styles in app/globals.css.
+*/
+
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: calc(100svh - 4.5rem);
+  display: flex;
+  align-items: center;
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.layout {
+  width: 100%;
+  max-width: 120rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 5vw, 5rem);
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+/* Editorial column */
+
+.editorial {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--color-brand-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin: 0.25rem 0 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+}
+
+.heading span {
+  display: block;
+}
+
+.body {
+  max-width: 30rem;
+  margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.55;
+  opacity: 0.82;
+}
+
+.note {
+  max-width: 28rem;
+  margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid currentColor;
+  opacity: 0.6;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* Scene / stage */
+
+.scene {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  border-radius: 0.4rem;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+  display: grid;
+  justify-items: center;
+  align-content: space-between;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  min-height: clamp(24rem, 68vw, 34rem);
+  transition:
+    background-color 500ms ease,
+    color 500ms ease;
+}
+
+.sceneWarm {
+  background: var(--color-home-warm);
+  color: var(--color-black);
+}
+
+.sceneDark {
+  background: var(--color-home-dark);
+  color: var(--color-white);
+}
+
+.panels {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.panels span {
+  position: relative;
+  flex: 1 0 auto;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.015);
+  transition:
+    background-color 500ms ease,
+    border-color 500ms ease;
+}
+
+.panels span:nth-child(3n) {
+  transform: scaleY(1.035);
+  transform-origin: bottom;
+}
+
+.panels span:nth-child(3n + 1) {
+  opacity: 0.7;
+}
+
+.sceneDark .panels span {
+  border-right-color: rgba(255, 255, 255, 0.06);
+  background: rgba(107, 48, 119, 0.14);
+}
+
+.sceneDark::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -20% -10% auto;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(107, 48, 119, 0.35),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.sceneWarm .panels span {
+  background: rgba(107, 48, 119, 0.05);
+}
+
+/* Product stage */
+
+.stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+}
+
+.podium {
+  position: absolute;
+  z-index: 0;
+  bottom: 6%;
+  left: 50%;
+  width: 48%;
+  aspect-ratio: 5 / 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  filter: blur(0.9rem);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.2),
+    transparent 72%
+  );
+}
+
+.sceneDark .podium {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(107, 48, 119, 0.5),
+    transparent 72%
+  );
+}
+
+.bottleWrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.tiltLeft {
+  transform: rotate(-2.5deg);
+}
+
+.tiltRight {
+  transform: rotate(2.5deg);
+}
+
+.bottleAnimate {
+  animation: bottleIn 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bottleIn {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bottleFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bottleImg {
+  width: auto;
+  height: clamp(15rem, 58vw, 26rem);
+  max-width: 82%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.3));
+}
+
+/* Metadata */
+
+.metadata {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid currentColor;
+  width: min(100%, 26rem);
+  opacity: 0.92;
+}
+
+.metadata div {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.metadata dt {
+  flex: none;
+  font-weight: 700;
+}
+
+.metadata dt::after {
+  content: ":";
+}
+
+.metadata dd {
+  margin: 0;
+}
+
+/* Switcher */
+
+.switcher {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.switcherArrow {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.switcherArrow:hover {
+  background: currentColor;
+}
+
+.switcherArrow:hover span {
+  color: var(--color-brand-primary);
+}
+
+.sceneWarm .switcherArrow:hover span {
+  color: var(--color-home-warm);
+}
+
+.sceneDark .switcherArrow:hover span {
+  color: var(--color-home-dark);
+}
+
+.switcherTabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.switcherTab {
+  position: relative;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  opacity: 0.65;
+  cursor: pointer;
+  transition:
+    opacity 200ms ease,
+    background-color 200ms ease;
+}
+
+.switcherTabIndex {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.switcherTabActive {
+  opacity: 1;
+  background: rgba(107, 48, 119, 0.12);
+}
+
+.switcherTabDot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+}
+
+.switcherTab:focus-visible,
+.switcherArrow:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .panels span {
+    transition-duration: 0.01ms;
+  }
+
+  .bottleAnimate {
+    animation: bottleFade 1ms linear both;
+  }
+
+  .tiltLeft,
+  .tiltRight {
+    transform: none;
+  }
+
+  .switcherTab {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Tablet: same single-column stack, larger scale via the clamp()s above */
+
+@media (min-width: 64rem) {
+  .layout {
+    grid-template-columns: minmax(18rem, 0.4fr) minmax(24rem, 0.6fr);
+    align-items: center;
+  }
+
+  .scene {
+    min-height: clamp(28rem, 46vw, 40rem);
+    padding: clamp(2rem, 3vw, 3.5rem);
+  }
+
+  .bottleImg {
+    height: clamp(24rem, 34vw, 34rem);
+    max-width: 70%;
+  }
+
+  .stage {
+    gap: 1.75rem;
+  }
+}
+
+@media (min-width: 90rem) {
+  .heading {
+    font-size: clamp(3.4rem, 4.6vw, 4.6rem);
+  }
+}

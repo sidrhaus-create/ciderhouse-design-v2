@@ -4,18 +4,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { productFamilies } from "@/data/catalog-content";
 import { homepageContent } from "@/data/homepage-content";
-import { foundationNavigation } from "@/lib/navigation";
+import { foundationNavigation, isPreviewRoute } from "@/lib/navigation";
+
+const brandLinks = productFamilies.map((family) => ({
+  href: `/brands/${family.slug}`,
+  label: family.navLabel,
+}));
 
 export function SiteHeader() {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
+  const isPreview = isPreviewRoute(pathname);
   const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef<HTMLDialogElement>(null);
   const menuTitleId = useId();
-  const navigation = isHomepage
-    ? homepageContent.navigation
-    : foundationNavigation;
+  const navigation = isPreview
+    ? foundationNavigation
+    : homepageContent.navigation;
 
   useEffect(() => {
     if (!isHomepage) return;
@@ -40,6 +47,11 @@ export function SiteHeader() {
     const menu = menuRef.current;
     if (menu?.open) menu.close();
     document.documentElement.classList.remove("is-overlay-open");
+    document
+      .querySelectorAll<HTMLDetailsElement>("details[data-brands-menu]")
+      .forEach((details) => {
+        details.open = false;
+      });
   }, [pathname]);
 
   useEffect(
@@ -102,22 +114,50 @@ export function SiteHeader() {
         </Link>
         <nav
           aria-label={
-            isHomepage ? "Основная навигация" : "Навигация по foundation"
+            isPreview ? "Навигация по foundation" : "Основная навигация"
           }
           className="desktop-nav"
         >
-          {navigation.map((item) => (
-            <Link
-              aria-current={
-                !isHomepage && pathname === item.href ? "page" : undefined
-              }
-              className="desktop-nav__link"
-              href={item.href}
-              key={item.href}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navigation.map((item) =>
+            item.href === "/#product-worlds" ? (
+              <details
+                className="desktop-nav__brands"
+                data-brands-menu
+                key={item.href}
+              >
+                <summary className="desktop-nav__link">
+                  {item.label}
+                  <span aria-hidden="true" className="desktop-nav__caret">
+                    ▾
+                  </span>
+                </summary>
+                <div className="desktop-nav__brands-menu">
+                  {brandLinks.map((brand) => (
+                    <Link
+                      aria-current={
+                        pathname === brand.href ? "page" : undefined
+                      }
+                      href={brand.href}
+                      key={brand.href}
+                    >
+                      {brand.label}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <Link
+                aria-current={
+                  !isHomepage && pathname === item.href ? "page" : undefined
+                }
+                className="desktop-nav__link"
+                href={item.href}
+                key={item.href}
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
         {isHomepage ? (
           <Link className="header-cta" href="/where-to-buy">
@@ -157,7 +197,7 @@ export function SiteHeader() {
               width={3775}
             />
             <p className="mobile-menu__eyebrow" id={menuTitleId}>
-              {isHomepage ? "Навигация" : "Foundation navigation"}
+              {isPreview ? "Foundation navigation" : "Навигация"}
             </p>
             <button
               aria-label="Закрыть меню"
@@ -175,25 +215,57 @@ export function SiteHeader() {
                 Главная
               </Link>
             ) : null}
-            {navigation.map((item, index) => (
-              <Link
-                aria-current={
-                  !isHomepage && pathname === item.href ? "page" : undefined
-                }
-                className="mobile-menu__link"
-                href={item.href}
-                key={item.href}
-                onClick={closeMenu}
-              >
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                {item.label}
-              </Link>
-            ))}
+            {navigation.map((item, index) =>
+              item.href === "/#product-worlds" ? (
+                <details
+                  className="mobile-menu__brands"
+                  data-brands-menu
+                  key={item.href}
+                >
+                  <summary className="mobile-menu__link">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span className="mobile-menu__link-label">
+                      {item.label}
+                    </span>
+                    <span aria-hidden="true" className="mobile-menu__caret">
+                      ▾
+                    </span>
+                  </summary>
+                  <div className="mobile-menu__brands-list">
+                    {brandLinks.map((brand) => (
+                      <Link
+                        aria-current={
+                          pathname === brand.href ? "page" : undefined
+                        }
+                        href={brand.href}
+                        key={brand.href}
+                        onClick={closeMenu}
+                      >
+                        {brand.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <Link
+                  aria-current={
+                    !isHomepage && pathname === item.href ? "page" : undefined
+                  }
+                  className="mobile-menu__link"
+                  href={item.href}
+                  key={item.href}
+                  onClick={closeMenu}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
           <p className="mobile-menu__note">
-            {isHomepage
-              ? "Сидр и медовуха · 18+"
-              : "Preview shell · native scroll · keyboard ready"}
+            {isPreview
+              ? "Preview shell · native scroll · keyboard ready"
+              : "Сидр и медовуха · 18+"}
           </p>
         </div>
       </dialog>

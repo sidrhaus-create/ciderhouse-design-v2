@@ -5,13 +5,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
-      { source: "/catalog", destination: "/#product-worlds", permanent: false },
-      { source: "/katalog", destination: "/#product-worlds", permanent: true },
-      {
-        source: "/brands/:slug",
-        destination: "/#world-:slug",
-        permanent: false,
-      },
+      { source: "/katalog", destination: "/catalog", permanent: true },
       {
         source: "/production",
         destination: "/#production-story",

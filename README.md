@@ -61,10 +61,13 @@ pnpm format
 ## Routes
 
 - `/` — production-oriented Cider House homepage
+- `/catalog` — editorial assortment overview with family navigation, representative product tiles, and a formats explainer
+- `/brands/double-tree`, `/brands/dtree-party`, `/brands/white-phoenix`, `/brands/mister-bee`, `/brands/migliore`, `/brands/bumble-coffee`, `/brands/zero` — one shared family-page template (`app/brands/[slug]/page.tsx`) rendering typed data per family. DTREE PARTY, Migliore, and Bumble Coffee are structurally complete but have no sourced content yet (see `docs/CATALOG-CONTENT-SOURCES.md`) — their pages render an honest "not yet confirmed" state rather than invented data.
+- `/catalog-concept` — an isolated, unlisted experimental visual prototype (Double Tree only). Not linked from any production navigation, not in the sitemap, `noindex`. Do not treat as production direction.
 - `/design-system` — colors, typography, spacing, layout, and control states
 - `/components-preview` — cards, approved product-lock preview, forms, tabs, accordion, dialog, drawer, and status states
 - `/motion-playground` — safe reveal, continuous ticker, reduced-motion fallback, and restrained ScrollTrigger proof
-- `/robots.txt` and `/sitemap.xml` — homepage indexation with preview routes excluded
+- `/robots.txt` and `/sitemap.xml` — homepage, catalog, and family-page indexation with preview routes excluded
 - custom 404 — foundation boundary state
 
 ## Architecture
@@ -73,18 +76,19 @@ pnpm format
 app/                  App Router routes, metadata, global tokens/styles
 components/layout/    Responsive header and footer
 components/ui/        Typed reusable UI primitives
+components/catalog/   Catalog/family-page product card, family nav, and shared page template
 components/motion/    Route-scoped motion prototypes
 components/home/      Homepage-only native-scroll motion controller
 components/previews/  Interactive component demonstrations
-data/                 Editable local sample data, explicitly placeholder
-types/                Product, brand, article, and store contracts
+data/                 Editable local content: homepage copy and the typed catalog/family data
+types/                Product, brand, article, store, and catalog/family contracts
 lib/                  Navigation and site configuration
 public/assets/         Approved brand/product/media files only
 ```
 
-Server Components are the default. Client Components are limited to interactive navigation, overlays, tabs, form/status previews, age-gate state, product error handling, and motion demos. Native scrolling is never intercepted.
+Server Components are the default. Client Components are limited to interactive navigation, overlays, tabs, form/status previews, age-gate state, product error handling, catalog family-nav active-state tracking, and motion demos. Native scrolling is never intercepted.
 
-Homepage copy, sources, approval states, statistics, production stages, FAQ, social URLs, and CTAs live in `data/homepage-content.ts`. Reconciliation decisions are documented in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
+Homepage copy, sources, approval states, statistics, production stages, FAQ, social URLs, and CTAs live in `data/homepage-content.ts`. Reconciliation decisions are documented in `docs/HOMEPAGE-CONTENT-SOURCES.md`. Catalog and family-page product data, formats, and per-SKU approval/availability status live in `data/catalog-content.ts` (typed via `types/catalog.ts`); reconciliation decisions are documented in `docs/CATALOG-CONTENT-SOURCES.md`. Routes outside `/` and the three preview routes (`/design-system`, `/components-preview`, `/motion-playground`) render the real production navigation and footer, not the foundation preview shell.
 
 ## Asset and content safety
 

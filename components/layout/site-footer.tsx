@@ -3,14 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { productFamilies } from "@/data/catalog-content";
 import { homepageContent } from "@/data/homepage-content";
-import { foundationNavigation } from "@/lib/navigation";
+import { foundationNavigation, isPreviewRoute } from "@/lib/navigation";
 import { Container } from "@/components/ui/container";
+
+const footerBrandLinks = productFamilies.map((family) => ({
+  href: `/brands/${family.slug}`,
+  label: family.navLabel,
+}));
 
 export function SiteFooter() {
   const pathname = usePathname();
 
-  if (pathname === "/") return <HomepageFooter />;
+  if (!isPreviewRoute(pathname)) return <HomepageFooter />;
 
   return (
     <footer className="site-footer site-footer--foundation">
@@ -83,6 +89,14 @@ function HomepageFooter() {
         </Link>
       </div>
       <div className="container container--wide home-footer__grid">
+        <nav aria-label="Бренды" className="home-footer__brands">
+          <p className="home-footer__group-title">Бренды</p>
+          {footerBrandLinks.map((brand) => (
+            <Link href={brand.href} key={brand.href}>
+              {brand.label}
+            </Link>
+          ))}
+        </nav>
         <nav aria-label="Навигация в подвале" className="home-footer__nav">
           <p className="home-footer__group-title">Разделы</p>
           {navigation.map((item) => (

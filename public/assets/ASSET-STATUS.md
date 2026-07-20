@@ -1,8 +1,12 @@
-# Asset status - homepage production candidate
+# Asset status - production candidate
 
-Last reviewed: 2026-07-17. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`. This pass ingested the official Double Tree and White Phoenix catalog bottle originals that a prior pass had located but could not download.
+Last reviewed: 2026-07-20. All original attachments were re-inspected. The authoritative extraction record is `brand/guidelines/BRANDBOOK-EXTRACTION.md`. This pass wires the previously-ingested Double Tree and White Phoenix catalog originals into the new `/catalog` and `/brands/[slug]` routes; see `docs/CATALOG-CONTENT-SOURCES.md` for the catalog-specific content audit.
 
-Homepage usage: the hero, Mister Bee product world, production story, and final CTA use the three approved Mister Bee product-lock PNGs. The two 0% scenes use one unchanged transparent product composition downloaded from the official Cider House homepage. Double Tree and White Phoenix now each show two original official bottle cutouts (in addition to their existing raster family logo) instead of a text-only placeholder poster.
+Homepage usage: the hero, Mister Bee product world, production story, and final CTA use the three approved Mister Bee product-lock PNGs. The two 0% scenes use one unchanged transparent product composition downloaded from the official Cider House homepage. Double Tree and White Phoenix each show two original official bottle cutouts (in addition to their existing raster family logo) instead of a text-only placeholder poster.
+
+Catalog and family-page usage: `/catalog` shows a restrained 3-bottle hero composition plus up to 4 representative product tiles per family. `/brands/double-tree` and `/brands/white-phoenix` now use all 17 and all 15 official catalog originals respectively as full product listings; `/brands/mister-bee` uses the same 3 approved product-lock bottles plus 4 name-only `asset-missing` entries; `/brands/zero` uses the same unchanged composite as its only visual, with 3 `asset-missing` product entries documenting that individual bottle masters do not exist.
+
+Three additional families — **DTREE PARTY**, **Migliore**, **Bumble Coffee** — were added to the catalog data architecture and navigation this pass. A full source sweep of every URL in `ciderhouse.ru`'s live sitemap (home, `/katalog`, `/ph`, `/production`, `/map`, `/merch`, `/blog`, `/clients`, `/festival`) plus targeted web search found **no official logo, product image, or product fact for any of the three** — see `docs/CATALOG-CONTENT-SOURCES.md` for the full per-family research record. No asset was downloaded, generated, or substituted for these three families; their family pages render an intentional "изображение пока не подтверждено" state instead.
 
 ## Approved
 
@@ -23,8 +27,8 @@ Homepage usage: the hero, Mister Bee product world, production story, and final 
 | Double Tree — Тёмная вишня (0.45 л, homepage) | `products/double-tree/double-tree-045-dark-cherry-front.png` | Byte-for-byte copy of the official [catalog](https://ciderhouse.ru/katalog) source; 1680×2100 transparent PNG, SHA-256 `A242615FF556F98CE4E5063995BA9E35307C853496B86CBF2BA3383CFDDE7202`. |
 | White Phoenix — Вишня-маракуйя (homepage) | `products/white-phoenix/white-phoenix-cherry-passionfruit-front.png` | Byte-for-byte copy of the official [homepage](https://ciderhouse.ru/) source; 1680×2100 transparent PNG, SHA-256 `67A275FB76F33ECD92D65B18709728C4900B0FB6C9A07A9C20AC229FD3435F61`. |
 | White Phoenix — Питахайя-киви (homepage) | `products/white-phoenix/white-phoenix-pitaya-kiwi-front.png` | Byte-for-byte copy of the official [homepage](https://ciderhouse.ru/) source; 1680×2100 transparent PNG, SHA-256 `7AEC4B2D69DB0F15C74CD4786908224AC7A29FC50E89D7596E9BADE38F9FF169`. |
-| 15 additional Double Tree bottle originals (10 more 0.45 l flavors + all 5 of the 0.75 l line) | `products/double-tree/double-tree-{045,075}-*-front.png` | Byte-for-byte official catalog originals, 1680×2100 transparent PNG each. Ingested for future catalog/product-page use; not yet wired into the homepage. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
-| 13 additional White Phoenix bottle originals | `products/white-phoenix/white-phoenix-*-front.png` | Byte-for-byte official catalog/homepage originals, transparent PNG, each 640×800 — that is the actual `data-original` resource the live site itself publishes for these thirteen SKUs, not a locally created thumbnail. Ingested for future catalog/product-page use; not yet wired into the homepage. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
+| 15 additional Double Tree bottle originals (10 more 0.45 l flavors + all 5 of the 0.75 l line) | `products/double-tree/double-tree-{045,075}-*-front.png` | Byte-for-byte official catalog originals, 1680×2100 transparent PNG each. Wired into `/brands/double-tree` as the full product listing. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
+| 13 additional White Phoenix bottle originals | `products/white-phoenix/white-phoenix-*-front.png` | Byte-for-byte official catalog/homepage originals, transparent PNG, each 640×800 — that is the actual `data-original` resource the live site itself publishes for these thirteen SKUs, not a locally created thumbnail. Wired into `/brands/white-phoenix` as part of the full product listing. Full per-file source URLs, filenames, and hashes are in `docs/HOMEPAGE-CONTENT-SOURCES.md`. |
 
 The extracted SVGs preserve existing PDF vector operators. They were not traced, redrawn, simplified, retyped, or recolored. All 32 newly ingested Double Tree and White Phoenix files are unmodified downloads: no resize, crop, recolor, background edit, or format conversion was applied.
 
@@ -60,6 +64,9 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 | Partner logos | No partner-logo files or partner metadata are present. |
 | Individual 0% bottle masters | The official homepage exposes the three approved 0% bottles only as one transparent composition. No independent original files were found, so the composition has not been split or reconstructed. |
 | Additional product angles | No approved 3/4, back, cap/top, shadow, or source-editable product files are present for any family. |
+| DTREE PARTY logo, product images, product names | Not found anywhere in the inspected attachments or on any live official page checked 2026-07-20 (see `docs/CATALOG-CONTENT-SOURCES.md`). |
+| Migliore logo, product images, product names | Same as above — no official source found. |
+| Bumble Coffee logo, product images, product names, container type | Same as above — no official source found; even the container type (bottle/can/other) is unconfirmed. |
 
 ## Replace-before-production
 
@@ -83,6 +90,7 @@ All six SVGs parsed successfully, rendered at high density without clipping or n
 - All 15 White Phoenix and all 17 Double Tree (12 × 0.45 L + 5 × 0.75 L) bottle originals were downloaded byte-for-byte on 2026-07-17 and are now local repository files under `public/assets/products/white-phoenix/` and `public/assets/products/double-tree/`. Two per brand are wired into the homepage; the rest are reserved for future catalog/product pages.
 - The complete URL-level inventory (source URL, repository filename, dimensions, local status) is maintained in `docs/HOMEPAGE-CONTENT-SOURCES.md`.
 - The four official product photographs and the seven Mister Bee catalog cutouts remain source-found-but-not-ingested (Mister Bee already uses a separately supplied approved product-lock set instead).
+- On 2026-07-20, every URL listed in the official site's own `sitemap.xml` (`/`, `/katalog`, `/ph`, `/production`, `/map`, `/merch`, `/blog`, `/clients`, `/festival`, plus `/contact`) was fetched and text-searched for "DTREE PARTY", "Migliore", and "Bumble Coffee" (including Cyrillic transliterations). None of the three names, or any product/logo/image associated with them, appear anywhere on the official site.
 
 ## Official color resolution
 

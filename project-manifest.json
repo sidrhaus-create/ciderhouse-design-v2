@@ -1,10 +1,30 @@
 {
   "project": "Cider House Digital Rebrand",
-  "stage": "homepage-production-candidate",
+  "stage": "multi-page-catalog-foundation",
   "primaryColor": "#6B3077",
   "secondaryColors": ["#FFFFFF", "#000000"],
   "firstPrompt": "prompts/01-foundation.md",
   "homepagePrompt": "prompts/02-homepage.md",
   "contentAudit": "docs/HOMEPAGE-CONTENT-SOURCES.md",
-  "warning": "Do not publish content marked requires-approval."
+  "catalogContentAudit": "docs/CATALOG-CONTENT-SOURCES.md",
+  "routes": [
+    "/",
+    "/catalog",
+    "/brands/double-tree",
+    "/brands/dtree-party",
+    "/brands/white-phoenix",
+    "/brands/mister-bee",
+    "/brands/migliore",
+    "/brands/bumble-coffee",
+    "/brands/zero"
+  ],
+  "previewRoutes": [
+    "/design-system",
+    "/components-preview",
+    "/motion-playground"
+  ],
+  "experimentalRoutes": [
+    "/catalog-concept"
+  ],
+  "warning": "Do not publish content marked requires-approval. DTREE PARTY, Migliore, and Bumble Coffee have no sourced content yet — see docs/CATALOG-CONTENT-SOURCES.md."
 }

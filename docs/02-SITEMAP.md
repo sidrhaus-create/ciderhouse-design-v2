@@ -1,5 +1,7 @@
 # Proposed Sitemap
 
+> **Implementation status (2026-07-20):** `/catalog` and seven `/brands/[slug]` routes are implemented — `double-tree`, `dtree-party`, `white-phoenix`, `mister-bee`, `migliore`, `bumble-coffee`, `zero` — see `data/catalog-content.ts`, `docs/CATALOG-CONTENT-SOURCES.md`, and `README.md`. DTREE PARTY, Migliore, and Bumble Coffee are structurally live but have no sourced content yet. An isolated, unlisted experimental prototype also exists at `/catalog-concept` (Double Tree only, not linked from navigation, not in the sitemap). The `/catalog/*` sub-category paths, `/product/[slug]`, and every other route below remain proposed/not implemented.
+
 ## Core routes
 
 ```text
