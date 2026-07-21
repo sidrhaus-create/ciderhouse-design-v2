@@ -144,3 +144,5 @@ These are project interface rules. The supplied brandbook does not define an off
 ## Brand-family differentiation
 
 Official family accent colors, textures, and motion characters are not defined in the supplied brandbook. Family differentiation must wait for an approved source and must never redefine core usability patterns.
+
+**Implementation note (2026-07-21):** `/catalog`'s family chapters (`components/catalog/family-chapter.tsx`) do vary background tone per family via a decorative `theme` token (`warm`/`purple`/`dark`/`muted` in `types/catalog.ts`) built entirely from already-official/established tokens (`--color-home-warm`, `--color-brand-primary`, `--color-home-dark`/`--color-black`, `--color-paper-muted`) — no new hex values. Two small additional decorative-only accents exist (a muted amber tone on Double Tree, a honey tone on Mister Bee) and are explicitly documented as non-brand decoration in `docs/CATALOG-CONTENT-SOURCES.md`, not as new official brandbook colors.

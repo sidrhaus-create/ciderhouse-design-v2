@@ -24,9 +24,22 @@ export function HeroParallax({
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      return;
+
+    // Pause the continuous focal-product float whenever the hero scrolls
+    // out of view, regardless of reduced-motion/pointer capability.
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        element.dataset.inView = entry?.isIntersecting ? "true" : "false";
+      },
+      { threshold: 0.1 },
+    );
+    visibilityObserver.observe(element);
+
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return () => visibilityObserver.disconnect();
     }
 
     function handleMove(event: PointerEvent) {
@@ -45,6 +58,7 @@ export function HeroParallax({
     element.addEventListener("pointermove", handleMove);
     element.addEventListener("pointerleave", handleLeave);
     return () => {
+      visibilityObserver.disconnect();
       element.removeEventListener("pointermove", handleMove);
       element.removeEventListener("pointerleave", handleLeave);
     };

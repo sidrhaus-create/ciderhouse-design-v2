@@ -47,3 +47,7 @@ Mobile is an independently art-directed experience.
 - Fast flick scroll
 - Back/forward navigation
 - Menu opened during orientation change
+
+## Catalog mobile simplifications (2026-07-21)
+
+Below 48rem: reveal travel distance and duration shrink, hero product entrance and shimmer sweeps slow further, and the hero's `min-height` is capped at `min(88svh, 46rem)` instead of the desktop `clamp(44rem, 84svh, 58rem)` so the first section never dominates a small viewport. Pointer parallax and card hover-lift are excluded from touch by their `(hover: hover) and (pointer: fine)` media guard rather than a separate mobile check, so there is nothing to "turn off" on touch — it never activates. The hero's three-bottle composition (one focal + two secondary, enlarged again in the fourth pass) was re-checked by hand at 320px after the size increase and still fits within the available column with margin to spare; no bottle is dropped or hidden at any of the required widths. `.chapter__rail` and `.chapter__collection` (Double Tree's below-spotlight modules) are always one column below 48rem — never two narrow cards side by side — becoming two columns only from 48rem up.

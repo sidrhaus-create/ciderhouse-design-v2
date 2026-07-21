@@ -61,7 +61,7 @@ pnpm format
 ## Routes
 
 - `/` — production-oriented Cider House homepage
-- `/catalog` — editorial assortment overview with family navigation, representative product tiles, and a formats explainer
+- `/catalog` — immersive, product-led editorial catalog: a large-scale hero, sticky family navigation, seven family "chapters" built from a shared 4-variant layout system (`components/catalog/family-chapter.tsx`, `product-spotlight.tsx`), a formats explainer, and a final CTA. See "Catalog layout system" below and `docs/CATALOG-CONTENT-SOURCES.md` for the full design rationale.
 - `/brands/double-tree`, `/brands/dtree-party`, `/brands/white-phoenix`, `/brands/mister-bee`, `/brands/migliore`, `/brands/bumble-coffee`, `/brands/zero` — one shared family-page template (`app/brands/[slug]/page.tsx`) rendering typed data per family. DTREE PARTY, Migliore, and Bumble Coffee are structurally complete but have no sourced content yet (see `docs/CATALOG-CONTENT-SOURCES.md`) — their pages render an honest "not yet confirmed" state rather than invented data.
 - `/catalog-concept` — an isolated, unlisted experimental visual prototype (Double Tree only). Not linked from any production navigation, not in the sitemap, `noindex`. Do not treat as production direction.
 - `/design-system` — colors, typography, spacing, layout, and control states
@@ -89,6 +89,19 @@ public/assets/         Approved brand/product/media files only
 Server Components are the default. Client Components are limited to interactive navigation, overlays, tabs, form/status previews, age-gate state, product error handling, catalog family-nav active-state tracking, and motion demos. Native scrolling is never intercepted.
 
 Homepage copy, sources, approval states, statistics, production stages, FAQ, social URLs, and CTAs live in `data/homepage-content.ts`. Reconciliation decisions are documented in `docs/HOMEPAGE-CONTENT-SOURCES.md`. Catalog and family-page product data, formats, and per-SKU approval/availability status live in `data/catalog-content.ts` (typed via `types/catalog.ts`); reconciliation decisions are documented in `docs/CATALOG-CONTENT-SOURCES.md`. Routes outside `/` and the three preview routes (`/design-system`, `/components-preview`, `/motion-playground`) render the real production navigation and footer, not the foundation preview shell.
+
+## Catalog layout system
+
+`/catalog` is built from a small set of reusable pieces rather than one bespoke page:
+
+- `components/catalog/family-chapter.tsx` — one shared "chapter" component driving all seven family sections. Each family is assigned one of four layout variants (`spotlight-left`, `stage-right`, `dark-centered`, `split-rail`) based on which suits its available assets, not a mechanical index rotation. A family with zero approved product images (DTREE PARTY, Migliore, Bumble Coffee) automatically renders a typography-led "pending" state instead of any layout variant's product stage — never a fake product; each pending family has its own visual character (see `docs/CATALOG-CONTENT-SOURCES.md`), and the copy shown is a plain public "coming soon" phrase, never internal status jargon.
+- `components/catalog/product-spotlight.tsx` — the large focal product display. Shows a compact prev/next + tab switcher only when more than one approved product exists for that slot; a single product (or Zero's combined composite) renders statically with no required interaction. A `mode="duo"` variant (used for Double Tree) presents two products as one simultaneous composition instead of a switcher.
+- `components/catalog/catalog-product-card.tsx` — the secondary "rail"/"collection" card used in `.chapter__rail`/`.chapter__collection` and the full product listing on `/brands/[slug]`; enlarged as the one shared-component change needed for the catalog redesign. Mister Bee's rail bypasses this component entirely (`chapter__rail--bare`) in favor of bare bottle images, per its own art direction.
+- `components/catalog/hero-parallax.tsx` — small desktop-only, reduced-motion-safe pointer parallax wrapper, used on the catalog hero's product cluster; also pauses the hero's continuous float animation via `IntersectionObserver` whenever the hero scrolls out of view.
+
+**Motion convention:** an element that needs both a static positional transform (centering, rotation) and an animated one must never let both target the CSS `transform` property — later animation keyframes silently discard earlier static declarations. The convention here: `transform` is reserved for static positioning; continuous effects use the standalone `translate` property; one-shot entrances use `translate` (or `scale`, on any element whose continuous effect already owns `translate`). See `docs/05-MOTION.md` for the incident that prompted this rule.
+
+Full rationale, breakpoint math, and the visual-motion system (linework, shimmer, reveals) are documented in `docs/CATALOG-CONTENT-SOURCES.md`.
 
 ## Asset and content safety
 

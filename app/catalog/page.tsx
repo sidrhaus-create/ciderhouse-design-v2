@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { SafeReveal } from "@/components/motion/safe-reveal";
 import { CatalogFamilyNav } from "@/components/catalog/catalog-family-nav";
-import { CatalogProductCard } from "@/components/catalog/catalog-product-card";
 import { HeroParallax } from "@/components/catalog/hero-parallax";
+import {
+  FamilyChapter,
+  type ChapterVariant,
+} from "@/components/catalog/family-chapter";
 import { catalogContent, productFamilies } from "@/data/catalog-content";
 import { formatLabels, type ProductFormat } from "@/types/catalog";
 
@@ -22,28 +24,41 @@ export const metadata: Metadata = {
   },
 };
 
-const heroComposition = [
+const heroFocal = {
+  src: "/assets/products/white-phoenix/white-phoenix-cherry-passionfruit-front.png",
+  alt: "Бутылка White Phoenix Вишня-маракуйя; упаковка показана без изменений",
+  width: 1680,
+  height: 2100,
+};
+
+const heroSecondary = [
   {
-    src: "/assets/products/double-tree/double-tree-045-pear-front.png",
-    alt: "Бутылка Double Tree Груша; упаковка показана без изменений",
+    src: "/assets/products/double-tree/double-tree-045-dark-cherry-front.png",
+    alt: "Бутылка Double Tree Тёмная вишня; упаковка показана без изменений",
     width: 1680,
     height: 2100,
+    position: "left" as const,
   },
   {
     src: "/assets/products/mister-bee/mister-bee-foundation-01-front.png",
     alt: "Классическая бутылка медовухи Mister Bee; упаковка показана без изменений",
     width: 182,
     height: 870,
+    position: "right" as const,
   },
-  {
-    src: "/assets/products/white-phoenix/white-phoenix-cherry-passionfruit-front.png",
-    alt: "Бутылка White Phoenix Вишня-маракуйя; упаковка показана без изменений",
-    width: 1680,
-    height: 2100,
-  },
-] as const;
+];
 
 const allFormats: ProductFormat[] = ["bottle", "can", "keg"];
+
+const chapterVariants: Record<string, ChapterVariant> = {
+  "double-tree": "stage-right",
+  "dtree-party": "spotlight-left",
+  "white-phoenix": "dark-centered",
+  "mister-bee": "split-rail",
+  migliore: "stage-right",
+  "bumble-coffee": "spotlight-left",
+  zero: "dark-centered",
+};
 
 export default function CatalogPage() {
   return (
@@ -55,7 +70,7 @@ export default function CatalogPage() {
         />
         <div aria-hidden="true" className="catalog-shimmer" />
         <div className="container container--wide catalog-hero__layout">
-          <div className="catalog-hero__copy catalog-reveal-stagger">
+          <SafeReveal className="catalog-hero__copy catalog-reveal-stagger">
             <p className="family-kicker">{catalogContent.eyebrow}</p>
             <h1 className="catalog-hero__title" id="catalog-hero-title">
               {catalogContent.title}
@@ -77,24 +92,33 @@ export default function CatalogPage() {
                 {catalogContent.secondaryCta.label}
               </ButtonLink>
             </div>
-          </div>
+          </SafeReveal>
           <HeroParallax
             ariaLabel="Продукция Cider House"
-            className="catalog-hero__products catalog-hero__products--enter"
+            className="catalog-hero__stage catalog-hero__stage--enter"
           >
-            {heroComposition.map((asset) => (
+            {heroSecondary.map((asset) => (
               <Image
                 alt={asset.alt}
-                className="catalog-hero__bottle"
+                className={`catalog-hero__secondary catalog-hero__secondary--${asset.position}`}
                 height={asset.height}
                 key={asset.src}
-                priority
-                sizes="(max-width: 768px) 30vw, 16vw"
+                sizes="(max-width: 768px) 24vw, 14vw"
                 src={asset.src}
                 unoptimized
                 width={asset.width}
               />
             ))}
+            <Image
+              alt={heroFocal.alt}
+              className="catalog-hero__focal"
+              height={heroFocal.height}
+              priority
+              sizes="(max-width: 768px) 52vw, 26vw"
+              src={heroFocal.src}
+              unoptimized
+              width={heroFocal.width}
+            />
           </HeroParallax>
         </div>
       </section>
@@ -103,100 +127,19 @@ export default function CatalogPage() {
         items={productFamilies.map((family) => ({
           slug: family.slug,
           label: family.navLabel,
+          theme: family.theme,
         }))}
       />
 
-      {productFamilies.map((family, index) => {
-        const withAsset = family.products
-          .filter((product) => product.asset)
-          .slice(0, 4);
-        const visibleProducts =
-          withAsset.length > 0 ? withAsset : family.products.slice(0, 3);
-
-        const linework =
-          family.slug === "dtree-party"
-            ? "diagonal"
-            : family.slug === "mister-bee"
-              ? "rings"
-              : null;
-
-        return (
-          <section
-            aria-labelledby={`${family.slug}-title`}
-            className={`catalog-family catalog-family--${family.slug}`}
-            id={family.slug}
-            key={family.slug}
-          >
-            {linework ? (
-              <div
-                aria-hidden="true"
-                className={`catalog-linework catalog-linework--${linework}`}
-              />
-            ) : null}
-            {family.theme === "dark" ? (
-              <div aria-hidden="true" className="catalog-shimmer" />
-            ) : null}
-            <SafeReveal className="container container--wide catalog-family__layout catalog-reveal-rule">
-              <div className="catalog-family__identity catalog-reveal-stagger">
-                {family.logo ? (
-                  <Image
-                    alt={family.logo.alt}
-                    className="catalog-family__logo"
-                    height={family.logo.height}
-                    src={family.logo.src}
-                    width={family.logo.width}
-                  />
-                ) : null}
-                <p className="family-kicker">
-                  <span aria-hidden="true" className="catalog-index">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  {family.categoryLabel}
-                </p>
-                <h2
-                  className="catalog-family__title"
-                  id={`${family.slug}-title`}
-                >
-                  {family.title}
-                </h2>
-                <p className="catalog-family__description">
-                  {family.description}
-                </p>
-                <Link
-                  className="catalog-family__link"
-                  href={`/brands/${family.slug}`}
-                >
-                  Смотреть направление {family.navLabel}{" "}
-                  <span aria-hidden="true">↗</span>
-                </Link>
-              </div>
-              <div className="catalog-family__products">
-                {family.missingAssetNote ? (
-                  <p className="family-missing-note" role="note">
-                    {family.missingAssetNote}
-                  </p>
-                ) : null}
-                {visibleProducts.length > 0 ? (
-                  <div className="catalog-grid catalog-grid--compact">
-                    {visibleProducts.map((product) => (
-                      <CatalogProductCard
-                        familyHref={`/brands/${family.slug}`}
-                        key={product.id}
-                        product={product}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="family-empty-note" role="status">
-                    Подтверждённые продукты этой линейки пока не опубликованы
-                    официальным источником.
-                  </p>
-                )}
-              </div>
-            </SafeReveal>
-          </section>
-        );
-      })}
+      {productFamilies.map((family, index) => (
+        <FamilyChapter
+          family={family}
+          index={index}
+          key={family.slug}
+          priority={index === 0}
+          variant={chapterVariants[family.slug] ?? "spotlight-left"}
+        />
+      ))}
 
       <section
         aria-labelledby="catalog-formats-title"
@@ -210,32 +153,39 @@ export default function CatalogPage() {
           <h2 className="family-section-title" id="catalog-formats-title">
             Форматы
           </h2>
-          <div className="catalog-formats__table" role="table">
-            <div
-              className="catalog-formats__row catalog-formats__row--head"
-              role="row"
-            >
-              <span role="columnheader">Направление</span>
-              {allFormats.map((format) => (
-                <span key={format} role="columnheader">
-                  {formatLabels[format]}
-                </span>
-              ))}
-            </div>
-            {productFamilies.map((family) => (
-              <div
-                className="catalog-formats__row"
-                key={family.slug}
-                role="row"
-              >
-                <span role="rowheader">{family.navLabel}</span>
-                {allFormats.map((format) => (
-                  <span key={format} role="cell">
-                    {family.formats.includes(format) ? "✓" : "—"}
+          <div className="format-system">
+            {allFormats.map((format, formatIndex) => {
+              const supportingFamilies = productFamilies.filter((family) =>
+                family.formats.includes(format),
+              );
+              return (
+                <div className="format-system__column" key={format}>
+                  <span aria-hidden="true" className="catalog-index">
+                    {String(formatIndex + 1).padStart(2, "0")}
                   </span>
-                ))}
-              </div>
-            ))}
+                  <h3 className="format-system__name">
+                    {formatLabels[format]}
+                  </h3>
+                  {supportingFamilies.length > 0 ? (
+                    <ul className="format-system__families">
+                      {supportingFamilies.map((family) => (
+                        <li key={family.slug}>
+                          <span
+                            aria-hidden="true"
+                            className="format-system__dot"
+                          />
+                          {family.navLabel}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="format-system__empty">
+                      Пока не подтверждено ни для одного направления.
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <p className="catalog-formats__note">
             Формат отмечен только для направлений, где он подтверждён
@@ -248,30 +198,41 @@ export default function CatalogPage() {
       <section aria-labelledby="catalog-cta-title" className="catalog-cta">
         <div
           aria-hidden="true"
-          className="catalog-linework catalog-linework--grid"
+          className="catalog-linework catalog-linework--diagonal"
         />
         <div aria-hidden="true" className="catalog-shimmer" />
         <SafeReveal className="container container--wide catalog-cta__layout">
-          <h2 className="family-section-title" id="catalog-cta-title">
-            {catalogContent.cta.title}
-          </h2>
-          <p>{catalogContent.cta.body}</p>
-          <div className="family-actions">
-            {catalogContent.cta.actions.map((action, index) => (
-              <ButtonLink
-                className={
-                  index === 0
-                    ? "family-button"
-                    : "family-button family-button--outline"
-                }
-                href={action.href}
-                key={action.href}
-                variant={index === 0 ? "inverse" : "secondary"}
-              >
-                {action.label}
-              </ButtonLink>
-            ))}
+          <div className="catalog-cta__copy catalog-reveal-stagger">
+            <h2 className="family-section-title" id="catalog-cta-title">
+              {catalogContent.cta.title}
+            </h2>
+            <p>{catalogContent.cta.body}</p>
+            <div className="family-actions">
+              {catalogContent.cta.actions.map((action, index) => (
+                <ButtonLink
+                  className={
+                    index === 0
+                      ? "family-button"
+                      : "family-button family-button--outline"
+                  }
+                  href={action.href}
+                  key={action.href}
+                  variant={index === 0 ? "inverse" : "secondary"}
+                >
+                  {action.label}
+                </ButtonLink>
+              ))}
+            </div>
           </div>
+          <Image
+            alt="Бутылка Double Tree Груша; упаковка показана без изменений"
+            className="catalog-cta__bottle"
+            height={2100}
+            sizes="(max-width: 768px) 40vw, 18vw"
+            src="/assets/products/double-tree/double-tree-045-pear-front.png"
+            unoptimized
+            width={1680}
+          />
         </SafeReveal>
       </section>
     </div>

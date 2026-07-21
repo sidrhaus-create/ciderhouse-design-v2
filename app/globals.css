@@ -4437,8 +4437,8 @@ ol {
 .catalog-card__asset {
   display: grid;
   place-items: center;
-  height: clamp(11rem, 32vw, 15rem);
-  padding: 1rem;
+  height: clamp(14rem, 38vw, 20rem);
+  padding: 1.25rem;
   background: var(--color-paper-muted);
 }
 
@@ -4537,6 +4537,9 @@ ol {
   position: relative;
   isolation: isolate;
   overflow: clip;
+  display: flex;
+  align-items: center;
+  min-height: min(92svh, 54rem);
   padding-block: clamp(3.5rem, 9vw, 6rem);
   background: var(--color-brand-primary);
   color: var(--color-white);
@@ -4544,6 +4547,7 @@ ol {
 
 .catalog-hero__layout {
   display: grid;
+  width: 100%;
   gap: clamp(2rem, 6vw, 3.5rem);
   align-items: center;
 }
@@ -4565,20 +4569,82 @@ ol {
   line-height: 1.55;
 }
 
-.catalog-hero__products {
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  gap: clamp(0.5rem, 3vw, 1.5rem);
-  height: clamp(14rem, 40vw, 20rem);
+.catalog-hero__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(22rem, 66vw, 38rem);
+  transition: transform 300ms ease;
 }
 
-.catalog-hero__bottle {
+.catalog-hero__focal,
+.catalog-hero__secondary {
+  position: absolute;
+  bottom: 0;
   width: auto;
-  height: 100%;
-  max-width: 30%;
   object-fit: contain;
-  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.35));
+}
+
+.catalog-hero__focal {
+  z-index: 3;
+  left: 54%;
+  height: 100%;
+  max-width: 66%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2rem 2.5rem rgba(0, 0, 0, 0.4));
+  /*
+    The entrance uses `scale`, not `transform`, because `transform` already
+    holds the static translateX(-50%) centering and `translate` is already
+    owned by the continuous float below — scale is the one axis left that
+    won't clobber either.
+  */
+  animation:
+    catalog-hero-float 7s ease-in-out infinite,
+    catalog-fade-up-scale 650ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
+}
+
+.catalog-hero__secondary {
+  opacity: 0.85;
+  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.3)) brightness(0.88);
+  animation: catalog-fade-up 650ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
+}
+
+.catalog-hero__secondary--left {
+  z-index: 1;
+  left: 2%;
+  height: 70%;
+  max-width: 44%;
+  transform: rotate(-5deg);
+}
+
+.catalog-hero__secondary--right {
+  z-index: 2;
+  right: 2%;
+  height: 86%;
+  max-width: 46%;
+  transform: rotate(5deg);
+}
+
+.catalog-hero__stage--enter[data-in-view="false"] .catalog-hero__focal {
+  animation-play-state: paused, running;
+}
+
+@keyframes catalog-hero-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -0.6rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-hero__stage--enter {
+    transform: translate(
+      calc(var(--parallax-x, 0) * 1rem),
+      calc(var(--parallax-y, 0) * 0.6rem)
+    );
+  }
 }
 
 /* Family nav */
@@ -4594,8 +4660,26 @@ ol {
   padding: 0.75rem var(--gutter);
   scroll-padding-inline: var(--gutter);
   border-bottom: 1px solid var(--color-line);
-  background: var(--color-paper);
+  background: rgba(243, 237, 228, 0.96);
+  backdrop-filter: blur(6px);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
   scrollbar-width: thin;
+}
+
+.catalog-family-nav[data-theme="dark"] {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(12, 11, 26, 0.9);
+}
+
+.catalog-family-nav[data-theme="dark"] .catalog-family-nav__link {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.catalog-family-nav[data-theme="dark"]
+  .catalog-family-nav__link[aria-current="true"] {
+  color: var(--color-white);
 }
 
 .catalog-family-nav__link {
@@ -4621,14 +4705,32 @@ ol {
 
 /* Catalog family sections */
 
-.catalog-family {
+.chapter {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   border-top: 1px solid var(--color-line);
-  padding-block: clamp(3rem, 8vw, 5rem);
+  padding-block: clamp(4rem, 10vw, 7rem);
 }
 
 .catalog-family--double-tree {
   background: var(--color-home-warm);
   color: var(--color-black);
+}
+
+/* Restrained, decorative-only accent — not an official brand color. */
+.catalog-family--double-tree .catalog-index {
+  color: #b9862c;
+  opacity: 0.9;
+}
+
+.catalog-family--double-tree .chapter__title::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin-top: 0.6rem;
+  background: #b9862c;
 }
 
 .catalog-family--white-phoenix {
@@ -4637,8 +4739,23 @@ ol {
 }
 
 .catalog-family--mister-bee {
-  background: var(--color-brand-primary);
+  background: linear-gradient(
+    165deg,
+    var(--color-brand-primary) 0%,
+    #8a5a97 100%
+  );
   color: var(--color-white);
+}
+
+/* Restrained, decorative-only accent — not an official brand color. */
+.catalog-family--mister-bee .product-spotlight__tab-dot,
+.catalog-family--mister-bee .catalog-index {
+  background: #e8b872;
+}
+
+.catalog-family--mister-bee .catalog-index {
+  background: none;
+  color: #e8b872;
 }
 
 .catalog-family--zero {
@@ -4657,16 +4774,23 @@ ol {
 }
 
 .catalog-family--bumble-coffee {
-  background: var(--color-paper-muted);
-  color: var(--color-black);
+  background: var(--color-home-dark);
+  color: var(--color-white);
 }
 
-.catalog-family__layout {
+.chapter__layout {
   display: grid;
-  gap: clamp(2rem, 5vw, 3rem);
+  gap: clamp(2rem, 6vw, 3.5rem);
+  align-items: center;
 }
 
-.catalog-family__logo {
+.chapter__identity {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+}
+
+.chapter__logo {
   width: auto;
   max-width: 9rem;
   height: auto;
@@ -4675,25 +4799,149 @@ ol {
   margin-bottom: 1rem;
 }
 
-.catalog-family--white-phoenix .catalog-family__logo {
+.catalog-family--white-phoenix .chapter__logo {
   padding: 0.5rem 0.75rem;
   background: var(--color-white);
 }
 
-.catalog-family__title {
+.chapter__title {
   margin-bottom: 0.75rem;
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 1;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
 }
 
-.catalog-family__description {
+.chapter__description {
   max-width: 32rem;
   margin-bottom: 1.25rem;
   font-size: var(--type-body-lg);
   line-height: 1.5;
+  opacity: 0.85;
+}
+
+.chapter__stage {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.chapter__rail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .chapter__rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.chapter__rail--bare {
+  gap: 1.5rem;
+}
+
+.chapter__rail-item {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  padding: 1.25rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.chapter__rail-item img {
+  width: auto;
+  height: clamp(9rem, 24vw, 14rem);
+  object-fit: contain;
+  filter: drop-shadow(0 1.25rem 1.5rem rgba(0, 0, 0, 0.4));
+}
+
+.chapter__rail-item figcaption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.chapter__collection {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding-top: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid currentColor;
+  opacity: 0.96;
+}
+
+@media (min-width: 48rem) {
+  .chapter__collection {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.chapter:has(.chapter__pending) {
+  padding-block: clamp(2.75rem, 7vw, 4.5rem);
+}
+
+.chapter__pending {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+}
+
+.chapter__pending-index {
+  position: absolute;
+  z-index: -1;
+  top: -14%;
+  right: -4%;
+  color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+  opacity: 0.08;
+  font-size: clamp(8rem, 26vw, 18rem);
+  font-weight: 800;
+  line-height: 0.8;
+  pointer-events: none;
+}
+
+/* Pending-family individual character */
+
+.chapter__pending--dtree-party .chapter__title {
+  font-size: clamp(2.6rem, 7.5vw, 4.4rem);
+}
+
+.chapter__pending-word {
+  position: absolute;
+  z-index: -1;
+  bottom: -18%;
+  left: -3%;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  font-size: clamp(4.5rem, 17vw, 11rem);
+  color: rgba(255, 255, 255, 0.09);
+  transform: rotate(-6deg);
+  pointer-events: none;
+}
+
+.chapter__pending--migliore .chapter__title {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  letter-spacing: -0.06em;
+}
+
+.chapter__pending--migliore .chapter__description {
+  border-top: 1px solid currentColor;
+  padding-top: 1rem;
+  opacity: 0.7;
+}
+
+.chapter__pending--bumble-coffee .catalog-index {
+  font-size: 1em;
   opacity: 0.85;
 }
 
@@ -4716,6 +4964,263 @@ ol {
   color: var(--color-ink);
 }
 
+/* Product spotlight */
+
+.product-spotlight {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+}
+
+.product-spotlight__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(19rem, 50vw, 32rem);
+  display: grid;
+  place-items: center;
+}
+
+.product-spotlight__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  translate: 0 0.9rem;
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-visible="true"] .product-spotlight__frame {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.product-spotlight__image {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.75rem 2rem rgba(0, 0, 0, 0.28));
+}
+
+/* Duo spotlight — two products presented as one composition (Double Tree) */
+
+.product-spotlight--duo {
+  width: 100%;
+}
+
+.product-spotlight__stage--duo {
+  position: relative;
+  height: clamp(22rem, 56vw, 36rem);
+}
+
+.product-spotlight__image--primary,
+.product-spotlight__image--secondary {
+  position: absolute;
+  bottom: 0;
+  width: auto;
+  object-fit: contain;
+  opacity: 0;
+  translate: 0 0.9rem;
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    translate 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-spotlight__image--primary {
+  z-index: 2;
+  left: 56%;
+  height: 100%;
+  max-width: 62%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2rem 2.25rem rgba(0, 0, 0, 0.3));
+}
+
+.product-spotlight__image--secondary {
+  z-index: 1;
+  left: 30%;
+  height: 76%;
+  max-width: 42%;
+  transform: translateX(-50%) rotate(-4deg);
+  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.26)) brightness(0.92);
+  transition-delay: 90ms;
+}
+
+[data-visible="true"] .product-spotlight__image--primary {
+  opacity: 1;
+  translate: 0 0;
+}
+
+[data-visible="true"] .product-spotlight__image--secondary {
+  opacity: 0.88;
+  translate: 0 0;
+}
+
+.product-spotlight__meta--duo {
+  max-width: 30rem;
+}
+
+@media (min-width: 64rem) {
+  .product-spotlight__stage--duo {
+    height: clamp(28rem, 42vw, 42rem);
+  }
+}
+
+.product-spotlight__meta {
+  display: grid;
+  gap: 0.4rem;
+  width: min(100%, 26rem);
+  padding-top: 1rem;
+  border-top: 1px solid currentColor;
+  opacity: 0.92;
+  font-size: 0.85rem;
+}
+
+.product-spotlight__meta div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.product-spotlight__meta dt {
+  font-weight: 700;
+}
+
+.product-spotlight__meta dt::after {
+  content: ":";
+}
+
+.product-spotlight__meta dd {
+  margin: 0;
+}
+
+.product-spotlight__switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-spotlight__arrow {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.product-spotlight__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.product-spotlight__tab {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  opacity: 0.6;
+  cursor: pointer;
+  transition:
+    opacity 200ms ease,
+    background-color 200ms ease;
+}
+
+.product-spotlight__tab--active {
+  opacity: 1;
+  background: rgba(107, 48, 119, 0.14);
+}
+
+.product-spotlight__tab-dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+}
+
+.product-spotlight__tab:focus-visible,
+.product-spotlight__arrow:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Chapter layout variants (desktop) */
+
+@media (min-width: 64rem) {
+  .chapter--spotlight-left .chapter__layout {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .chapter--spotlight-left .chapter__stage {
+    order: -1;
+  }
+
+  .chapter--stage-right .chapter__layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .chapter--stage-right .product-spotlight__stage {
+    height: clamp(26rem, 46vw, 40rem);
+  }
+
+  .chapter--dark-centered .chapter__layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    max-width: 58rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .chapter--dark-centered .chapter__identity {
+    justify-items: center;
+  }
+
+  .chapter--dark-centered .product-spotlight__stage {
+    height: clamp(25rem, 36vw, 38rem);
+    padding-block: 0.5rem;
+  }
+
+  .chapter--split-rail .chapter__layout {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  }
+
+  .chapter--split-rail .chapter__stage {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.7fr);
+    align-items: center;
+  }
+
+  .chapter--split-rail .chapter__rail {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter--split-rail .product-spotlight__stage {
+    height: clamp(24rem, 38vw, 34rem);
+  }
+
+  .chapter__layout:has(.chapter__pending) {
+    grid-template-columns: 1fr;
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+}
+
 /* Catalog formats block */
 
 .catalog-formats {
@@ -4723,27 +5228,88 @@ ol {
   background: var(--color-paper);
 }
 
-.catalog-formats__table {
+.format-system {
   display: grid;
-  border-top: 1px solid var(--color-line);
+  gap: 2rem;
+  margin-block: 2rem;
 }
 
-.catalog-formats__row {
+@media (min-width: 48rem) {
+  .format-system {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+}
+
+.format-system__column {
+  position: relative;
+  padding-top: 1.5rem;
+  border-top: 2px solid currentColor;
+}
+
+.format-system__column::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--color-brand-primary);
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-visible="true"] .format-system__column::after {
+  transform: scaleX(1);
+}
+
+.format-system__column:nth-child(2)::after {
+  transition-delay: 90ms;
+}
+
+.format-system__column:nth-child(3)::after {
+  transition-delay: 180ms;
+}
+
+.format-system__name {
+  margin: 0.5rem 0 1.25rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+}
+
+.format-system__families {
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) repeat(3, minmax(3.5rem, 0.6fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.format-system__families li {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding-block: 0.85rem;
-  border-bottom: 1px solid var(--color-line);
-  font-size: var(--type-body-sm);
+  gap: 0.65rem;
+  font-size: 1.02rem;
+  font-weight: 700;
 }
 
-.catalog-formats__row--head {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: var(--type-caption);
+.format-system__dot {
+  flex: none;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+}
+
+.format-system__empty {
+  max-width: 20rem;
+  margin: 0;
   color: var(--color-ink-muted);
+  font-size: var(--type-body-sm);
 }
 
 .catalog-formats__note {
@@ -4761,8 +5327,46 @@ ol {
 
 .catalog-cta__layout {
   display: grid;
-  max-width: 42rem;
-  gap: 1rem;
+  gap: clamp(2rem, 6vw, 3.5rem);
+  align-items: center;
+}
+
+.catalog-cta__copy {
+  max-width: 34rem;
+}
+
+.catalog-cta__copy p {
+  margin-top: 0.75rem;
+  opacity: 0.82;
+}
+
+.catalog-cta__bottle {
+  justify-self: center;
+  width: auto;
+  height: clamp(16rem, 46vw, 25rem);
+  max-width: 74%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.5rem 1.75rem rgba(0, 0, 0, 0.4));
+  opacity: 0;
+  translate: 0 0.9rem;
+  transition:
+    opacity 650ms cubic-bezier(0.16, 1, 0.3, 1) 180ms,
+    translate 650ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
+}
+
+[data-visible="true"] .catalog-cta__bottle {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (min-width: 64rem) {
+  .catalog-cta__layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.6fr);
+  }
+
+  .catalog-cta__bottle {
+    height: clamp(22rem, 30vw, 31rem);
+  }
 }
 
 /* Family page template */
@@ -4815,8 +5419,8 @@ ol {
 }
 
 .family-page--bumble-coffee .family-hero {
-  background: var(--color-paper-muted);
-  color: var(--color-black);
+  background: var(--color-home-dark);
+  color: var(--color-white);
 }
 
 .family-hero__pending {
@@ -4987,7 +5591,10 @@ ol {
 }
 
 @media (min-width: 48rem) {
-  .catalog-hero__layout,
+  .catalog-hero__layout {
+    grid-template-columns: minmax(0, 0.85fr) minmax(22rem, 1.15fr);
+  }
+
   .family-hero__layout {
     grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.9fr);
   }
@@ -5033,7 +5640,6 @@ ol {
 
 /* Host sections need position:relative so the decorative layers (which are
    position:absolute, z-index:0) stack correctly behind their content. */
-.catalog-family,
 .catalog-formats,
 .catalog-cta,
 .family-products {
@@ -5042,7 +5648,7 @@ ol {
   overflow: clip;
 }
 
-.catalog-family > .safe-reveal,
+.chapter > .safe-reveal,
 .catalog-formats > .safe-reveal,
 .catalog-cta > .safe-reveal,
 .family-products > .safe-reveal,
@@ -5206,42 +5812,68 @@ ol {
 
 /* Section entrance — stronger but restrained; a short stagger between
    direct children (eyebrow, title, body, actions). */
+/*
+  Reveal-gated entrances: start hidden, only animate once an ancestor
+  SafeReveal wrapper flips to data-visible="true". Using a plain keyframe
+  `animation` here (instead of a gated transition) would let the effect
+  play out fully on mount, long before a below-the-fold chapter is ever
+  scrolled to — so every reveal below must use the transition + selector
+  pattern, not an unconditional animation.
+*/
 .catalog-reveal-stagger > * {
   opacity: 0;
   transform: translateY(0.9rem);
-  animation: catalog-fade-up 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-visible="true"] .catalog-reveal-stagger > * {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .catalog-reveal-stagger > *:nth-child(1) {
-  animation-delay: 0ms;
+  transition-delay: 0ms;
 }
 .catalog-reveal-stagger > *:nth-child(2) {
-  animation-delay: 70ms;
+  transition-delay: 70ms;
 }
 .catalog-reveal-stagger > *:nth-child(3) {
-  animation-delay: 140ms;
+  transition-delay: 140ms;
 }
 .catalog-reveal-stagger > *:nth-child(4) {
-  animation-delay: 210ms;
+  transition-delay: 210ms;
 }
 .catalog-reveal-stagger > *:nth-child(n + 5) {
-  animation-delay: 260ms;
+  transition-delay: 260ms;
 }
 
+/*
+  Uses the standalone `translate` property (not `transform`) so this can be
+  combined with an element's own static `transform` (centering, rotation)
+  without one clobbering the other.
+*/
 @keyframes catalog-fade-up {
   from {
     opacity: 0;
-    transform: translateY(0.9rem);
+    translate: 0 0.9rem;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    translate: 0 0;
   }
 }
 
-/* Product composition entering slightly after the editorial text. */
-.catalog-hero__products--enter {
-  animation: catalog-fade-up 650ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
+@keyframes catalog-fade-up-scale {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 /* A thin dividing line that draws in left-to-right on reveal. */
@@ -5373,11 +6005,25 @@ ol {
 @media (max-width: 47.99rem) {
   .catalog-reveal-stagger > * {
     transform: translateY(0.5rem);
+    transition-duration: 480ms;
+  }
+
+  .catalog-hero__secondary {
     animation-duration: 480ms;
   }
 
-  .catalog-hero__products--enter {
-    animation-duration: 480ms;
+  .product-spotlight__frame,
+  .product-spotlight__image--primary,
+  .product-spotlight__image--secondary,
+  .catalog-cta__bottle {
+    transition-duration: 480ms;
+  }
+
+  .catalog-hero__focal {
+    /* Keep the continuous float's own slow 7s pace; only the one-shot
+       entrance (second in the list) speeds up on mobile. */
+    animation-name: catalog-hero-float-soft, catalog-fade-up-scale;
+    animation-duration: 7s, 480ms;
   }
 
   .catalog-linework {
@@ -5387,11 +6033,29 @@ ol {
   .catalog-shimmer::after {
     animation-duration: 20s;
   }
+
+  .catalog-hero {
+    min-height: min(88svh, 46rem);
+  }
+}
+
+@keyframes catalog-hero-float-soft {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -0.3rem;
+  }
 }
 
 @media (min-width: 64rem) {
   .catalog-reveal-stagger > * {
     animation-duration: 700ms;
+  }
+
+  .catalog-hero {
+    min-height: clamp(44rem, 84svh, 58rem);
   }
 }
 
@@ -5402,25 +6066,49 @@ ol {
   }
 
   .catalog-reveal-stagger > * {
-    animation: none;
+    transition-duration: 0.01ms;
     opacity: 1;
     transform: none;
   }
 
-  .catalog-hero__products--enter {
+  .catalog-hero__focal,
+  .catalog-hero__secondary {
     animation: none;
     opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+
+  .product-spotlight__frame,
+  .product-spotlight__image--primary,
+  .product-spotlight__image--secondary,
+  .catalog-cta__bottle {
+    transition-duration: 0.01ms;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .product-spotlight__image--secondary {
+    opacity: 0.88;
+  }
+
+  .catalog-hero__stage--enter {
+    transform: none;
   }
 
   .catalog-reveal-rule::before {
     transition-duration: 0.01ms;
   }
 
-  .catalog-hero__bottle,
-  .product-asset__image,
-  .family-hero__bottle {
+  .catalog-hero__stage {
     transition-duration: 0.01ms;
     transform: none !important;
+  }
+
+  .product-asset__image,
+  .family-hero__bottle,
+  .product-spotlight__image {
+    transition-duration: 0.01ms;
   }
 
   .catalog-card {
@@ -5434,5 +6122,13 @@ ol {
 
   .catalog-page {
     scroll-behavior: auto;
+  }
+
+  .format-system__column::after {
+    transition-duration: 0.01ms;
+  }
+
+  .catalog-family-nav {
+    transition-duration: 0.01ms;
   }
 }

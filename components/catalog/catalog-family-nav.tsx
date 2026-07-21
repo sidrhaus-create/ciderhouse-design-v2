@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { FamilyTheme } from "@/types/catalog";
 
 type CatalogFamilyNavProps = {
-  items: Array<{ slug: string; label: string }>;
+  items: Array<{ slug: string; label: string; theme: FamilyTheme }>;
 };
 
 export function CatalogFamilyNav({ items }: CatalogFamilyNavProps) {
   const [activeSlug, setActiveSlug] = useState(items[0]?.slug);
   const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   useEffect(() => {
     const sections = items
@@ -34,10 +36,27 @@ export function CatalogFamilyNav({ items }: CatalogFamilyNavProps) {
     return () => observer.disconnect();
   }, [items]);
 
+  useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    linkRefs.current[activeSlug ?? ""]?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [activeSlug]);
+
+  const activeTheme =
+    items.find((item) => item.slug === activeSlug)?.theme ?? "warm";
+  const navTheme =
+    activeTheme === "dark" || activeTheme === "purple" ? "dark" : "light";
+
   return (
     <nav
       aria-label="Навигация по направлениям каталога"
       className="catalog-family-nav"
+      data-theme={navTheme}
       ref={navRef}
     >
       {items.map((item) => (
@@ -46,6 +65,9 @@ export function CatalogFamilyNav({ items }: CatalogFamilyNavProps) {
           className="catalog-family-nav__link"
           href={`#${item.slug}`}
           key={item.slug}
+          ref={(element) => {
+            linkRefs.current[item.slug] = element;
+          }}
         >
           {item.label}
         </a>
