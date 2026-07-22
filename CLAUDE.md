@@ -23,7 +23,7 @@ First-time setup: `copy .env.example .env.local` (Windows) or `cp .env.example .
 
 ## Architecture
 
-Next.js 16 App Router + TypeScript + React 19, no smooth-scroll library, GSAP/ScrollTrigger for scroll-driven motion only. Server Components are the default; Client Components (`"use client"`) are used only for the age gate, header/nav overlays, tabs/dialog/drawer/form previews, and motion controllers.
+Next.js 16 App Router + TypeScript + React 19, no smooth-scroll library. GSAP/ScrollTrigger is the only system for scroll-driven/global page choreography (parallax, scroll-linked reveals, `home-motion.tsx`); the `motion` package is permitted separately, scoped to isolated client components, for non-scroll interactions (`AnimatePresence` transitions, shared layout transitions, spring microinteractions, reduced-motion-aware state) — it must never drive scroll position or duplicate ScrollTrigger's job. GSAP and Motion must never animate the same DOM element. Server Components are the default; Client Components (`"use client"`) are used only for the age gate, header/nav overlays, tabs/dialog/drawer/form previews, and motion controllers.
 
 - `app/` — routes. `/` (`app/page.tsx`) is the real production-candidate homepage. `/design-system`, `/components-preview`, `/motion-playground` are non-indexable internal preview routes (excluded via `app/robots.ts` / `app/sitemap.ts`). `app/not-found.tsx` is the 404 boundary.
 - `components/layout/` — `SiteHeader` / `SiteFooter`, used in `app/layout.tsx` for every route.
