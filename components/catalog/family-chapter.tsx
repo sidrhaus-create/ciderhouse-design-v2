@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { SafeReveal } from "@/components/motion/safe-reveal";
 import { CatalogProductCard } from "@/components/catalog/catalog-product-card";
+import { ProductCollection } from "@/components/catalog/product-collection";
+import { ProductMediaStage } from "@/components/catalog/product-media-stage";
 import { ProductSpotlight } from "@/components/catalog/product-spotlight";
 import type { ProductFamily, ProductRecord } from "@/types/catalog";
 
@@ -16,10 +18,8 @@ type FamilyChapterProps = {
 };
 
 const linework: Partial<Record<string, "grid" | "rings" | "diagonal">> = {
-  "dtree-party": "diagonal",
   "mister-bee": "rings",
   "white-phoenix": "diagonal",
-  "bumble-coffee": "grid",
   zero: "rings",
 };
 
@@ -38,7 +38,6 @@ export function FamilyChapter({
   const assetProducts = family.products.filter((product) => product.asset);
   const hasCompositeOnly =
     assetProducts.length === 0 && family.heroAssets.length > 0;
-  const isPending = assetProducts.length === 0 && !hasCompositeOnly;
   const isDuo = duoSpotlightFamilies.has(family.slug);
   const isBareRail = bareRailFamilies.has(family.slug);
 
@@ -115,73 +114,46 @@ export function FamilyChapter({
         <div aria-hidden="true" className="catalog-shimmer" />
       ) : null}
       <SafeReveal className="container container--wide chapter__layout catalog-reveal-rule">
-        {isPending ? (
-          <div className={`chapter__pending chapter__pending--${family.slug}`}>
-            {identity}
-            <div aria-hidden="true" className="chapter__pending-index">
-              {String(index + 1).padStart(2, "0")}
-            </div>
-            {family.slug === "dtree-party" ? (
-              <div aria-hidden="true" className="chapter__pending-word">
-                PARTY
-              </div>
-            ) : null}
-          </div>
-        ) : (
-          <>
-            {identity}
-            <div className="chapter__stage">
-              <ProductSpotlight
-                mode={isDuo ? "duo" : "single"}
-                priority={priority}
-                products={spotlightProducts}
-                sharedFlavorLabel={
-                  hasCompositeOnly
-                    ? family.characterNotes.join(" · ")
-                    : undefined
-                }
-              />
-              {railProducts.length > 0 ? (
-                <div
-                  className={`chapter__rail${isBareRail ? " chapter__rail--bare" : ""}`}
-                >
-                  {railProducts.map((product) =>
-                    isBareRail && product.asset ? (
-                      <figure className="chapter__rail-item" key={product.id}>
-                        <Image
-                          alt={product.asset.alt}
-                          height={product.asset.height}
-                          sizes="(max-width: 767px) 40vw, 16vw"
-                          src={product.asset.src}
-                          unoptimized
-                          width={product.asset.width}
-                        />
-                        <figcaption>{product.flavor}</figcaption>
-                      </figure>
-                    ) : (
-                      <CatalogProductCard
-                        familyHref={`/brands/${family.slug}`}
-                        key={product.id}
-                        product={product}
-                      />
-                    ),
-                  )}
-                </div>
-              ) : null}
-            </div>
-            {collectionProducts.length > 0 ? (
-              <div className="chapter__collection">
-                {collectionProducts.map((product) => (
+        {identity}
+        <div className="chapter__stage">
+          <ProductSpotlight
+            mode={isDuo ? "duo" : "single"}
+            priority={priority}
+            products={spotlightProducts}
+            sharedFlavorLabel={
+              hasCompositeOnly ? family.characterNotes.join(" · ") : undefined
+            }
+          />
+          {railProducts.length > 0 ? (
+            <div
+              className={`chapter__rail${isBareRail ? " chapter__rail--bare" : ""}`}
+            >
+              {railProducts.map((product) =>
+                isBareRail && product.asset ? (
+                  <figure className="chapter__rail-item" key={product.id}>
+                    <ProductMediaStage
+                      asset={product.asset}
+                      sizes="(max-width: 767px) 40vw, 16vw"
+                      variant="card"
+                      visual={product.visual}
+                    />
+                    <figcaption>{product.flavor}</figcaption>
+                  </figure>
+                ) : (
                   <CatalogProductCard
                     familyHref={`/brands/${family.slug}`}
                     key={product.id}
                     product={product}
                   />
-                ))}
-              </div>
-            ) : null}
-          </>
-        )}
+                ),
+              )}
+            </div>
+          ) : null}
+        </div>
+        <ProductCollection
+          familyHref={`/brands/${family.slug}`}
+          products={collectionProducts}
+        />
       </SafeReveal>
     </section>
   );

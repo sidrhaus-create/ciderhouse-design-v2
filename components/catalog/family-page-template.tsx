@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { SafeReveal } from "@/components/motion/safe-reveal";
+import { BackToTop } from "@/components/catalog/back-to-top";
 import { CatalogProductCard } from "@/components/catalog/catalog-product-card";
 import { productFamilies } from "@/data/catalog-content";
 import { formatLabels, type ProductFamily } from "@/types/catalog";
@@ -232,6 +233,7 @@ export function FamilyPageTemplate({ family }: { family: ProductFamily }) {
           </div>
         </div>
       </section>
+      <BackToTop />
     </div>
   );
 }

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button";
 import { SafeReveal } from "@/components/motion/safe-reveal";
+import { BackToTop } from "@/components/catalog/back-to-top";
 import { CatalogFamilyNav } from "@/components/catalog/catalog-family-nav";
 import { HeroParallax } from "@/components/catalog/hero-parallax";
 import {
   FamilyChapter,
   type ChapterVariant,
 } from "@/components/catalog/family-chapter";
+import { PendingFamilyChapter } from "@/components/catalog/pending-family-chapter";
 import { catalogContent, productFamilies } from "@/data/catalog-content";
 import { formatLabels, type ProductFormat } from "@/types/catalog";
 
@@ -52,13 +54,18 @@ const allFormats: ProductFormat[] = ["bottle", "can", "keg"];
 
 const chapterVariants: Record<string, ChapterVariant> = {
   "double-tree": "stage-right",
-  "dtree-party": "spotlight-left",
   "white-phoenix": "dark-centered",
   "mister-bee": "split-rail",
-  migliore: "stage-right",
-  "bumble-coffee": "spotlight-left",
   zero: "dark-centered",
 };
+
+/** True once a family has neither approved product images nor a hero composite — nothing for FamilyChapter to stage. */
+function isPendingFamily(family: (typeof productFamilies)[number]) {
+  return (
+    family.products.filter((product) => product.asset).length === 0 &&
+    family.heroAssets.length === 0
+  );
+}
 
 export default function CatalogPage() {
   return (
@@ -70,27 +77,29 @@ export default function CatalogPage() {
         />
         <div aria-hidden="true" className="catalog-shimmer" />
         <div className="container container--wide catalog-hero__layout">
-          <SafeReveal className="catalog-hero__copy catalog-reveal-stagger">
-            <p className="family-kicker">{catalogContent.eyebrow}</p>
-            <h1 className="catalog-hero__title" id="catalog-hero-title">
-              {catalogContent.title}
-            </h1>
-            <p className="catalog-hero__body">{catalogContent.body}</p>
-            <div className="family-actions">
-              <ButtonLink
-                className="family-button"
-                href={catalogContent.primaryCta.href}
-                variant="inverse"
-              >
-                {catalogContent.primaryCta.label}
-              </ButtonLink>
-              <ButtonLink
-                className="family-button family-button--outline"
-                href={catalogContent.secondaryCta.href}
-                variant="secondary"
-              >
-                {catalogContent.secondaryCta.label}
-              </ButtonLink>
+          <SafeReveal className="catalog-hero__copy">
+            <div className="catalog-reveal-stagger">
+              <p className="family-kicker">{catalogContent.eyebrow}</p>
+              <h1 className="catalog-hero__title" id="catalog-hero-title">
+                {catalogContent.title}
+              </h1>
+              <p className="catalog-hero__body">{catalogContent.body}</p>
+              <div className="family-actions">
+                <ButtonLink
+                  className="family-button"
+                  href={catalogContent.primaryCta.href}
+                  variant="inverse"
+                >
+                  {catalogContent.primaryCta.label}
+                </ButtonLink>
+                <ButtonLink
+                  className="family-button family-button--outline"
+                  href={catalogContent.secondaryCta.href}
+                  variant="secondary"
+                >
+                  {catalogContent.secondaryCta.label}
+                </ButtonLink>
+              </div>
             </div>
           </SafeReveal>
           <HeroParallax
@@ -131,15 +140,23 @@ export default function CatalogPage() {
         }))}
       />
 
-      {productFamilies.map((family, index) => (
-        <FamilyChapter
-          family={family}
-          index={index}
-          key={family.slug}
-          priority={index === 0}
-          variant={chapterVariants[family.slug] ?? "spotlight-left"}
-        />
-      ))}
+      {productFamilies.map((family, index) =>
+        isPendingFamily(family) ? (
+          <PendingFamilyChapter
+            family={family}
+            index={index}
+            key={family.slug}
+          />
+        ) : (
+          <FamilyChapter
+            family={family}
+            index={index}
+            key={family.slug}
+            priority={index === 0}
+            variant={chapterVariants[family.slug] ?? "spotlight-left"}
+          />
+        ),
+      )}
 
       <section
         aria-labelledby="catalog-formats-title"
@@ -235,6 +252,7 @@ export default function CatalogPage() {
           />
         </SafeReveal>
       </section>
+      <BackToTop />
     </div>
   );
 }

@@ -649,7 +649,7 @@ ol {
   text-decoration: none;
 }
 
-.mobile-menu__link span {
+.mobile-menu__index {
   font-size: var(--type-caption);
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -1132,6 +1132,8 @@ ol {
 
 .product-asset {
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   width: 100%;
   height: min(60vh, 31rem);
   min-height: 20rem;
@@ -1143,6 +1145,7 @@ ol {
   width: auto;
   height: 100%;
   max-width: 100%;
+  min-height: 0;
   object-fit: contain;
 }
 
@@ -1155,6 +1158,52 @@ ol {
   border: 1px dashed var(--color-error);
   color: var(--color-error);
   text-align: center;
+}
+
+/*
+ * Shared catalog media container (components/catalog/product-media-stage.tsx).
+ * `display: contents` means it never introduces a box of its own — every
+ * consumer's existing sizing/positioning rules (card, spotlight, spotlight
+ * duo, bare rail) keep applying to the underlying .product-asset figure
+ * exactly as if it were rendered inline. The wrapper exists only to carry
+ * --stage-scale/--stage-offset-y as inherited custom properties. `scale`/
+ * `translate` are used (not `transform`) so this never collides with
+ * `.product-asset__image`'s own hover-lift `transform`, or with any static
+ * `transform` a positioned ancestor (e.g. duo primary/secondary) relies on.
+ */
+.product-media-stage {
+  display: contents;
+}
+
+.product-media-stage .product-asset__image {
+  scale: var(--stage-scale, 1);
+  translate: 0 var(--stage-offset-y, 0rem);
+}
+
+/* Single/switcher spotlight: the figure fills its frame on both axes (a
+   definite width, not `fit-content`) so the image's own `width: auto` +
+   `height: 100%` can resolve directly against a definite box instead of
+   forming a shrink-to-fit-vs-auto circular dependency — that circularity is
+   what let a tall bottle source get sized by width first and overflow the
+   frame's fixed height. */
+.product-media-stage--spotlight .product-asset {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+}
+
+/* Duo spotlight: the figure sizes to its own content (not 100% of the
+   abs-positioned primary/secondary ancestor, whose own width is
+   shrink-to-fit) so nothing here depends on an indeterminate
+   percentage-through-shrink-to-fit chain. */
+.product-media-stage--spotlight-duo .product-asset {
+  width: fit-content;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
 }
 
 .brand-card {
@@ -4436,10 +4485,26 @@ ol {
 
 .catalog-card__asset {
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
   place-items: center;
   height: clamp(14rem, 38vw, 20rem);
   padding: 1.25rem;
+  overflow: hidden;
   background: var(--color-paper-muted);
+}
+
+/* Card media must size against its own fixed-height slot (`height: 100%`
+   of the padded content area above), not the global `.product-asset`
+   viewport-height rule — otherwise a tall bottle source spills past the
+   card's media slot into the card text below it. `grid-template-rows:
+   minmax(0, 1fr)` on `.catalog-card__asset` is what lets this percentage
+   height resolve to a real pixel value instead of falling back to the
+   image's own intrinsic size. */
+.product-media-stage--card .product-asset {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
 }
 
 .catalog-card__missing {
@@ -4550,6 +4615,13 @@ ol {
   width: 100%;
   gap: clamp(2rem, 6vw, 3.5rem);
   align-items: center;
+}
+
+/* `.family-kicker`'s default color is the brand-purple text tone meant for
+   light section backgrounds; the hero's own background is that same purple,
+   so it needs the hero's white-on-purple treatment instead. */
+.catalog-hero__copy .family-kicker {
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .catalog-hero__title {
@@ -4665,7 +4737,12 @@ ol {
   transition:
     background-color 300ms ease,
     border-color 300ms ease;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.catalog-family-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .catalog-family-nav[data-theme="dark"] {
@@ -4851,6 +4928,13 @@ ol {
   border: 1px solid rgba(255, 255, 255, 0.26);
 }
 
+.chapter__rail-item .product-asset {
+  width: fit-content;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+}
+
 .chapter__rail-item img {
   width: auto;
   height: clamp(9rem, 24vw, 14rem);
@@ -4866,7 +4950,7 @@ ol {
   text-align: center;
 }
 
-.chapter__collection {
+.product-collection {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1fr;
@@ -4878,71 +4962,29 @@ ol {
 }
 
 @media (min-width: 48rem) {
-  .chapter__collection {
+  .product-collection {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.chapter:has(.chapter__pending) {
-  padding-block: clamp(2.75rem, 7vw, 4.5rem);
+/* Pending family (components/catalog/pending-family-chapter.tsx) — a
+   quiet, honest placeholder for a family with zero approved assets. No
+   ghost typography or invented imagery; deliberately shorter than a
+   populated chapter since there is no product stage to give it room for. */
+.chapter--pending {
+  padding-block: clamp(2.25rem, 5.5vw, 3.5rem);
 }
 
 .chapter__pending {
-  position: relative;
   display: grid;
-  gap: 1rem;
-  max-width: 44rem;
+  gap: 0.75rem;
 }
 
-.chapter__pending-index {
-  position: absolute;
-  z-index: -1;
-  top: -14%;
-  right: -4%;
-  color: transparent;
-  -webkit-text-stroke: 1px currentColor;
-  opacity: 0.08;
-  font-size: clamp(8rem, 26vw, 18rem);
-  font-weight: 800;
-  line-height: 0.8;
-  pointer-events: none;
-}
-
-/* Pending-family individual character */
-
-.chapter__pending--dtree-party .chapter__title {
-  font-size: clamp(2.6rem, 7.5vw, 4.4rem);
-}
-
-.chapter__pending-word {
-  position: absolute;
-  z-index: -1;
-  bottom: -18%;
-  left: -3%;
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.8;
-  font-size: clamp(4.5rem, 17vw, 11rem);
-  color: rgba(255, 255, 255, 0.09);
-  transform: rotate(-6deg);
-  pointer-events: none;
-}
-
-.chapter__pending--migliore .chapter__title {
-  font-size: clamp(3rem, 9vw, 6.5rem);
-  letter-spacing: -0.06em;
-}
-
-.chapter__pending--migliore .chapter__description {
-  border-top: 1px solid currentColor;
-  padding-top: 1rem;
-  opacity: 0.7;
-}
-
-.chapter__pending--bumble-coffee .catalog-index {
-  font-size: 1em;
-  opacity: 0.85;
+.chapter__pending-message {
+  max-width: 32rem;
+  opacity: 0.75;
+  font-size: var(--type-body-sm);
+  line-height: 1.55;
 }
 
 .catalog-family__link {
@@ -4977,13 +5019,16 @@ ol {
   width: 100%;
   height: clamp(19rem, 50vw, 32rem);
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
   place-items: center;
+  overflow: hidden;
 }
 
 .product-spotlight__frame {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: grid;
   place-items: center;
   opacity: 0;
@@ -4998,11 +5043,7 @@ ol {
   translate: 0 0;
 }
 
-.product-spotlight__image {
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
+.product-spotlight__frame .product-asset__image {
   filter: drop-shadow(0 1.75rem 2rem rgba(0, 0, 0, 0.28));
 }
 
@@ -5212,12 +5253,6 @@ ol {
 
   .chapter--split-rail .product-spotlight__stage {
     height: clamp(24rem, 38vw, 34rem);
-  }
-
-  .chapter__layout:has(.chapter__pending) {
-    grid-template-columns: 1fr;
-    max-width: 44rem;
-    margin-inline: auto;
   }
 }
 
@@ -6106,8 +6141,7 @@ ol {
   }
 
   .product-asset__image,
-  .family-hero__bottle,
-  .product-spotlight__image {
+  .family-hero__bottle {
     transition-duration: 0.01ms;
   }
 
@@ -6131,4 +6165,47 @@ ol {
   .catalog-family-nav {
     transition-duration: 0.01ms;
   }
+
+  .back-to-top {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Back to top (components/catalog/back-to-top.tsx) — isolated scroll
+   control, no GSAP/Motion involvement; plain opacity/translate CSS only. */
+.back-to-top {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: var(--z-sticky);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0;
+  translate: 0 0.5rem;
+  transition:
+    opacity 220ms ease,
+    translate 220ms ease,
+    background 160ms ease;
+  pointer-events: none;
+}
+
+.back-to-top[data-visible="true"] {
+  opacity: 0.92;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+  opacity: 1;
+  background: var(--color-brand-primary);
+  color: var(--color-white);
 }

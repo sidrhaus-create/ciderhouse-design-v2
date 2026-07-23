@@ -25,6 +25,21 @@ export type CatalogAsset = {
   alt: string;
 };
 
+/**
+ * Presentation-only normalization for a single product asset rendered inside
+ * a `ProductMediaStage`. These values never touch the source file — they
+ * exist because two approved images can share the same CSS box height yet
+ * show visibly different bottle sizes when their transparent canvas padding
+ * differs. Manually calibrated per asset from a measured alpha-channel
+ * bounding-box audit (see `docs/CATALOG-CONTENT-SOURCES.md`), not guessed.
+ */
+export type ProductVisualAdjust = {
+  /** Uniform scale multiplier (preserves aspect ratio); 1 = no adjustment. */
+  scale?: number;
+  /** Vertical baseline nudge in rem, applied only inside the stage. */
+  offsetY?: number;
+};
+
 export type ProductRecord = {
   id: string;
   familySlug: FamilySlug;
@@ -35,6 +50,8 @@ export type ProductRecord = {
   alcoholClassification?: string;
   sweetness?: "сухой" | "полусухой" | "полусладкий" | "сладкий";
   asset?: CatalogAsset;
+  /** Optional per-asset display normalization; see `ProductVisualAdjust`. */
+  visual?: ProductVisualAdjust;
   availabilityStatus: CatalogContentStatus;
   approvalStatus: CatalogContentStatus;
   sourceUrl: string;

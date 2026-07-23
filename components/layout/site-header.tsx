@@ -211,7 +211,7 @@ export function SiteHeader() {
           <nav aria-label="Мобильная навигация" className="mobile-menu__nav">
             {!isHomepage ? (
               <Link className="mobile-menu__link" href="/" onClick={closeMenu}>
-                <span>00</span>
+                <span className="mobile-menu__index">00</span>
                 Главная
               </Link>
             ) : null}
@@ -223,7 +223,9 @@ export function SiteHeader() {
                   key={item.href}
                 >
                   <summary className="mobile-menu__link">
-                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span className="mobile-menu__index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                     <span className="mobile-menu__link-label">
                       {item.label}
                     </span>
@@ -256,7 +258,9 @@ export function SiteHeader() {
                   key={item.href}
                   onClick={closeMenu}
                 >
-                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span className="mobile-menu__index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   {item.label}
                 </Link>
               ),

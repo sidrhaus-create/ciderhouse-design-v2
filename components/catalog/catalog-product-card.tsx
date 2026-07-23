@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ProductAsset } from "@/components/ui/product-asset";
+import { ProductMediaStage } from "@/components/catalog/product-media-stage";
 import { formatLabels, type ProductRecord } from "@/types/catalog";
 
 const statusLabels: Record<string, string> = {
@@ -24,12 +24,11 @@ export function CatalogProductCard({
     <article className="catalog-card" data-home-reveal>
       <div className="catalog-card__asset">
         {product.asset ? (
-          <ProductAsset
-            alt={product.asset.alt}
-            height={product.asset.height}
+          <ProductMediaStage
+            asset={product.asset}
             sizes="(max-width: 767px) 44vw, 220px"
-            src={product.asset.src}
-            width={product.asset.width}
+            variant="card"
+            visual={product.visual}
           />
         ) : (
           <div className="catalog-card__missing" role="status">

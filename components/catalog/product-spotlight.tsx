@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState, type KeyboardEvent } from "react";
+import { ProductMediaStage } from "@/components/catalog/product-media-stage";
 import { formatLabels, type ProductRecord } from "@/types/catalog";
 
 type ProductSpotlightProps = {
@@ -30,25 +30,23 @@ export function ProductSpotlight({
     return (
       <div className="product-spotlight product-spotlight--duo">
         <div className="product-spotlight__stage product-spotlight__stage--duo">
-          <Image
-            alt={second.asset!.alt}
-            className="product-spotlight__image product-spotlight__image--secondary"
-            height={second.asset!.height}
-            sizes="(max-width: 767px) 46vw, 24vw"
-            src={second.asset!.src}
-            unoptimized
-            width={second.asset!.width}
-          />
-          <Image
-            alt={first.asset!.alt}
-            className="product-spotlight__image product-spotlight__image--primary"
-            height={first.asset!.height}
-            priority={priority}
-            sizes="(max-width: 767px) 58vw, 30vw"
-            src={first.asset!.src}
-            unoptimized
-            width={first.asset!.width}
-          />
+          <div className="product-spotlight__image--secondary">
+            <ProductMediaStage
+              asset={second.asset!}
+              sizes="(max-width: 767px) 46vw, 24vw"
+              variant="spotlight-duo"
+              visual={second.visual}
+            />
+          </div>
+          <div className="product-spotlight__image--primary">
+            <ProductMediaStage
+              asset={first.asset!}
+              priority={priority}
+              sizes="(max-width: 767px) 58vw, 30vw"
+              variant="spotlight-duo"
+              visual={first.visual}
+            />
+          </div>
         </div>
         <dl className="product-spotlight__meta product-spotlight__meta--duo">
           <div>
@@ -96,15 +94,12 @@ export function ProductSpotlight({
     <div className="product-spotlight">
       <div className="product-spotlight__stage">
         <div className="product-spotlight__frame" key={active.id}>
-          <Image
-            alt={active.asset.alt}
-            className="product-spotlight__image"
-            height={active.asset.height}
+          <ProductMediaStage
+            asset={active.asset}
             priority={priority}
             sizes="(max-width: 767px) 78vw, (max-width: 1023px) 46vw, 34vw"
-            src={active.asset.src}
-            unoptimized
-            width={active.asset.width}
+            variant="spotlight"
+            visual={active.visual}
           />
         </div>
       </div>
