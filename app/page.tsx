@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { HomeMotion } from "@/components/home/home-motion";
+import { BackToTop } from "@/components/catalog/back-to-top";
 import { Accordion } from "@/components/ui/accordion";
 import { ButtonLink } from "@/components/ui/button";
 import { homepageContent } from "@/data/homepage-content";
@@ -595,6 +596,7 @@ export default function Homepage() {
           </div>
         </div>
       </section>
+      <BackToTop />
     </HomeMotion>
   );
 }

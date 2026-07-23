@@ -2160,9 +2160,9 @@ ol {
 
 .home-hero__bottle--left {
   z-index: 1;
-  left: 24%;
-  height: 86%;
-  max-height: 27rem;
+  left: 28%;
+  height: 72%;
+  max-height: 22rem;
   transform: translateX(-50%) rotate(-5deg);
 }
 
@@ -2172,9 +2172,9 @@ ol {
 
 .home-hero__bottle--right {
   z-index: 2;
-  left: 76%;
-  height: 87%;
-  max-height: 27.5rem;
+  left: 72%;
+  height: 73%;
+  max-height: 22.5rem;
   transform: translateX(-50%) rotate(5deg);
 }
 
@@ -2697,8 +2697,8 @@ ol {
   left: 15%;
 }
 .home-city--2 {
-  top: 10%;
-  left: 55%;
+  top: 24%;
+  left: 38%;
 }
 .home-city--3 {
   top: 68%;
@@ -3366,6 +3366,7 @@ ol {
 .home-section-heading {
   position: relative;
   padding-block: clamp(4rem, 9vw, 6.5rem);
+  padding-left: clamp(1.25rem, 2.5vw, 2rem);
   border-bottom: 1px solid var(--home-rule);
   background:
     linear-gradient(
