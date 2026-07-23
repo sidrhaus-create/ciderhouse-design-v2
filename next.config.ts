@@ -7,11 +7,6 @@ const nextConfig: NextConfig = {
     return [
       { source: "/katalog", destination: "/catalog", permanent: true },
       {
-        source: "/production",
-        destination: "/#production-story",
-        permanent: false,
-      },
-      {
         source: "/where-to-buy",
         destination: "/#where-to-buy",
         permanent: false,

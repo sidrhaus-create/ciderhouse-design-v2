@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${siteConfig.url}/production`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
     ...productFamilies.map((family) => ({
       url: `${siteConfig.url}/brands/${family.slug}`,
       lastModified,
