@@ -6225,23 +6225,78 @@ ol {
   isolation: isolate;
   overflow: clip;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: clamp(2.25rem, 6vw, 3rem);
   min-height: clamp(34rem, 66vw, 44rem);
   padding-block: clamp(3.5rem, 9vw, 6rem);
+  /* Fallback for browsers without color-mix() support; the enhanced
+     declaration below is skipped entirely (not partially applied) if
+     color-mix() is unsupported, leaving this two-stop gradient in place. */
   background: linear-gradient(
     135deg,
     var(--color-brand-primary) 0%,
-    var(--color-home-dark) 62%
+    var(--color-home-dark) 68%
   );
+  background:
+    radial-gradient(
+      65% 90% at 14% 22%,
+      rgba(107, 48, 119, 0.7) 0%,
+      rgba(107, 48, 119, 0) 72%
+    ),
+    linear-gradient(
+      140deg,
+      var(--color-brand-primary) 0%,
+      color-mix(in srgb, var(--color-brand-primary) 45%, var(--color-home-dark))
+        52%,
+      color-mix(in srgb, var(--color-brand-primary) 18%, var(--color-home-dark))
+        100%
+    );
   color: var(--color-white);
+}
+
+/* Slightly stronger, page-scoped grid/shimmer visibility for this hero
+   only — the shared .catalog-linework / .catalog-shimmer defaults stay
+   untouched so /catalog is unaffected. Kept deliberately subtle (a small
+   bump over the ~0.05 stock opacity) per the "premium, not noisy" brief. */
+.production-hero .catalog-linework--grid::before {
+  opacity: 0.08;
+}
+
+.production-hero .catalog-linework--grid::after {
+  opacity: 0.09;
+}
+
+.production-hero .catalog-shimmer::before {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+.production-hero .catalog-shimmer::after {
+  background-image: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.09) 50%,
+    transparent 58%
+  );
+}
+
+/* The grid/shimmer background layers and the text column both need an
+   explicit z-index above .production-hero__visual (below), so the technical
+   overlay and copy stay legible over both the plain-purple area and the
+   photo area alike, regardless of source order. */
+.production-hero > .catalog-linework,
+.production-hero > .catalog-shimmer {
+  z-index: 1;
 }
 
 .production-hero__layout {
   position: relative;
-  z-index: 1;
-  display: grid;
-  gap: clamp(2rem, 6vw, 3.5rem);
-  align-items: center;
+  z-index: 2;
+}
+
+.production-hero__copy {
+  max-width: 36rem;
 }
 
 .production-hero__kicker {
@@ -6279,41 +6334,69 @@ ol {
   text-transform: uppercase;
 }
 
-/* Factory visual (public/assets/production/factory-hero.png) — the photo
-   sits at the base z-index (auto), with two positioned overlay layers
-   painting above it (positive z-index always paints above z-index:auto in
-   the same stacking context, regardless of DOM order): a purple/dark
-   multiply tint, then a directional fade so the left edge dissolves into
-   the hero's own background instead of reading as a hard-edged photo card.
-   The technical grid (.catalog-linework--grid, reused from the catalog
-   hero) sits above both via the descendant override below. */
-.production-hero__factory {
+/* Factory visual (public/assets/production/factory-hero.png), styled as a
+   full-bleed background layer rather than a contained "card" or "photo
+   pasted into a box": on mobile it is a normal in-flow block below the
+   copy (stacked, per the brief); from 48rem up it becomes an absolutely
+   positioned layer spanning the whole hero and bleeding to the section's
+   own right/top/bottom edges, so there is no visible box boundary at all —
+   only the left edge, where it meets the text, has a deliberate soft
+   dissolve. Layer order inside the element (all painted together, then
+   masked as one unit): photo (auto z-index) -> purple/dark multiply
+   color-grade (::before) -> top/bottom vignette (::after). The technical
+   grid + shimmer (z-index 1 above) and the .production-hero background
+   gradient itself carry through visually underneath/around this layer,
+   which is what makes the photo read as embedded in one continuous
+   atmosphere instead of a separate inserted image. */
+.production-hero__visual {
   position: relative;
-  isolation: isolate;
+  z-index: 0;
   overflow: clip;
-  height: clamp(15rem, 46vw, 19rem);
+  height: clamp(13rem, 48vw, 17rem);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 84%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 84%,
+    transparent 100%
+  );
 }
 
-.production-hero__factory-image {
+.production-hero__visual-image {
   object-fit: cover;
   object-position: center;
 }
 
-.production-hero__factory::before {
+/* Two passes make the photo read as branded purple rather than a neutral
+   industrial gray, matching the "purple is the main identity" brief: a
+   hue-replace pass (mix-blend-mode: color takes the hue/saturation of the
+   brand purple while keeping the photo's own highlight/shadow luminance —
+   a standard duotone-style brand photography treatment), then a multiply
+   pass for a deeper vignette and an extra wash of purple across the whole
+   frame (not just a diagonal edge), so the effect holds even far from the
+   left/text edge. */
+.production-hero__visual::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    125deg,
-    rgba(107, 48, 119, 0.6) 0%,
-    rgba(12, 11, 26, 0.3) 55%,
-    rgba(12, 11, 26, 0.62) 100%
+  background: rgba(107, 48, 119, 0.68);
+  background: color-mix(
+    in srgb,
+    var(--color-brand-primary) 78%,
+    var(--color-home-dark)
   );
-  mix-blend-mode: multiply;
+  mix-blend-mode: color;
 }
 
-.production-hero__factory::after {
+.production-hero__visual::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -6321,48 +6404,57 @@ ol {
   background:
     linear-gradient(
       to bottom,
-      rgba(12, 11, 26, 0.42) 0%,
-      transparent 22%,
-      transparent 78%,
-      rgba(12, 11, 26, 0.55) 100%
+      rgba(12, 11, 26, 0.32) 0%,
+      transparent 24%,
+      transparent 76%,
+      rgba(12, 11, 26, 0.36) 100%
     ),
-    linear-gradient(to left, rgba(12, 11, 26, 0.4) 0%, transparent 14%),
-    linear-gradient(
-      to right,
-      var(--color-home-dark) 0%,
-      rgba(12, 11, 26, 0) 42%
-    );
-}
-
-.production-hero__factory .catalog-linework {
-  z-index: 3;
-  opacity: 0.5;
+    rgba(51, 24, 66, 0.42);
+  mix-blend-mode: multiply;
 }
 
 @media (min-width: 48rem) {
-  .production-hero__layout {
-    grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  .production-hero {
+    align-items: center;
   }
 
-  .production-hero__factory {
-    height: clamp(20rem, 32vw, 28rem);
+  .production-hero__copy {
+    max-width: 31rem;
   }
 
-  .production-hero__factory::after {
+  .production-hero__visual {
+    position: absolute;
+    inset: 0;
+    left: 25%;
+    height: auto;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 34%,
+      black 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 34%,
+      black 100%
+    );
+  }
+
+  .production-hero__visual-image {
+    object-position: 70% center;
+  }
+
+  .production-hero__visual::after {
     background:
       linear-gradient(
         to bottom,
-        rgba(12, 11, 26, 0.38) 0%,
+        rgba(12, 11, 26, 0.26) 0%,
         transparent 18%,
         transparent 82%,
-        rgba(12, 11, 26, 0.5) 100%
+        rgba(12, 11, 26, 0.32) 100%
       ),
-      linear-gradient(to left, rgba(12, 11, 26, 0.38) 0%, transparent 12%),
-      linear-gradient(
-        to right,
-        var(--color-home-dark) 0%,
-        rgba(12, 11, 26, 0) 32%
-      );
+      rgba(51, 24, 66, 0.38);
   }
 }
 

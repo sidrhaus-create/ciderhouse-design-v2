@@ -124,21 +124,17 @@ export default function ProductionPage() {
               </p>
             </div>
           </SafeReveal>
-          <SafeReveal className="production-hero__factory">
-            <Image
-              alt={heroFactory.alt}
-              className="production-hero__factory-image"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 45vw"
-              src={heroFactory.src}
-            />
-            <div
-              aria-hidden="true"
-              className="catalog-linework catalog-linework--grid"
-            />
-          </SafeReveal>
         </div>
+        <SafeReveal className="production-hero__visual">
+          <Image
+            alt={heroFactory.alt}
+            className="production-hero__visual-image"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 75vw"
+            src={heroFactory.src}
+          />
+        </SafeReveal>
       </section>
 
       <section
