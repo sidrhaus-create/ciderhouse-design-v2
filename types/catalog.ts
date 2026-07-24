@@ -8,13 +8,7 @@ export type CatalogContentStatus =
 export type ProductFormat = "bottle" | "can" | "keg";
 
 export type FamilySlug =
-  | "double-tree"
-  | "dtree-party"
-  | "white-phoenix"
-  | "mister-bee"
-  | "migliore"
-  | "bumble-coffee"
-  | "zero";
+  "double-tree" | "dtree-party" | "white-phoenix" | "mister-bee" | "zero";
 
 export type FamilyTheme = "warm" | "purple" | "dark" | "muted";
 
@@ -58,6 +52,14 @@ export type ProductRecord = {
   facts?: string[];
 };
 
+/** A named sub-line inside a family that itself groups several product lines (e.g. "0%"). */
+export type ProductGroup = {
+  slug: string;
+  label: string;
+  products: ProductRecord[];
+  missingAssetNote?: string;
+};
+
 export type ProductFamily = {
   slug: FamilySlug;
   categoryLabel: string;
@@ -70,6 +72,8 @@ export type ProductFamily = {
   formats: ProductFormat[];
   characterNotes: string[];
   products: ProductRecord[];
+  /** Optional grouping of `products` into named sub-lines, shown alongside the family's own composite/products. */
+  groups?: ProductGroup[];
   status: CatalogContentStatus;
   sourceUrl: string;
   missingAssetNote?: string;

@@ -4604,11 +4604,46 @@ ol {
   isolation: isolate;
   overflow: clip;
   display: flex;
-  align-items: center;
-  min-height: min(92svh, 54rem);
-  padding-block: clamp(3.5rem, 9vw, 6rem);
+  align-items: flex-end;
+  min-height: min(84svh, 46rem);
+  padding-top: clamp(2rem, 4.5vw, 3.25rem);
+  /* The source photo's own opaque pixels (podium/contact-shadow) reach the
+     very last row of the file — confirmed by decoding its alpha channel —
+     so there is no baked-in transparent margin to account for here. Only
+     enough bottom padding to keep `.catalog-hero__photo`'s CSS drop-shadow
+     from a hard clip against this section's `overflow: clip`; the family
+     nav sits immediately below with no gap of its own, so the podium reads
+     as standing directly on it. */
+  padding-bottom: 0.2rem;
+  /* Fallback for browsers without color-mix() support; the enhanced
+     declaration below is skipped entirely (not partially applied) if
+     color-mix() is unsupported, leaving this flat brand-purple in place. */
   background: var(--color-brand-primary);
+  background: linear-gradient(
+    118deg,
+    var(--color-brand-primary) 0%,
+    color-mix(in srgb, var(--color-brand-primary) 55%, var(--color-home-dark))
+      62%,
+    var(--color-home-dark) 100%
+  );
   color: var(--color-white);
+}
+
+/* Subtle studio-lighting vignette: a soft lift near the copy, a deeper
+   near-black fade toward the bottom-right, behind the grid/shimmer/content. */
+.catalog-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      65% 70% at 10% 25%,
+      rgba(255, 255, 255, 0.06),
+      transparent 65%
+    ),
+    radial-gradient(75% 65% at 100% 100%, rgba(0, 0, 0, 0.38), transparent 62%);
 }
 
 .catalog-hero__layout {
@@ -4642,82 +4677,70 @@ ol {
   line-height: 1.55;
 }
 
-.catalog-hero__stage {
+/* Product photo with its real per-pixel transparent background (see
+   app/catalog/page.tsx `heroPhoto` and docs/CATALOG-CONTENT-SOURCES.md for
+   how the transparent PNG was derived — every bottle/label/podium pixel is
+   byte-identical to the source photo; only the plain studio backdrop around
+   that unchanged composition is transparent). Because the PNG itself now
+   carries real alpha at the product silhouette, no CSS edge-mask is needed
+   or used here — object-fit: contain on an already-transparent image is
+   sufficient, and adding a mask on top of real transparency was exactly
+   what previously produced a visible soft-edged white rectangle. Two-layer
+   stack: glow (behind) -> the photo itself, on top, unmasked. */
+.catalog-hero__photo-stage {
   position: relative;
-  width: 100%;
-  height: clamp(22rem, 66vw, 38rem);
-  transition: transform 300ms ease;
-}
-
-.catalog-hero__focal,
-.catalog-hero__secondary {
-  position: absolute;
-  bottom: 0;
-  width: auto;
-  object-fit: contain;
-}
-
-.catalog-hero__focal {
-  z-index: 3;
-  left: 54%;
-  height: 100%;
-  max-width: 66%;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 2rem 2.5rem rgba(0, 0, 0, 0.4));
-  /*
-    The entrance uses `scale`, not `transform`, because `transform` already
-    holds the static translateX(-50%) centering and `translate` is already
-    owned by the continuous float below — scale is the one axis left that
-    won't clobber either.
-  */
-  animation:
-    catalog-hero-float 7s ease-in-out infinite,
-    catalog-fade-up-scale 650ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
-}
-
-.catalog-hero__secondary {
-  opacity: 0.85;
-  filter: drop-shadow(0 1.5rem 1.5rem rgba(0, 0, 0, 0.3)) brightness(0.88);
-  animation: catalog-fade-up 650ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
-}
-
-.catalog-hero__secondary--left {
   z-index: 1;
-  left: 2%;
-  height: 70%;
-  max-width: 44%;
-  transform: rotate(-5deg);
+  width: 100%;
+  align-self: end;
+  /* No negative margin here: the photo must stay fully inside the hero's
+     own padded box. An earlier pass pulled it past the bottom padding to
+     overlap a (since-removed) background block — that pushed part of the
+     image past `.catalog-hero`'s `overflow: clip` boundary, clipping off
+     real podium/bottle-bottom pixels. The hero's own bottom padding is now
+     the only gap between the photo and the family nav below; kept small
+     (see `.catalog-hero`) so the two still read as close/connected. */
 }
 
-.catalog-hero__secondary--right {
-  z-index: 2;
-  right: 2%;
-  height: 86%;
-  max-width: 46%;
-  transform: rotate(5deg);
+.catalog-hero__photo-glow {
+  position: absolute;
+  inset: -10% -6%;
+  z-index: 0;
+  pointer-events: none;
+  /* Pure brand purple fading to transparent — no white in the gradient at
+     all, so this cannot read as a white halo behind the product silhouette. */
+  background: radial-gradient(
+    52% 55% at 50% 52%,
+    rgba(107, 48, 119, 0.55),
+    rgba(107, 48, 119, 0) 72%
+  );
+  filter: blur(10px);
 }
 
-.catalog-hero__stage--enter[data-in-view="false"] .catalog-hero__focal {
-  animation-play-state: paused, running;
+.catalog-hero__photo-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 2400 / 1350;
+  opacity: 0;
+  transform: translateY(1.25rem) scale(0.98);
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes catalog-hero-float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -0.6rem;
-  }
+.catalog-hero__photo-wrap[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .catalog-hero__stage--enter {
-    transform: translate(
-      calc(var(--parallax-x, 0) * 1rem),
-      calc(var(--parallax-y, 0) * 0.6rem)
-    );
-  }
+.catalog-hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Follows the PNG's real alpha silhouette (bottles + podium), not a
+     rectangular box — a single soft contact/ambient shadow for the whole
+     group, not a per-bottle effect. */
+  filter: drop-shadow(0 1.5rem 2.5rem rgba(0, 0, 0, 0.4));
 }
 
 /* Family nav */
@@ -4760,19 +4783,32 @@ ol {
   color: var(--color-white);
 }
 
+/* Hover/active feel intentionally mirrors `.desktop-nav__link` (the main
+   site header's nav — see its rule right below `.desktop-nav`): same
+   timing tokens (`--motion-ui`/`--ease-standard`), same underline mechanic
+   (scaleX growing from the trailing edge on hover/active), same "no other
+   hover styling" restraint. The bullet marker on the active family and the
+   colour change are this component's own pre-existing addition (there is
+   more than one nav item to distinguish while scrolling, unlike the main
+   nav's per-page links), kept alongside rather than replacing the shared
+   underline language. */
 .catalog-family-nav__link {
+  position: relative;
   flex: none;
   padding: 0.6rem 0.9rem;
-  border-bottom: 2px solid transparent;
   color: var(--color-ink-muted);
   font-size: var(--type-body-sm);
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
+  transition: color var(--motion-ui) var(--ease-standard);
+}
+
+.catalog-family-nav__link:hover {
+  color: var(--color-brand-primary);
 }
 
 .catalog-family-nav__link[aria-current="true"] {
-  border-color: var(--color-brand-primary);
   color: var(--color-brand-primary);
 }
 
@@ -4843,16 +4879,6 @@ ol {
 
 .catalog-family--dtree-party {
   background: var(--color-brand-primary);
-  color: var(--color-white);
-}
-
-.catalog-family--migliore {
-  background: var(--color-home-warm);
-  color: var(--color-black);
-}
-
-.catalog-family--bumble-coffee {
-  background: var(--color-home-dark);
   color: var(--color-white);
 }
 
@@ -5449,16 +5475,6 @@ ol {
   color: var(--color-white);
 }
 
-.family-page--migliore .family-hero {
-  background: var(--color-home-warm);
-  color: var(--color-black);
-}
-
-.family-page--bumble-coffee .family-hero {
-  background: var(--color-home-dark);
-  color: var(--color-white);
-}
-
 .family-hero__pending {
   display: grid;
   place-items: center;
@@ -5628,7 +5644,8 @@ ol {
 
 @media (min-width: 48rem) {
   .catalog-hero__layout {
-    grid-template-columns: minmax(0, 0.85fr) minmax(22rem, 1.15fr);
+    /* ~36:64 text:photo split. */
+    grid-template-columns: minmax(0, 0.56fr) minmax(26rem, 1fr);
   }
 
   .family-hero__layout {
@@ -5935,20 +5952,6 @@ ol {
   transform: scaleX(1);
 }
 
-/* Desktop-only pointer parallax consumption (see components/catalog/hero-parallax.tsx) */
-.catalog-hero__bottle {
-  transition: transform 300ms ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .catalog-hero__products--enter .catalog-hero__bottle {
-    transform: translate(
-      calc(var(--parallax-x, 0) * 0.9rem),
-      calc(var(--parallax-y, 0) * 0.55rem)
-    );
-  }
-}
-
 /* Restrained product/card motion */
 .catalog-card {
   transition:
@@ -5977,26 +5980,28 @@ ol {
   transition: transform 260ms ease;
 }
 
-/* Navigation and link feedback */
-.catalog-family-nav__link {
-  position: relative;
-}
-
+/* Navigation and link feedback — underline mechanic matches
+   `.desktop-nav__link::after` exactly (see that rule): full-width, same
+   2px/0.45rem placement, same scaleX + transform-origin flip, same
+   `--motion-ui`/`--ease-standard` timing, triggered by hover as well as the
+   active/current family. */
 .catalog-family-nav__link::after {
   content: "";
   position: absolute;
-  right: 0.9rem;
-  bottom: 0.15rem;
-  left: 0.9rem;
+  right: 0;
+  bottom: 0.45rem;
+  left: 0;
   height: 2px;
   transform: scaleX(0);
-  transform-origin: left;
+  transform-origin: right;
   background: var(--color-brand-primary);
-  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--motion-ui) var(--ease-standard);
 }
 
+.catalog-family-nav__link:hover::after,
 .catalog-family-nav__link[aria-current="true"]::after {
   transform: scaleX(1);
+  transform-origin: left;
 }
 
 .catalog-page {
@@ -6044,10 +6049,6 @@ ol {
     transition-duration: 480ms;
   }
 
-  .catalog-hero__secondary {
-    animation-duration: 480ms;
-  }
-
   .product-spotlight__frame,
   .product-spotlight__image--primary,
   .product-spotlight__image--secondary,
@@ -6055,11 +6056,8 @@ ol {
     transition-duration: 480ms;
   }
 
-  .catalog-hero__focal {
-    /* Keep the continuous float's own slow 7s pace; only the one-shot
-       entrance (second in the list) speeds up on mobile. */
-    animation-name: catalog-hero-float-soft, catalog-fade-up-scale;
-    animation-duration: 7s, 480ms;
+  .catalog-hero__photo-wrap {
+    transition-duration: 480ms;
   }
 
   .catalog-linework {
@@ -6071,17 +6069,7 @@ ol {
   }
 
   .catalog-hero {
-    min-height: min(88svh, 46rem);
-  }
-}
-
-@keyframes catalog-hero-float-soft {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -0.3rem;
+    min-height: min(80svh, 40rem);
   }
 }
 
@@ -6091,7 +6079,7 @@ ol {
   }
 
   .catalog-hero {
-    min-height: clamp(44rem, 84svh, 58rem);
+    min-height: clamp(38rem, 76svh, 50rem);
   }
 }
 
@@ -6107,14 +6095,6 @@ ol {
     transform: none;
   }
 
-  .catalog-hero__focal,
-  .catalog-hero__secondary {
-    animation: none;
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
-  }
-
   .product-spotlight__frame,
   .product-spotlight__image--primary,
   .product-spotlight__image--secondary,
@@ -6128,17 +6108,14 @@ ol {
     opacity: 0.88;
   }
 
-  .catalog-hero__stage--enter {
-    transform: none;
-  }
-
   .catalog-reveal-rule::before {
     transition-duration: 0.01ms;
   }
 
-  .catalog-hero__stage {
+  .catalog-hero__photo-wrap {
     transition-duration: 0.01ms;
-    transform: none !important;
+    opacity: 1;
+    transform: none;
   }
 
   .product-asset__image,

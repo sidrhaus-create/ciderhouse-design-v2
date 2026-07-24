@@ -87,7 +87,15 @@ export function FamilyChapter({
         {family.title}
       </h2>
       <p className="chapter__description">{family.description}</p>
-      {family.missingAssetNote ? (
+      {family.groups ? (
+        <div className="family-groups" role="list">
+          {family.groups.map((group) => (
+            <p className="family-missing-note" key={group.slug} role="listitem">
+              <strong>{group.label}.</strong> {group.missingAssetNote}
+            </p>
+          ))}
+        </div>
+      ) : family.missingAssetNote ? (
         <p className="family-missing-note" role="note">
           {family.missingAssetNote}
         </p>

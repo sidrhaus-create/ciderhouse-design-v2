@@ -14,8 +14,6 @@
     "/brands/dtree-party",
     "/brands/white-phoenix",
     "/brands/mister-bee",
-    "/brands/migliore",
-    "/brands/bumble-coffee",
     "/brands/zero"
   ],
   "previewRoutes": [
@@ -26,5 +24,5 @@
   "experimentalRoutes": [
     "/catalog-concept"
   ],
-  "warning": "Do not publish content marked requires-approval. DTREE PARTY, Migliore, and Bumble Coffee have no sourced content yet — see docs/CATALOG-CONTENT-SOURCES.md."
+  "warning": "Do not publish content marked requires-approval. DTREE PARTY has no sourced content yet, and the \"0%\" category (Migliore, Bumble Coffee) has no sourced content yet for those two joining lines — see docs/CATALOG-CONTENT-SOURCES.md."
 }

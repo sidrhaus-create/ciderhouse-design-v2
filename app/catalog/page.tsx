@@ -4,7 +4,6 @@ import { ButtonLink } from "@/components/ui/button";
 import { SafeReveal } from "@/components/motion/safe-reveal";
 import { BackToTop } from "@/components/catalog/back-to-top";
 import { CatalogFamilyNav } from "@/components/catalog/catalog-family-nav";
-import { HeroParallax } from "@/components/catalog/hero-parallax";
 import {
   FamilyChapter,
   type ChapterVariant,
@@ -26,29 +25,22 @@ export const metadata: Metadata = {
   },
 };
 
-const heroFocal = {
-  src: "/assets/products/white-phoenix/white-phoenix-cherry-passionfruit-front.png",
-  alt: "Бутылка White Phoenix Вишня-маракуйя; упаковка показана без изменений",
-  width: 1680,
-  height: 2100,
+/**
+ * Transparent-background derivative of `docs/references/catalog-hero/catalog-bottles-source.jpg`
+ * (that source file is never modified — see docs/CATALOG-CONTENT-SOURCES.md
+ * "Catalog hero: transparent-background derivative" for the exact
+ * flood-fill technique and verification). Every bottle, label, cap, liquid
+ * colour, podium and shadow pixel is byte-identical to the source; only the
+ * plain white studio backdrop around that unchanged composition was made
+ * transparent, so the photo can sit directly in the purple hero without a
+ * visible white card.
+ */
+const heroPhoto = {
+  src: "/assets/products/catalog/catalog-hero-transparent.png",
+  alt: "Ассортимент бутылок Cider House: линейки Double Tree и White Phoenix; фотография показана без изменений",
+  width: 2400,
+  height: 1350,
 };
-
-const heroSecondary = [
-  {
-    src: "/assets/products/double-tree/double-tree-045-dark-cherry-front.png",
-    alt: "Бутылка Double Tree Тёмная вишня; упаковка показана без изменений",
-    width: 1680,
-    height: 2100,
-    position: "left" as const,
-  },
-  {
-    src: "/assets/products/mister-bee/mister-bee-foundation-01-front.png",
-    alt: "Классическая бутылка медовухи Mister Bee; упаковка показана без изменений",
-    width: 182,
-    height: 870,
-    position: "right" as const,
-  },
-];
 
 const allFormats: ProductFormat[] = ["bottle", "can", "keg"];
 
@@ -102,33 +94,21 @@ export default function CatalogPage() {
               </div>
             </div>
           </SafeReveal>
-          <HeroParallax
-            ariaLabel="Продукция Cider House"
-            className="catalog-hero__stage catalog-hero__stage--enter"
-          >
-            {heroSecondary.map((asset) => (
+          <div className="catalog-hero__photo-stage">
+            <div aria-hidden="true" className="catalog-hero__photo-glow" />
+            <SafeReveal className="catalog-hero__photo-wrap">
               <Image
-                alt={asset.alt}
-                className={`catalog-hero__secondary catalog-hero__secondary--${asset.position}`}
-                height={asset.height}
-                key={asset.src}
-                sizes="(max-width: 768px) 24vw, 14vw"
-                src={asset.src}
+                alt={heroPhoto.alt}
+                className="catalog-hero__photo"
+                height={heroPhoto.height}
+                priority
+                sizes="(max-width: 768px) 92vw, 60vw"
+                src={heroPhoto.src}
                 unoptimized
-                width={asset.width}
+                width={heroPhoto.width}
               />
-            ))}
-            <Image
-              alt={heroFocal.alt}
-              className="catalog-hero__focal"
-              height={heroFocal.height}
-              priority
-              sizes="(max-width: 768px) 52vw, 26vw"
-              src={heroFocal.src}
-              unoptimized
-              width={heroFocal.width}
-            />
-          </HeroParallax>
+            </SafeReveal>
+          </div>
         </div>
       </section>
 

@@ -8,8 +8,6 @@ type PendingFamilyChapterProps = {
 
 const linework: Partial<Record<string, "grid" | "rings" | "diagonal">> = {
   "dtree-party": "diagonal",
-  migliore: "grid",
-  "bumble-coffee": "rings",
 };
 
 /**
