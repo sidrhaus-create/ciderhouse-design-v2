@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { preload } from "react-dom";
 import { AgeGate } from "@/components/age-gate";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
+import "./site.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -42,6 +44,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const ageGateEnabled = process.env.NEXT_PUBLIC_ENABLE_AGE_GATE !== "false";
+
+  for (const font of ["unbounded-cyrillic", "manrope-cyrillic"]) {
+    preload(`/assets/fonts/${font}.woff2`, {
+      as: "font",
+      type: "font/woff2",
+      crossOrigin: "anonymous",
+    });
+  }
 
   return (
     <html lang="ru">

@@ -1,239 +1,230 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ButtonLink } from "@/components/ui/button";
-import { SafeReveal } from "@/components/motion/safe-reveal";
+import type { CSSProperties } from "react";
 import { BackToTop } from "@/components/catalog/back-to-top";
-import { CatalogProductCard } from "@/components/catalog/catalog-product-card";
+import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
+import { SiteMotion } from "@/components/motion/site-motion";
+import { Closing } from "@/components/site/closing";
+import { Kicker, Lines, pad, Words } from "@/components/site/text";
+import { Bottle } from "@/components/ui/bottle";
 import { productFamilies } from "@/data/catalog-content";
+import { explorerFamilies, familyLeads } from "@/data/showcase";
+import { photography, type Photo } from "@/data/site-content";
+import { plural, POSITIONS } from "@/lib/plural";
 import { formatLabels, type ProductFamily } from "@/types/catalog";
 
+/** Full-bleed photograph used on a family page, where one exists. */
+const familyPhoto: Partial<
+  Record<string, { photo: Photo; focus: string; caption: string }>
+> = {
+  "double-tree": {
+    photo: photography.appleCider,
+    focus: "50% 64%",
+    caption: "Зелёное яблоко",
+  },
+  "white-phoenix": {
+    photo: photography.cherryCocktail,
+    focus: "50% 42%",
+    caption: "Тёмная вишня",
+  },
+};
+
 export function FamilyPageTemplate({ family }: { family: ProductFamily }) {
-  const otherFamilies = productFamilies.filter(
-    (item) => item.slug !== family.slug,
-  );
-  const familyIndex = productFamilies.findIndex(
-    (item) => item.slug === family.slug,
-  );
-  const previousFamily =
-    productFamilies[
-      (familyIndex - 1 + productFamilies.length) % productFamilies.length
-    ];
-  const nextFamily =
-    productFamilies[(familyIndex + 1) % productFamilies.length];
+  const index = productFamilies.findIndex((item) => item.slug === family.slug);
+  const next = productFamilies[(index + 1) % productFamilies.length];
+  const explorer = explorerFamilies.find((item) => item.slug === family.slug);
+  const tone = explorer?.tone ?? "ink";
+  const leads = familyLeads[family.slug] ?? [];
+  const photo = familyPhoto[family.slug];
+  const composite = leads.length ? undefined : family.heroAssets[0];
+  const count = family.products.length;
+  const titleLines =
+    family.title.length > 9 ? family.title.split(" ") : [family.title];
 
   return (
-    <div className={`family-page family-page--${family.slug}`}>
-      <section aria-labelledby="family-hero-title" className="family-hero">
-        {family.theme === "purple" || family.theme === "dark" ? (
-          <div
-            aria-hidden="true"
-            className={`catalog-linework catalog-linework--${
-              familyIndex % 2 === 0 ? "diagonal" : "rings"
-            }`}
-          />
-        ) : null}
-        <div className="container container--wide family-hero__layout">
-          <div className="family-hero__copy catalog-reveal-stagger">
-            <p className="family-kicker">
-              <span className="catalog-index" aria-hidden="true">
-                {String(familyIndex + 1).padStart(2, "0")}
-              </span>
-              {family.categoryLabel}
-            </p>
-            {family.logo ? (
-              <Image
-                alt={family.logo.alt}
-                className="family-hero__logo"
-                height={family.logo.height}
-                src={family.logo.src}
-                width={family.logo.width}
-              />
-            ) : null}
-            <h1 className="family-hero__title" id="family-hero-title">
-              {family.title}
-            </h1>
-            <p className="family-hero__body">{family.description}</p>
-            <div className="family-actions">
-              <ButtonLink
-                className="family-button"
-                href="#products"
-                variant="inverse"
-              >
-                Смотреть продукцию
-              </ButtonLink>
-              <ButtonLink
-                className="family-button family-button--outline"
-                href="/where-to-buy"
-                variant="secondary"
-              >
-                Где купить
-              </ButtonLink>
-            </div>
-          </div>
-          {family.heroAssets.length > 0 ? (
-            <div
-              aria-label={`Продукция ${family.title}`}
-              className="family-hero__products"
-            >
-              {family.heroAssets.map((asset) => (
+    <SiteMotion className={`brand brand--${family.slug}`}>
+      {/* Poster hero ---------------------------------------------------- */}
+      <section
+        aria-labelledby="brand-title"
+        className="hs hs--static"
+        data-initial=""
+        data-tone={tone}
+      >
+        <div className="hs__stage">
+          <div className={`hs-slide cx-tone-${tone}`} data-state="active">
+            {leads.length ? (
+              <div className="hs-media hs-media--cluster hs-media--trio">
+                <span aria-hidden="true" className="hs-disc" />
+                <div
+                  aria-label={`Бутылки ${family.title}`}
+                  className="hs-cluster"
+                  role="group"
+                >
+                  {leads.map((item, leadIndex) => (
+                    <Bottle
+                      asset={item.asset}
+                      className="hs-cluster__bottle"
+                      index={leadIndex}
+                      key={item.id}
+                      priority
+                      sizes="(max-width: 1023px) 40vw, 22vw"
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : composite ? (
+              <div className="hs-media hs-media--composite">
                 <Image
-                  alt={asset.alt}
-                  className="family-hero__bottle"
-                  height={asset.height}
-                  key={asset.src}
-                  sizes="(max-width: 768px) 40vw, 22vw"
-                  src={asset.src}
-                  unoptimized
-                  width={asset.width}
+                  alt={composite.alt}
+                  height={composite.height}
+                  priority
+                  sizes="(max-width: 1023px) 90vw, 46vw"
+                  src={composite.src}
+                  width={composite.width}
                 />
-              ))}
+              </div>
+            ) : (
+              <div aria-hidden="true" className="hs-media hs-media--cluster">
+                <span className="hs-disc" />
+              </div>
+            )}
+            <div className="cx-wrap hs-copy">
+              <p className="hs-kicker">
+                <span>{pad(index + 1)}</span>
+                <span>{family.categoryLabel}</span>
+              </p>
+              <div className="hs-copy__main">
+                <h1
+                  className="hs-title"
+                  data-size={family.title.length > 11 ? undefined : "xl"}
+                  id="brand-title"
+                >
+                  {titleLines.map((line, lineIndex) => (
+                    <span
+                      className="hs-line"
+                      key={line}
+                      style={{ "--i": lineIndex } as CSSProperties}
+                    >
+                      <span>{line}</span>
+                    </span>
+                  ))}
+                </h1>
+                <p className="hs-body">{family.description}</p>
+                <div className="cx-actions hs-actions">
+                  {count ? (
+                    <Link className="cx-btn cx-btn--solid" href="#brands">
+                      {count} {plural(count, POSITIONS)}
+                      <span aria-hidden="true">↓</span>
+                    </Link>
+                  ) : null}
+                  <Link className="cx-btn cx-btn--ghost" href="/where-to-buy">
+                    Где купить
+                  </Link>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="family-hero__pending" role="status">
-              <span aria-hidden="true">∅</span>
-              <p>Официальное изображение пока не подтверждено</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section aria-labelledby="family-story-title" className="family-story">
-        <SafeReveal className="container container--narrow catalog-reveal-rule">
-          <h2 className="family-section-title" id="family-story-title">
-            О линейке
-          </h2>
-          {family.story.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </SafeReveal>
-      </section>
-
-      <section
-        aria-labelledby="family-products-title"
-        className="family-products"
-        id="products"
-      >
-        {family.theme === "dark" ? (
-          <div aria-hidden="true" className="catalog-shimmer" />
-        ) : null}
-        <SafeReveal className="container container--wide catalog-reveal-rule">
-          <h2 className="family-section-title" id="family-products-title">
-            Продукция
-          </h2>
-          {family.missingAssetNote ? (
-            <p className="family-missing-note" role="note">
-              {family.missingAssetNote}
-            </p>
-          ) : null}
-          {family.products.length > 0 ? (
-            <div className="catalog-grid">
-              {family.products.map((product) => (
-                <CatalogProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <p className="family-empty-note" role="status">
-              Подтверждённые продукты этой линейки пока не опубликованы
-              официальным источником.
-            </p>
-          )}
-        </SafeReveal>
-      </section>
-
-      <section
-        aria-labelledby="family-formats-title"
-        className="family-formats"
-      >
-        <SafeReveal className="container container--wide catalog-reveal-rule">
-          <h2 className="family-section-title" id="family-formats-title">
-            Форматы
-          </h2>
-          {family.formats.length > 0 ? (
-            <ul className="family-formats__list">
-              {family.formats.map((format) => (
-                <li key={format}>{formatLabels[format]}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="family-empty-note" role="status">
-              Форматы пока не подтверждены официальным источником.
-            </p>
-          )}
-        </SafeReveal>
-      </section>
-
-      <section
-        aria-labelledby="family-character-title"
-        className="family-character"
-      >
-        <SafeReveal className="container container--wide">
-          <h2 className="family-section-title" id="family-character-title">
-            Направление вкуса
-          </h2>
-          {family.characterNotes.length > 0 ? (
-            <ul className="family-character__list">
-              {family.characterNotes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="family-empty-note" role="status">
-              Направление вкуса пока не подтверждено официальным источником.
-            </p>
-          )}
-        </SafeReveal>
-      </section>
-
-      <section aria-labelledby="family-other-title" className="family-other">
-        <SafeReveal className="container container--wide">
-          <h2 className="family-section-title" id="family-other-title">
-            Другие направления
-          </h2>
-          <div className="family-prev-next">
-            <Link href={`/brands/${previousFamily.slug}`}>
-              <span aria-hidden="true">←</span> {previousFamily.navLabel}
-            </Link>
-            <Link href={`/brands/${nextFamily.slug}`}>
-              {nextFamily.navLabel} <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <ul className="family-other__list">
-            {otherFamilies.map((other) => (
-              <li key={other.slug}>
-                <Link href={`/brands/${other.slug}`}>{other.navLabel}</Link>
-              </li>
-            ))}
-          </ul>
-        </SafeReveal>
-      </section>
-
-      <section
-        aria-labelledby="family-final-cta-title"
-        className="family-final-cta"
-      >
-        <div className="container container--wide family-final-cta__layout">
-          <h2 className="family-section-title" id="family-final-cta-title">
-            {family.title} — часть ассортимента Cider House
-          </h2>
-          <div className="family-actions">
-            <ButtonLink
-              className="family-button"
-              href="/catalog"
-              variant="inverse"
-            >
-              Смотреть весь ассортимент
-            </ButtonLink>
-            <ButtonLink
-              className="family-button family-button--outline"
-              href="/where-to-buy"
-              variant="secondary"
-            >
-              Где купить
-            </ButtonLink>
           </div>
         </div>
       </section>
+
+      {/* Story ---------------------------------------------------------- */}
+      <section
+        aria-labelledby="brand-story-title"
+        className="cx-section cx-tone-white"
+      >
+        <div className="cx-wrap">
+          <Kicker index="01">О линейке</Kicker>
+          <h2 className="visually-hidden" id="brand-story-title">
+            О линейке {family.title}
+          </h2>
+          <div className="cx-split">
+            <div className="cx-stack">
+              <p className="brand-story__lead" data-words>
+                <Words text={family.story[0]} />
+              </p>
+              {family.story.slice(1).map((paragraph) => (
+                <p className="cx-lead cx-muted" data-fade key={paragraph}>
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div className="cx-stack">
+              {family.characterNotes.length ? (
+                <ul className="cx-rows" data-stagger>
+                  {family.characterNotes.map((note, noteIndex) => (
+                    <li key={note}>
+                      <div className="cx-row brand-story__note">
+                        <span className="cx-row__index">
+                          {pad(noteIndex + 1)}
+                        </span>
+                        <span>{note}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              {family.formats.length ? (
+                <p className="cx-label cx-muted" data-fade>
+                  Форматы:{" "}
+                  {family.formats
+                    .map((format) => formatLabels[format].toLowerCase())
+                    .join(" · ")}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Photograph ---------------------------------------------------- */}
+      {photo ? (
+        <section
+          aria-label={photo.photo.alt}
+          className="cx-photo"
+          style={{ "--focus": photo.focus } as CSSProperties}
+        >
+          <div className="cx-photo__frame" data-parallax>
+            <Image
+              alt={photo.photo.alt}
+              height={photo.photo.height}
+              sizes="100vw"
+              src={photo.photo.src}
+              width={photo.photo.width}
+            />
+          </div>
+          <div className="cx-wrap cx-photo__content">
+            <div className="cx-photo__top cx-label">
+              <span>{family.title}</span>
+              <span>{photo.caption}</span>
+            </div>
+            <div className="cx-photo__bottom">
+              <p className="cx-mega" data-lines>
+                <Lines lines={[family.categoryLabel]} />
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* Range ---------------------------------------------------------- */}
+      {explorer && (count > 0 || explorer.composite) ? (
+        <CatalogExplorer families={[explorer]} single />
+      ) : null}
+
+      {/* Next family --------------------------------------------------- */}
+      <section className="cx-tone-ink">
+        <div className="cx-wrap">
+          <Link className="cx-next" href={`/brands/${next.slug}`}>
+            <span className="cx-label cx-muted">Следующее направление</span>
+            <span className="cx-next__name">
+              {next.title} <span aria-hidden="true">→</span>
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <Closing />
       <BackToTop />
-    </div>
+    </SiteMotion>
   );
 }

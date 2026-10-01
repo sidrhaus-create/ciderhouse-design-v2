@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { ButtonLink } from "@/components/ui/button";
-import { SafeReveal } from "@/components/motion/safe-reveal";
+import Link from "next/link";
 import { BackToTop } from "@/components/catalog/back-to-top";
-import { CatalogFamilyNav } from "@/components/catalog/catalog-family-nav";
-import {
-  FamilyChapter,
-  type ChapterVariant,
-} from "@/components/catalog/family-chapter";
-import { PendingFamilyChapter } from "@/components/catalog/pending-family-chapter";
+import { CatalogExplorer } from "@/components/catalog/catalog-explorer";
+import { SiteMotion } from "@/components/motion/site-motion";
+import { Closing } from "@/components/site/closing";
+import { Kicker, Lines, pad } from "@/components/site/text";
+import { Bottle } from "@/components/ui/bottle";
 import { catalogContent, productFamilies } from "@/data/catalog-content";
+import { catalogCount, explorerFamilies, shelfRow } from "@/data/showcase";
+import { plural, POSITIONS } from "@/lib/plural";
 import { formatLabels, type ProductFormat } from "@/types/catalog";
 
 export const metadata: Metadata = {
@@ -25,214 +24,110 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * Transparent-background derivative of `docs/references/catalog-hero/catalog-bottles-source.jpg`
- * (that source file is never modified — see docs/CATALOG-CONTENT-SOURCES.md
- * "Catalog hero: transparent-background derivative" for the exact
- * flood-fill technique and verification). Every bottle, label, cap, liquid
- * colour, podium and shadow pixel is byte-identical to the source; only the
- * plain white studio backdrop around that unchanged composition was made
- * transparent, so the photo can sit directly in the purple hero without a
- * visible white card.
- */
-const heroPhoto = {
-  src: "/assets/products/catalog/catalog-hero-transparent.png",
-  alt: "Ассортимент бутылок Cider House: линейки Double Tree и White Phoenix; фотография показана без изменений",
-  width: 2400,
-  height: 1350,
-};
-
 const allFormats: ProductFormat[] = ["bottle", "can", "keg"];
-
-const chapterVariants: Record<string, ChapterVariant> = {
-  "double-tree": "stage-right",
-  "white-phoenix": "dark-centered",
-  "mister-bee": "split-rail",
-  zero: "dark-centered",
-};
-
-/** True once a family has neither approved product images nor a hero composite — nothing for FamilyChapter to stage. */
-function isPendingFamily(family: (typeof productFamilies)[number]) {
-  return (
-    family.products.filter((product) => product.asset).length === 0 &&
-    family.heroAssets.length === 0
-  );
-}
 
 export default function CatalogPage() {
   return (
-    <div className="catalog-page">
-      <section aria-labelledby="catalog-hero-title" className="catalog-hero">
-        <div
-          aria-hidden="true"
-          className="catalog-linework catalog-linework--grid"
-        />
-        <div aria-hidden="true" className="catalog-shimmer" />
-        <div className="container container--wide catalog-hero__layout">
-          <SafeReveal className="catalog-hero__copy">
-            <div className="catalog-reveal-stagger">
-              <p className="family-kicker">{catalogContent.eyebrow}</p>
-              <h1 className="catalog-hero__title" id="catalog-hero-title">
-                {catalogContent.title}
-              </h1>
-              <p className="catalog-hero__body">{catalogContent.body}</p>
-              <div className="family-actions">
-                <ButtonLink
-                  className="family-button"
-                  href={catalogContent.primaryCta.href}
-                  variant="inverse"
-                >
-                  {catalogContent.primaryCta.label}
-                </ButtonLink>
-                <ButtonLink
-                  className="family-button family-button--outline"
-                  href={catalogContent.secondaryCta.href}
-                  variant="secondary"
-                >
-                  {catalogContent.secondaryCta.label}
-                </ButtonLink>
-              </div>
+    <SiteMotion className="catalog">
+      <section aria-labelledby="catalog-title" className="ct-hero cx-tone-ink">
+        <div className="cx-wrap">
+          <Kicker
+            aside={`${catalogCount} ${plural(catalogCount, POSITIONS)}`}
+            index="01"
+          >
+            {catalogContent.eyebrow}
+          </Kicker>
+          <h1 className="cx-mega ct-hero__title" data-lines id="catalog-title">
+            <Lines lines={["Выбери", "свой вкус"]} />
+          </h1>
+          <div className="ct-hero__foot" data-fade>
+            <p className="cx-lead">{catalogContent.body}</p>
+            <div className="cx-actions">
+              <Link className="cx-btn cx-btn--light" href="#brands">
+                {catalogContent.primaryCta.label}
+                <span aria-hidden="true">↓</span>
+              </Link>
+              <Link
+                className="cx-btn cx-btn--ghost"
+                href={catalogContent.secondaryCta.href}
+              >
+                {catalogContent.secondaryCta.label}
+              </Link>
             </div>
-          </SafeReveal>
-          <div className="catalog-hero__photo-stage">
-            <div aria-hidden="true" className="catalog-hero__photo-glow" />
-            <SafeReveal className="catalog-hero__photo-wrap">
-              <Image
-                alt={heroPhoto.alt}
-                className="catalog-hero__photo"
-                height={heroPhoto.height}
-                priority
-                sizes="(max-width: 768px) 92vw, 60vw"
-                src={heroPhoto.src}
-                unoptimized
-                width={heroPhoto.width}
-              />
-            </SafeReveal>
+          </div>
+        </div>
+        <div aria-hidden="true" className="cx-shelf">
+          <div className="cx-shelf__row">
+            {[0, 1].map((group) => (
+              <div
+                aria-hidden={group === 1}
+                className="cx-shelf__group"
+                key={group}
+              >
+                {shelfRow.map((item, index) => (
+                  <Bottle
+                    asset={{ ...item.asset, alt: "" }}
+                    index={index}
+                    key={item.id}
+                    priority={group === 0 && index < 8}
+                    sizes="(max-width: 768px) 30vw, 12vw"
+                  />
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <CatalogFamilyNav
-        items={productFamilies.map((family) => ({
-          slug: family.slug,
-          label: family.navLabel,
-          theme: family.theme,
-        }))}
-      />
-
-      {productFamilies.map((family, index) =>
-        isPendingFamily(family) ? (
-          <PendingFamilyChapter
-            family={family}
-            index={index}
-            key={family.slug}
-          />
-        ) : (
-          <FamilyChapter
-            family={family}
-            index={index}
-            key={family.slug}
-            priority={index === 0}
-            variant={chapterVariants[family.slug] ?? "spotlight-left"}
-          />
-        ),
-      )}
+      <CatalogExplorer families={explorerFamilies} />
 
       <section
-        aria-labelledby="catalog-formats-title"
-        className="catalog-formats"
+        aria-labelledby="formats-title"
+        className="cx-section cx-tone-white"
       >
-        <div
-          aria-hidden="true"
-          className="catalog-shimmer catalog-shimmer--light"
-        />
-        <SafeReveal className="container container--wide catalog-reveal-rule">
-          <h2 className="family-section-title" id="catalog-formats-title">
-            Форматы
-          </h2>
-          <div className="format-system">
-            {allFormats.map((format, formatIndex) => {
-              const supportingFamilies = productFamilies.filter((family) =>
-                family.formats.includes(format),
-              );
-              return (
-                <div className="format-system__column" key={format}>
-                  <span aria-hidden="true" className="catalog-index">
-                    {String(formatIndex + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="format-system__name">
-                    {formatLabels[format]}
-                  </h3>
-                  {supportingFamilies.length > 0 ? (
-                    <ul className="format-system__families">
-                      {supportingFamilies.map((family) => (
-                        <li key={family.slug}>
-                          <span
-                            aria-hidden="true"
-                            className="format-system__dot"
-                          />
-                          {family.navLabel}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="format-system__empty">
-                      Пока не подтверждено ни для одного направления.
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <p className="catalog-formats__note">
-            Формат отмечен только для направлений, где он подтверждён
-            источником. Отметка не означает, что каждый вкус выпускается в
-            каждом формате.
-          </p>
-        </SafeReveal>
-      </section>
-
-      <section aria-labelledby="catalog-cta-title" className="catalog-cta">
-        <div
-          aria-hidden="true"
-          className="catalog-linework catalog-linework--diagonal"
-        />
-        <div aria-hidden="true" className="catalog-shimmer" />
-        <SafeReveal className="container container--wide catalog-cta__layout">
-          <div className="catalog-cta__copy catalog-reveal-stagger">
-            <h2 className="family-section-title" id="catalog-cta-title">
-              {catalogContent.cta.title}
+        <div className="cx-wrap">
+          <Kicker index="02">Форматы</Kicker>
+          <div className="cx-split">
+            <h2 className="cx-h2" data-lines id="formats-title">
+              <Lines lines={["Бутылки,", "банки и кеги"]} />
             </h2>
-            <p>{catalogContent.cta.body}</p>
-            <div className="family-actions">
-              {catalogContent.cta.actions.map((action, index) => (
-                <ButtonLink
-                  className={
-                    index === 0
-                      ? "family-button"
-                      : "family-button family-button--outline"
-                  }
-                  href={action.href}
-                  key={action.href}
-                  variant={index === 0 ? "inverse" : "secondary"}
-                >
-                  {action.label}
-                </ButtonLink>
-              ))}
+            <div className="cx-stack">
+              <div className="cx-formats" data-stagger>
+                {allFormats.map((format, index) => {
+                  const families = productFamilies.filter((family) =>
+                    family.formats.includes(format),
+                  );
+                  return (
+                    <div className="cx-format" key={format}>
+                      <p className="cx-label cx-muted">{pad(index + 1)}</p>
+                      <h3 className="cx-h3">{formatLabels[format]}</h3>
+                      {families.length ? (
+                        <ul>
+                          {families.map((family) => (
+                            <li key={family.slug}>{family.navLabel}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="cx-note">
+                          Линейки в этом формате появятся в каталоге позже.
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="cx-note">
+                Формат отмечен только для направлений, где он подтверждён.
+                Отметка не означает, что каждый вкус выпускается в каждом
+                формате.
+              </p>
             </div>
           </div>
-          <Image
-            alt="Бутылка Double Tree Груша; упаковка показана без изменений"
-            className="catalog-cta__bottle"
-            height={2100}
-            sizes="(max-width: 768px) 40vw, 18vw"
-            src="/assets/products/double-tree/double-tree-045-pear-front.png"
-            unoptimized
-            width={1680}
-          />
-        </SafeReveal>
+        </div>
       </section>
+
+      <Closing actions={catalogContent.cta.actions} />
       <BackToTop />
-    </div>
+    </SiteMotion>
   );
 }

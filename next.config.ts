@@ -6,17 +6,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/katalog", destination: "/catalog", permanent: true },
-      {
-        source: "/where-to-buy",
-        destination: "/#where-to-buy",
-        permanent: false,
-      },
-      { source: "/map", destination: "/#where-to-buy", permanent: true },
-      { source: "/partners", destination: "/#partners", permanent: false },
-      { source: "/clients", destination: "/#partners", permanent: true },
-      { source: "/contacts", destination: "/#contacts", permanent: false },
-      { source: "/contact", destination: "/#contacts", permanent: true },
-      { source: "/blog", destination: "/#social", permanent: true },
+      { source: "/map", destination: "/where-to-buy", permanent: true },
+      { source: "/clients", destination: "/partners", permanent: true },
+      { source: "/contact", destination: "/contacts", permanent: true },
+      { source: "/ph", destination: "/catalog", permanent: true },
+      { source: "/blog", destination: "/#news", permanent: true },
+      { source: "/brands", destination: "/catalog", permanent: false },
       { source: "/privacy", destination: "/#legal", permanent: false },
       { source: "/legal", destination: "/#legal", permanent: false },
     ];

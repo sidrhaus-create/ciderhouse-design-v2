@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Container } from "@/components/ui/container";
 import { productFamilies } from "@/data/catalog-content";
 import { homepageContent } from "@/data/homepage-content";
 import { foundationNavigation, isPreviewRoute } from "@/lib/navigation";
-import { Container } from "@/components/ui/container";
 
 const footerBrandLinks = productFamilies.map((family) => ({
   href: `/brands/${family.slug}`,
@@ -16,7 +16,7 @@ const footerBrandLinks = productFamilies.map((family) => ({
 export function SiteFooter() {
   const pathname = usePathname();
 
-  if (!isPreviewRoute(pathname)) return <HomepageFooter />;
+  if (!isPreviewRoute(pathname)) return <CampaignFooter />;
 
   return (
     <footer className="site-footer site-footer--foundation">
@@ -55,16 +55,70 @@ export function SiteFooter() {
   );
 }
 
-function HomepageFooter() {
-  const { contacts, navigation, social } = homepageContent;
+function CampaignFooter() {
+  const { contacts, navigation, social, whereToBuy } = homepageContent;
   const currentYear = new Date().getFullYear();
+  const pages = navigation.filter((item) => !("kind" in item));
 
   return (
-    <footer className="home-footer" id="contacts">
-      <div className="container container--wide home-footer__top">
+    <footer className="cx-footer">
+      <div className="cx-wrap cx-footer__cta">
+        <p className="cx-footer__cta-title">
+          {whereToBuy.title[0]}
+          <br />
+          {whereToBuy.title[1]}
+        </p>
+        <Link className="cx-btn cx-btn--light" href="/where-to-buy">
+          {whereToBuy.cta.label} <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+
+      <div className="cx-wrap cx-footer__grid">
+        <nav aria-label="Бренды" className="cx-footer__group">
+          <h2>Бренды</h2>
+          {footerBrandLinks.map((brand) => (
+            <Link href={brand.href} key={brand.href}>
+              {brand.label}
+            </Link>
+          ))}
+        </nav>
+        <nav aria-label="Разделы" className="cx-footer__group">
+          <h2>Разделы</h2>
+          {pages.map((item) => (
+            <Link href={item.href} key={item.href}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="cx-footer__group">
+          <h2>Контакты</h2>
+          <a href={contacts.phoneHref}>{contacts.phone}</a>
+          <a href={contacts.emailHref}>{contacts.email}</a>
+          <a href={contacts.generalEmailHref}>{contacts.generalEmail}</a>
+        </div>
+        <div className="cx-footer__group">
+          <h2>Мы в сети</h2>
+          {social.links.map((item) => (
+            <a
+              href={item.href}
+              key={item.href}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {item.label}
+              <span className="visually-hidden">
+                {" "}
+                (откроется в новой вкладке)
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="cx-wrap">
         <Link
           aria-label="Cider House — главная"
-          className="home-footer__brand"
+          className="cx-footer__mark"
           href="/"
         >
           <Image
@@ -74,70 +128,23 @@ function HomepageFooter() {
             width={3775}
           />
         </Link>
-        <p className="home-footer__age">18+</p>
       </div>
-      <div className="container container--wide home-footer__primary">
-        <div>
-          <p className="home-footer__eyebrow">Продукция рядом</p>
-          <p className="home-footer__primary-title">
-            Найди Cider House
-            <br />в своём городе
-          </p>
-        </div>
-        <Link className="home-footer__primary-action" href="/where-to-buy">
-          Где купить <span aria-hidden="true">↗</span>
-        </Link>
-      </div>
-      <div className="container container--wide home-footer__grid">
-        <nav aria-label="Бренды" className="home-footer__brands">
-          <p className="home-footer__group-title">Бренды</p>
-          {footerBrandLinks.map((brand) => (
-            <Link href={brand.href} key={brand.href}>
-              {brand.label}
-            </Link>
-          ))}
-        </nav>
-        <nav aria-label="Навигация в подвале" className="home-footer__nav">
-          <p className="home-footer__group-title">Разделы</p>
-          {navigation.map((item) => (
-            <Link href={item.href} key={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="home-footer__contacts">
-          <p className="home-footer__group-title">Контакты</p>
-          <a href={contacts.phoneHref}>{contacts.phone}</a>
-          <a href={contacts.emailHref}>{contacts.email}</a>
-          <a href={contacts.generalEmailHref}>{contacts.generalEmail}</a>
-        </div>
-        <div className="home-footer__social">
-          <p className="home-footer__group-title">Социальные сети</p>
-          {social.links.map((item) => (
-            <a
-              href={item.href}
-              key={item.href}
-              rel="noreferrer"
-              target="_blank"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      </div>
-      <div className="container container--wide home-footer__bottom" id="legal">
+
+      <div className="cx-wrap cx-footer__bottom" id="legal">
+        <p className="cx-footer__age">18+</p>
         <p>
           © <time suppressHydrationWarning>{currentYear}</time>{" "}
           {contacts.company}
         </p>
-        <div className="home-footer__legal-links">
+        <p className="cx-footer__note">
+          Информация на сайте не является публичной офертой. Чрезмерное
+          употребление алкоголя вредит вашему здоровью.{" "}
+          {social.links.flatMap((item) => ("note" in item ? [item.note] : []))}
+        </p>
+        <div className="cx-footer__legal">
           <Link href="/privacy">Политика конфиденциальности</Link>
           <Link href="/legal">Правовая информация</Link>
         </div>
-        <p className="home-footer__legal-note">
-          Информация на сайте не является публичной офертой. Чрезмерное
-          употребление алкоголя вредит вашему здоровью.
-        </p>
       </div>
     </footer>
   );

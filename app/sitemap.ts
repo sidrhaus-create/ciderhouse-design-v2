@@ -24,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    ...["about", "where-to-buy", "partners", "contacts"].map((path) => ({
+      url: `${siteConfig.url}/${path}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     ...productFamilies.map((family) => ({
       url: `${siteConfig.url}/brands/${family.slug}`,
       lastModified,

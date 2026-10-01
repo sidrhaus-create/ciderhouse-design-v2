@@ -24,11 +24,13 @@ export const homepageContent = {
   sources,
   navigation: [
     { label: "Ассортимент", href: "/catalog" },
-    { label: "Бренды", href: "/#product-worlds" },
+    { label: "Бренды", href: "/catalog#brands", kind: "brands" },
+    { label: "0%", href: "/brands/zero" },
     { label: "Производство", href: "/production" },
+    { label: "О нас", href: "/about" },
     { label: "Где купить", href: "/where-to-buy" },
     { label: "Партнёрам", href: "/partners" },
-    { label: "Контакты", href: "/#contacts" },
+    { label: "Контакты", href: "/contacts" },
   ],
   hero: {
     eyebrow: "Cider House · с 2017 года",

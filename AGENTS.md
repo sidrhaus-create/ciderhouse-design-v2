@@ -49,7 +49,7 @@ Build a premium, modern, multi-page digital brand platform for Cider House. The 
 - Avoid autoplay audio.
 - Prevent layout shift and hydration mismatch.
 - Keep animations reversible and stable during fast scroll.
-- `motion` may be used inside isolated client components for AnimatePresence transitions, shared layout transitions, and spring-based microinteractions; it must never control scroll position or global page choreography — that remains GSAP/ScrollTrigger-only via `home-motion.tsx`. GSAP and Motion must never animate the same DOM element.
+- `motion` may be used inside isolated client components for AnimatePresence transitions, shared layout transitions, and spring-based microinteractions; it must never control scroll position or global page choreography — that remains GSAP/ScrollTrigger-only via `components/motion/site-motion.tsx`. GSAP and Motion must never animate the same DOM element.
 
 ## Accessibility and UX
 - Use semantic HTML and visible focus states.

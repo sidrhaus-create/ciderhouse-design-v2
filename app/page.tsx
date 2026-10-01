@@ -1,12 +1,29 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { HomeMotion } from "@/components/home/home-motion";
+import type { CSSProperties, ReactNode } from "react";
+import "./home.css";
 import { BackToTop } from "@/components/catalog/back-to-top";
+import { HeroSlider, type HeroSlide } from "@/components/home/hero-slider";
+import { SiteMotion } from "@/components/motion/site-motion";
+import { Closing } from "@/components/site/closing";
+import { Slider } from "@/components/site/slider";
 import { Accordion } from "@/components/ui/accordion";
-import { ButtonLink } from "@/components/ui/button";
+import { Bottle } from "@/components/ui/bottle";
+import { catalogContent } from "@/data/catalog-content";
 import { homepageContent } from "@/data/homepage-content";
+import {
+  catalogCount,
+  familyCount,
+  familyLeads,
+  flavorNames,
+  heroCluster,
+  runway,
+} from "@/data/showcase";
+import { photography, type Photo } from "@/data/site-content";
+import { plural, POSITIONS } from "@/lib/plural";
 import { siteConfig } from "@/lib/site";
+import type { FamilySlug } from "@/types/catalog";
 
 export const metadata: Metadata = {
   title: { absolute: "Cider House — сидр и медовуха с яркими вкусами" },
@@ -24,579 +41,691 @@ export const metadata: Metadata = {
       "Сидры и медовухи естественного брожения, яркие вкусы и собственное производство в России.",
     images: [
       {
-        url: "/assets/products/mister-bee/mister-bee-foundation-01-front.png",
-        width: 182,
-        height: 870,
-        alt: "Классическая медовуха Mister Bee от Cider House",
+        url: photography.mangoBowl.src,
+        width: photography.mangoBowl.width,
+        height: photography.mangoBowl.height,
+        alt: photography.mangoBowl.alt,
       },
     ],
   },
 };
 
-const faqItems = homepageContent.faq.map((item, index) => ({
+const content = homepageContent;
+const pad = (value: number) => String(value).padStart(2, "0");
+const worlds = content.productWorlds;
+const world = (id: string) => worlds.find((item) => item.id === id)!;
+
+function Lines({ lines }: { lines: readonly string[] }) {
+  return lines.map((line) => (
+    <span className="cx-line" key={line}>
+      <span>{line}</span>
+    </span>
+  ));
+}
+
+/** Words wrapped individually so the motion controller can light them up. */
+function Words({ text }: { text: string }) {
+  return text
+    .split(" ")
+    .map((word, index) => <span key={`${word}-${index}`}>{word} </span>);
+}
+
+/* ---- Hero slides ---------------------------------------------------------- */
+
+type SlideCopy = {
+  index: number;
+  label: string;
+  title: readonly string[];
+  size?: "xl" | "m";
+  body: string;
+  actions: { label: string; href: string }[];
+  isFirst?: boolean;
+};
+
+function SlideCopyBlock({
+  index,
+  label,
+  title,
+  size,
+  body,
+  actions,
+  isFirst,
+}: SlideCopy) {
+  const Heading = isFirst ? "h1" : "h2";
+  return (
+    <div className="cx-wrap hs-copy">
+      <p className="hs-kicker">
+        <span>{pad(index)}</span>
+        <span>{label}</span>
+      </p>
+      <div className="hs-copy__main">
+        <Heading className="hs-title" data-size={size}>
+          {title.map((line, lineIndex) => (
+            <span
+              className="hs-line"
+              key={line}
+              style={{ "--i": lineIndex } as CSSProperties}
+            >
+              <span>{line}</span>
+            </span>
+          ))}
+        </Heading>
+        <p className="hs-body">{body}</p>
+        <div className="cx-actions hs-actions">
+          {actions.map((action, actionIndex) => (
+            <Link
+              className={`cx-btn ${actionIndex === 0 ? "cx-btn--solid" : "cx-btn--ghost"}`}
+              href={action.href}
+              key={action.href}
+            >
+              {action.label}
+              {actionIndex === 0 ? <span aria-hidden="true">→</span> : null}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhotoMedia({ photo, focus }: { photo: Photo; focus: string }) {
+  return (
+    <div
+      className="hs-media hs-media--photo"
+      style={{ "--focus": focus } as CSSProperties}
+    >
+      <Image
+        alt={photo.alt}
+        height={photo.height}
+        sizes="(max-width: 1023px) 100vw, 50vw"
+        src={photo.src}
+        width={photo.width}
+      />
+    </div>
+  );
+}
+
+function slide(
+  id: string,
+  tone: HeroSlide["tone"],
+  copy: SlideCopy,
+  media: ReactNode,
+): HeroSlide {
+  return {
+    id,
+    label: copy.label,
+    tone,
+    content: (
+      <>
+        {media}
+        <SlideCopyBlock {...copy} />
+      </>
+    ),
+  };
+}
+
+const heroSlides: HeroSlide[] = [
+  slide(
+    "master",
+    "ink",
+    {
+      index: 1,
+      label: "Cider House",
+      title: ["Мы создаём", "настоящий", "сидр"],
+      body: content.hero.body,
+      actions: [content.hero.primaryCta, content.hero.secondaryCta],
+      isFirst: true,
+    },
+    <div className="hs-media hs-media--cluster">
+      <span aria-hidden="true" className="hs-disc" />
+      <div
+        aria-label="Бутылки Double Tree и White Phoenix"
+        className="hs-cluster"
+        role="group"
+      >
+        {heroCluster.map((item, index) => (
+          <Bottle
+            asset={item.asset}
+            className="hs-cluster__bottle"
+            index={index}
+            key={item.id}
+            priority
+            sizes="(max-width: 1023px) 40vw, 22vw"
+          />
+        ))}
+      </div>
+    </div>,
+  ),
+  slide(
+    "double-tree",
+    "paper",
+    {
+      index: 2,
+      label: world("double-tree").title,
+      title: ["Double", "Tree"],
+      size: "xl",
+      body: world("double-tree").description,
+      actions: [
+        { label: "Открыть Double Tree", href: world("double-tree").href },
+      ],
+    },
+    <PhotoMedia focus="50% 62%" photo={photography.appleCider} />,
+  ),
+  slide(
+    "white-phoenix",
+    "ink",
+    {
+      index: 3,
+      label: world("white-phoenix").title,
+      title: ["White", "Phoenix"],
+      size: "xl",
+      body: world("white-phoenix").description,
+      actions: [
+        { label: "Открыть White Phoenix", href: world("white-phoenix").href },
+      ],
+    },
+    <PhotoMedia focus="50% 45%" photo={photography.cherryCocktail} />,
+  ),
+  slide(
+    "mister-bee",
+    "brand",
+    {
+      index: 4,
+      label: world("mister-bee").title,
+      title: ["Mister", "Bee"],
+      size: "xl",
+      body: world("mister-bee").description,
+      actions: [
+        { label: "Открыть Mister Bee", href: world("mister-bee").href },
+      ],
+    },
+    <div className="hs-media hs-media--cluster hs-media--trio">
+      <span aria-hidden="true" className="hs-disc" />
+      <div aria-label="Бутылки Mister Bee" className="hs-cluster" role="group">
+        {(familyLeads["mister-bee"] ?? []).map((item, index) => (
+          <Bottle
+            asset={item.asset}
+            className="hs-cluster__bottle"
+            index={index}
+            key={item.id}
+            sizes="(max-width: 1023px) 40vw, 22vw"
+          />
+        ))}
+      </div>
+    </div>,
+  ),
+  slide(
+    "zero",
+    "ink",
+    {
+      index: 5,
+      label: "0%",
+      title: content.zeroFeature.title,
+      size: "m",
+      body: content.zeroFeature.body,
+      actions: [content.zeroFeature.cta],
+    },
+    <div className="hs-media hs-media--composite">
+      <Image
+        alt={photography.zero.alt}
+        height={photography.zero.height}
+        sizes="(max-width: 1023px) 90vw, 46vw"
+        src={photography.zero.src}
+        width={photography.zero.width}
+      />
+    </div>,
+  ),
+];
+
+/* ---- Family panels -------------------------------------------------------- */
+
+const worldTone: Record<string, string> = {
+  "double-tree": "paper",
+  "white-phoenix": "ink",
+  "mister-bee": "brand",
+  zero: "ink",
+};
+
+const faqItems = content.faq.map((item, index) => ({
   id: `homepage-faq-${index + 1}`,
   title: item.question,
-  content: <p className="home-faq__answer">{item.answer}</p>,
+  content: <p className="cx-faq__answer">{item.answer}</p>,
 }));
 
 export default function Homepage() {
-  const visibleStatistics = homepageContent.statistics.filter(
-    (item) => item.visible,
-  );
+  const statistics = content.statistics.filter((item) => item.visible);
+  const tickerA = flavorNames.filter((_, index) => index % 2 === 0);
+  const tickerB = flavorNames.filter((_, index) => index % 2 === 1);
 
   return (
-    <HomeMotion>
-      <section
-        aria-labelledby="home-hero-title"
-        className="home-hero"
-        data-home-hero
-        id="top"
-      >
-        <div aria-hidden="true" className="home-hero__texture" />
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="home-hero__colibri"
-          data-home-hero-symbol
-          height={1000}
-          priority
-          src="/assets/brand/symbols/cider-house-colibri-white.svg"
-          width={609}
-        />
-        <div className="container container--wide home-hero__layout">
-          <div className="home-hero__copy" data-home-hero-copy>
-            <p className="home-kicker home-kicker--light">
-              {homepageContent.hero.eyebrow}
-            </p>
-            <h1 className="home-display" id="home-hero-title">
-              {homepageContent.hero.title.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </h1>
-            <p className="home-hero__body">{homepageContent.hero.body}</p>
-            <div className="home-actions">
-              <ButtonLink
-                className="home-button home-button--light"
-                href={homepageContent.hero.primaryCta.href}
-                variant="inverse"
-              >
-                {homepageContent.hero.primaryCta.label}
-              </ButtonLink>
-              <ButtonLink
-                className="home-button home-button--outline-light"
-                href={homepageContent.hero.secondaryCta.href}
-                variant="secondary"
-              >
-                {homepageContent.hero.secondaryCta.label}
-              </ButtonLink>
-            </div>
-          </div>
+    <SiteMotion className="home">
+      <HeroSlider slides={heroSlides} />
 
-          <div className="home-hero__products" aria-label="Линейка Mister Bee">
-            {homepageContent.hero.assets.map((asset) => (
-              <div
-                className={`home-hero__bottle home-hero__bottle--${asset.position}`}
-                data-home-hero-bottle
-                key={asset.src}
-              >
-                <Image
-                  alt={asset.alt}
-                  fetchPriority={asset.position === "center" ? "high" : "auto"}
-                  height={870}
-                  priority={asset.position === "center"}
-                  sizes="(max-width: 768px) 38vw, (max-width: 1200px) 25vw, 18vw"
-                  src={asset.src}
-                  unoptimized
-                  width={182}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="home-hero__footer">
-          <span>Натуральное брожение</span>
-          <span aria-hidden="true">↓</span>
-          <span>Россия · 18+</span>
-        </div>
-      </section>
-
-      <section
-        aria-labelledby="product-worlds-title"
-        className="home-worlds"
-        id="product-worlds"
-      >
-        <div
-          className="container container--wide home-section-heading"
-          data-home-reveal
-        >
-          <p className="home-kicker">Четыре направления</p>
-          <h2 className="home-section-title" id="product-worlds-title">
-            Свой характер.
-            <br />
-            Одна культура вкуса.
-          </h2>
-          <p className="home-section-intro">
-            От европейской классики до современного прочтения медовухи и
-            безалкогольной коллекции.
-          </p>
-        </div>
-
-        {homepageContent.productWorlds.map((world) => (
-          <article
-            className={`home-world home-world--${world.id}`}
-            data-home-reveal
-            data-home-world
-            id={`world-${world.id}`}
-            key={world.id}
-          >
-            <div className="container container--wide home-world__layout">
-              <div className="home-world__meta" data-home-world-meta>
-                <span>{world.index}</span>
-                <span>{world.label}</span>
-              </div>
-              <div className="home-world__identity" data-home-world-visual>
-                {"logo" in world ? (
-                  <Image
-                    alt={`Логотип ${world.title}`}
-                    className="home-world__logo"
-                    data-home-world-logo
-                    height={world.id === "double-tree" ? 126 : 600}
-                    sizes="(max-width: 768px) 70vw, 34vw"
-                    src={world.logo}
-                    width={world.id === "double-tree" ? 190 : 1136}
-                  />
-                ) : null}
-                <h3 className="home-world__title" data-home-world-title>
-                  {world.title}
-                </h3>
-                {"images" in world ? (
-                  <div
-                    className={`home-world__products home-world__products--${world.id}`}
-                  >
-                    {world.images.map((src, index) => {
-                      const isNarrowBottle = world.id === "mister-bee";
-                      const flavor =
-                        "flavors" in world ? world.flavors[index] : undefined;
-                      return (
-                        <Image
-                          alt={`Бутылка ${world.title}${flavor ? ` ${flavor}` : ""}; упаковка показана без изменений`}
-                          data-home-product-lock
-                          height={isNarrowBottle ? 870 : 420}
-                          key={src}
-                          sizes={
-                            isNarrowBottle
-                              ? "(max-width: 768px) 28vw, 12vw"
-                              : "(max-width: 768px) 42vw, 18vw"
-                          }
-                          src={src}
-                          unoptimized
-                          width={isNarrowBottle ? 182 : 336}
-                        />
-                      );
-                    })}
-                  </div>
-                ) : null}
-                {world.id === "zero" ? (
-                  <div className="home-world__zero-identity">
-                    <Image
-                      alt={world.artwork.alt}
-                      className="home-world__zero-products"
-                      data-home-zero-products
-                      height={world.artwork.height}
-                      sizes="(max-width: 768px) 88vw, 42vw"
-                      src={world.artwork.src}
-                      unoptimized
-                      width={world.artwork.width}
-                    />
-                    <div aria-label="Вкусы безалкогольной линейки">
-                      {homepageContent.zeroFeature.tastes.map(
-                        (taste, index) => (
-                          <span key={taste}>
-                            {String(index + 1).padStart(2, "0")} · {taste}
-                          </span>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-              <div className="home-world__copy" data-home-world-copy>
-                <p>{world.description}</p>
-                <span>{world.detail}</span>
-                <Link className="home-arrow-link" href={world.href}>
-                  Открыть направление <span aria-hidden="true">↗</span>
-                </Link>
-              </div>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section
-        aria-labelledby="zero-feature-title"
-        className="home-zero-feature"
-        data-home-reveal
-        data-home-zero-feature
-        id="zero-collection"
-      >
-        <div aria-hidden="true" className="home-zero-feature__type">
-          0%
-        </div>
-        <div className="container container--wide home-zero-feature__layout">
-          <div>
-            <p className="home-kicker home-kicker--light">
-              {homepageContent.zeroFeature.eyebrow}
-            </p>
-            <h2 className="home-section-title" id="zero-feature-title">
-              {homepageContent.zeroFeature.title.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </h2>
-            <p className="home-zero-feature__body">
-              {homepageContent.zeroFeature.body}
-            </p>
-            <ButtonLink
-              className="home-button home-button--light"
-              href={homepageContent.zeroFeature.cta.href}
-              variant="inverse"
-            >
-              {homepageContent.zeroFeature.cta.label}
-            </ButtonLink>
-          </div>
-          <div className="home-zero-feature__showcase" data-home-zero-showcase>
-            <div className="home-zero-feature__visual" data-home-zero-visual>
-              <Image
-                alt={homepageContent.zeroFeature.artwork.alt}
-                className="home-zero-feature__products"
-                data-home-zero-products
-                height={homepageContent.zeroFeature.artwork.height}
-                sizes="(max-width: 768px) 92vw, 42vw"
-                src={homepageContent.zeroFeature.artwork.src}
-                unoptimized
-                width={homepageContent.zeroFeature.artwork.width}
-              />
-              <Image
-                alt=""
-                aria-hidden="true"
-                className="home-zero-feature__symbol"
-                height={1000}
-                src="/assets/brand/symbols/cider-house-colibri-white.svg"
-                width={609}
-              />
-            </div>
+      {/* Flavour ticker ------------------------------------------------- */}
+      <section aria-labelledby="ticker-title" className="hm-ticker">
+        <h2 className="visually-hidden" id="ticker-title">
+          Вкусы в каталоге: {flavorNames.join(", ")}
+        </h2>
+        <div aria-hidden="true" className="cx-marquee">
+          {[tickerA, tickerB].map((row, rowIndex) => (
             <div
-              className="home-zero-feature__tastes"
-              aria-label="Три вкуса коллекции"
+              className={`cx-marquee__row${rowIndex === 1 ? " cx-marquee__row--outline" : ""}`}
+              key={rowIndex}
             >
-              {homepageContent.zeroFeature.tastes.map((taste, index) => (
-                <div data-home-zero-taste key={taste}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{taste}</strong>
+              {[0, 1].map((group) => (
+                <div className="cx-marquee__group" key={group}>
+                  {row.map((name) => (
+                    <span className="cx-marquee__item" key={name}>
+                      {name}
+                    </span>
+                  ))}
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        aria-labelledby="home-story-title"
-        className="home-story"
-        data-home-story
-        id="about"
-      >
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="home-story__symbol"
-          data-home-story-symbol
-          height={1000}
-          src="/assets/brand/symbols/cider-house-colibri-black.svg"
-          width={585}
-        />
-        <div className="container container--wide home-story__layout">
-          <div data-home-reveal>
-            <p className="home-kicker">{homepageContent.story.eyebrow}</p>
-            <h2 className="home-section-title" id="home-story-title">
-              {homepageContent.story.title.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </h2>
-          </div>
-          <p className="home-story__body" data-home-reveal>
-            {homepageContent.story.body}
-          </p>
-        </div>
-        <div
-          className="container container--wide home-statistics"
-          data-home-reveal
-        >
-          {visibleStatistics.map((statistic) => (
-            <div className="home-statistic" key={statistic.label}>
-              <strong>{statistic.value}</strong>
-              <span>{statistic.label}</span>
-            </div>
           ))}
         </div>
       </section>
 
+      {/* Manifesto ------------------------------------------------------ */}
+      <section
+        aria-labelledby="manifesto-title"
+        className="cx-section cx-tone-paper hm-manifesto"
+        id="about"
+      >
+        <div className="cx-wrap">
+          <p className="cx-kicker" data-fade>
+            <span>01</span>
+            <span>{content.story.eyebrow}</span>
+          </p>
+          <h2 className="cx-display" data-lines id="manifesto-title">
+            <Lines lines={content.story.title} />
+          </h2>
+          <div className="hm-manifesto__body">
+            <p className="hm-manifesto__text" data-words>
+              <Words text={content.story.body} />
+            </p>
+            <Link className="cx-link" data-fade href="/about">
+              О компании <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <dl className="cx-stats hm-manifesto__stats" data-stagger>
+            {statistics.map((statistic) => (
+              <div className="cx-stat" key={statistic.label}>
+                <dt>{statistic.label}</dt>
+                <dd>{statistic.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* Campaign photograph ------------------------------------------- */}
+      <section
+        aria-labelledby="campaign-title"
+        className="cx-photo hm-campaign"
+        style={{ "--focus": "50% 58%" } as CSSProperties}
+      >
+        <div className="cx-photo__frame" data-parallax>
+          <Image
+            alt={photography.mangoBowl.alt}
+            height={photography.mangoBowl.height}
+            sizes="100vw"
+            src={photography.mangoBowl.src}
+            width={photography.mangoBowl.width}
+          />
+        </div>
+        <div className="cx-wrap cx-photo__content">
+          <div className="cx-photo__top cx-label">
+            <span>White Phoenix</span>
+            <span>Манго-цитрус</span>
+          </div>
+          <div className="cx-photo__bottom">
+            <h2 className="cx-mega" data-lines id="campaign-title">
+              <Lines lines={["Яркие", "вкусы"]} />
+            </h2>
+            <Link
+              className="cx-btn cx-btn--light"
+              data-fade
+              href="/brands/white-phoenix"
+            >
+              Смотреть White Phoenix <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Runway: the range moves sideways ------------------------------ */}
+      <section
+        aria-labelledby="runway-title"
+        className="cx-tone-ink hm-runway"
+        data-runway
+        id="product-worlds"
+      >
+        <div className="cx-wrap hm-runway__head">
+          <div>
+            <p className="cx-kicker">
+              <span>02</span>
+              <span>{catalogContent.eyebrow}</span>
+              <span>
+                {catalogCount} {plural(catalogCount, POSITIONS)} в каталоге
+              </span>
+            </p>
+            <h2 className="cx-h2" id="runway-title">
+              {catalogContent.title}
+            </h2>
+          </div>
+          <Link className="cx-btn cx-btn--light" href="/catalog">
+            Весь ассортимент <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="hm-runway__viewport">
+          <ol className="hm-runway__track" data-runway-track>
+            {runway.map((item, index) => (
+              <li key={item.id}>
+                <Link
+                  className="hm-runway__item"
+                  href={`/brands/${item.familySlug}`}
+                >
+                  <span className="hm-runway__num">{pad(index + 1)}</span>
+                  <Bottle
+                    asset={item.asset}
+                    className={
+                      item.volume === "0,75 л" ? "is-large-format" : ""
+                    }
+                    index={index}
+                    sizes="(max-width: 1023px) 46vw, 20vw"
+                  />
+                  <span className="hm-runway__name">{item.flavor}</span>
+                  <span className="hm-runway__family">
+                    {item.family}
+                    {item.volume ? ` · ${item.volume}` : ""}
+                  </span>
+                </Link>
+              </li>
+            ))}
+            <li className="hm-runway__end">
+              <Link href="/catalog">
+                <span>Весь</span>
+                <span>ассортимент</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      {/* Family panels -------------------------------------------------- */}
+      <section aria-labelledby="worlds-title" className="hm-worlds">
+        <h2 className="visually-hidden" id="worlds-title">
+          Направления Cider House
+        </h2>
+        {worlds.map((item) => {
+          const slug = item.id as FamilySlug;
+          const lead = familyLeads[slug]?.[1];
+          const count = familyCount(slug);
+          return (
+            <article
+              className={`hm-world cx-tone-${worldTone[item.id]}`}
+              key={item.id}
+            >
+              <p className="hm-world__meta cx-label">
+                <span>{item.index}</span>
+                <span>{item.label}</span>
+              </p>
+              <h3 className="hm-world__name">
+                {item.id === "zero" ? "0%" : item.title}
+              </h3>
+              <div className="hm-world__media">
+                {lead ? (
+                  <Bottle
+                    asset={lead.asset}
+                    sizes="(max-width: 1023px) 50vw, 26vw"
+                  />
+                ) : (
+                  <Image
+                    alt={photography.zero.alt}
+                    className="hm-world__composite"
+                    height={photography.zero.height}
+                    sizes="(max-width: 1023px) 80vw, 36vw"
+                    src={photography.zero.src}
+                    width={photography.zero.width}
+                  />
+                )}
+              </div>
+              <div className="hm-world__copy">
+                <p>{item.description}</p>
+                <Link className="cx-link hm-world__link" href={item.href}>
+                  {item.id === "zero"
+                    ? content.zeroFeature.cta.label
+                    : `${count} ${plural(count, POSITIONS)}`}{" "}
+                  <span aria-hidden="true">→</span>
+                  <span className="visually-hidden"> — {item.title}</span>
+                </Link>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      {/* Production ----------------------------------------------------- */}
       <section
         aria-labelledby="production-title"
-        className="home-production"
-        data-production-story
+        className="cx-photo hm-production"
         id="production-story"
       >
-        <div
-          className="container container--wide home-production__heading"
-          data-home-reveal
-        >
-          <p className="home-kicker home-kicker--light">
-            {homepageContent.production.eyebrow}
-          </p>
-          <h2 className="home-section-title" id="production-title">
-            {homepageContent.production.title.map((line) => (
-              <span key={line}>{line}</span>
-            ))}
-          </h2>
-          <p>{homepageContent.production.intro}</p>
+        <div className="cx-photo__frame" data-parallax>
+          <Image
+            alt={photography.factory.alt}
+            height={photography.factory.height}
+            sizes="100vw"
+            src={photography.factory.src}
+            width={photography.factory.width}
+          />
         </div>
-        <div className="container container--wide home-production__story">
-          <div className="home-production__object" data-production-bottle>
-            <Image
-              alt="Классическая бутылка Mister Bee проходит через визуальную историю производства; упаковка не изменена"
-              height={870}
-              sizes="(max-width: 768px) 42vw, 18vw"
-              src="/assets/products/mister-bee/mister-bee-foundation-01-front.png"
-              unoptimized
-              width={182}
-            />
-            <div
-              aria-label="Прогресс: восемь этапов производства"
-              className="home-production__progress"
-            >
-              <span>01</span>
-              <div aria-hidden="true">
-                <i data-production-progress />
+        <div className="cx-wrap hm-production__inner">
+          <p className="cx-kicker" data-fade>
+            <span>03</span>
+            <span>{content.production.eyebrow}</span>
+          </p>
+          <Slider
+            header={
+              <div className="hm-production__head">
+                <h2 className="cx-display" data-lines id="production-title">
+                  <Lines lines={content.production.title} />
+                </h2>
+                <p className="cx-lead" data-fade>
+                  {content.production.intro}
+                </p>
               </div>
-              <span>
-                {String(homepageContent.production.stages.length).padStart(
-                  2,
-                  "0",
-                )}
-              </span>
-            </div>
-          </div>
-          <div className="home-production__steps">
-            {homepageContent.production.stages.map((stage) => (
-              <article
-                className="home-production-step"
-                data-production-step
-                data-stage-index={stage.index}
-                key={stage.index}
-              >
-                <span>{stage.index}</span>
-                <h3>{stage.title}</h3>
+            }
+            label="Восемь этапов производства"
+          >
+            {content.production.stages.map((stage) => (
+              <article className="hm-stage" key={stage.index}>
+                <span aria-hidden="true" className="hm-stage__num">
+                  {stage.index}
+                </span>
+                <h3 className="cx-h3">{stage.title}</h3>
                 <p>{stage.body}</p>
               </article>
             ))}
-          </div>
+          </Slider>
+          <Link className="cx-btn cx-btn--light" data-fade href="/production">
+            Подробнее о производстве <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
 
+      {/* Where to buy --------------------------------------------------- */}
       <section
-        aria-labelledby="where-to-buy-title"
-        className="home-where"
-        data-home-reveal
+        aria-labelledby="where-title"
+        className="cx-section cx-tone-brand hm-where"
         id="where-to-buy"
       >
-        <div className="container container--wide home-where__layout">
-          <div className="home-where__copy">
-            <p className="home-kicker">{homepageContent.whereToBuy.eyebrow}</p>
-            <h2 className="home-section-title" id="where-to-buy-title">
-              {homepageContent.whereToBuy.title.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </h2>
-            <p>{homepageContent.whereToBuy.body}</p>
-            <ButtonLink
-              className="home-button"
-              href={homepageContent.whereToBuy.cta.href}
+        <div aria-hidden="true" className="cx-marquee hm-where__cities">
+          {[0, 1].map((rowIndex) => (
+            <div
+              className={`cx-marquee__row${rowIndex === 1 ? " cx-marquee__row--outline" : ""}`}
+              key={rowIndex}
             >
-              {homepageContent.whereToBuy.cta.label}
-            </ButtonLink>
-          </div>
-          <div className="home-city-field" aria-label="Города присутствия">
-            <div aria-hidden="true" className="home-city-field__lines" />
-            <span aria-hidden="true" className="home-city-field__region">
-              Россия
-            </span>
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="home-city-field__symbol"
-              data-home-city-symbol
-              height={1000}
-              src="/assets/brand/symbols/cider-house-colibri-white.svg"
-              width={609}
-            />
-            {homepageContent.whereToBuy.cities.map((city, index) => (
-              <span className={`home-city home-city--${index + 1}`} key={city}>
-                {city}
-              </span>
-            ))}
+              {[0, 1].map((group) => (
+                <div className="cx-marquee__group" key={group}>
+                  {(rowIndex === 0
+                    ? content.whereToBuy.cities
+                    : [...content.whereToBuy.cities].reverse()
+                  ).map((city) => (
+                    <span className="cx-marquee__item" key={city}>
+                      {city}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="cx-wrap hm-where__body">
+          <p className="cx-kicker" data-fade>
+            <span>04</span>
+            <span>{content.whereToBuy.eyebrow}</span>
+          </p>
+          <div className="cx-split cx-split--even">
+            <h2 className="cx-h2" data-lines id="where-title">
+              <Lines lines={content.whereToBuy.title} />
+            </h2>
+            <div className="cx-stack" data-fade>
+              <p className="cx-lead">{content.whereToBuy.body}</p>
+              <p className="visually-hidden">
+                Города: {content.whereToBuy.cities.join(", ")}.
+              </p>
+              <Link
+                className="cx-btn cx-btn--light"
+                href={content.whereToBuy.cta.href}
+              >
+                {content.whereToBuy.cta.label} <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Partners ------------------------------------------------------- */}
       <section
-        aria-labelledby="partnership-title"
-        className="home-partnership"
-        data-home-reveal
+        aria-labelledby="partners-title"
+        className="cx-section cx-tone-paper"
         id="partners"
       >
-        <div className="container container--wide home-partnership__layout">
-          <div>
-            <p className="home-kicker home-kicker--light">
-              {homepageContent.partnership.eyebrow}
-            </p>
-            <h2 className="home-section-title" id="partnership-title">
-              {homepageContent.partnership.title.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </h2>
-          </div>
-          <div className="home-partnership__content">
-            <ul>
-              {homepageContent.partnership.audiences.map((audience, index) => (
-                <li data-home-partner-audience key={audience}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{audience}</strong>
-                  <span aria-hidden="true">↗</span>
+        <div className="cx-wrap">
+          <p className="cx-kicker" data-fade>
+            <span>05</span>
+            <span>{content.partnership.eyebrow}</span>
+          </p>
+          <div className="cx-split">
+            <div className="cx-stack cx-split__sticky">
+              <h2 className="cx-h2" data-lines id="partners-title">
+                <Lines lines={content.partnership.title} />
+              </h2>
+              <p className="cx-lead" data-fade>
+                {content.partnership.body}
+              </p>
+              <Link
+                className="cx-btn cx-btn--brand"
+                data-fade
+                href={content.partnership.cta.href}
+              >
+                {content.partnership.cta.label}{" "}
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+            <ul className="cx-rows" data-stagger>
+              {content.partnership.audiences.map((audience, index) => (
+                <li key={audience}>
+                  <div className="cx-row">
+                    <span className="cx-row__index">{pad(index + 1)}</span>
+                    <span className="cx-row__title">{audience}</span>
+                  </div>
                 </li>
               ))}
             </ul>
-            <p>{homepageContent.partnership.body}</p>
-            <ButtonLink
-              className="home-button home-button--light"
-              href={homepageContent.partnership.cta.href}
-              variant="inverse"
-            >
-              {homepageContent.partnership.cta.label}
-            </ButtonLink>
           </div>
         </div>
       </section>
 
+      {/* News / channels ----------------------------------------------- */}
       <section
-        aria-labelledby="social-title"
-        className="home-social"
-        data-home-reveal
-        id="social"
+        aria-labelledby="news-title"
+        className="cx-section cx-tone-ink"
+        id="news"
       >
-        <div className="container container--wide home-social__heading">
-          <div>
-            <p className="home-kicker">{homepageContent.social.eyebrow}</p>
-            <h2 className="home-section-title" id="social-title">
-              {homepageContent.social.title.map((line) => (
-                <span key={line}>{line}</span>
+        <div className="cx-wrap">
+          <p className="cx-kicker" data-fade>
+            <span>06</span>
+            <span>{content.social.eyebrow}</span>
+          </p>
+          <div className="cx-split">
+            <div className="cx-stack">
+              <h2 className="cx-h2" data-lines id="news-title">
+                <Lines lines={content.social.title} />
+              </h2>
+              <p className="cx-lead cx-muted" data-fade>
+                {content.social.emptyEditorial}
+              </p>
+            </div>
+            <ul className="cx-rows" data-stagger>
+              {content.social.links.map((item, index) => (
+                <li key={item.href}>
+                  <a
+                    className="cx-row"
+                    href={item.href}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <span className="cx-row__index">{pad(index + 1)}</span>
+                    <span className="cx-row__title">{item.label}</span>
+                    <span aria-hidden="true" className="cx-row__aside">
+                      ↗
+                    </span>
+                    <span className="visually-hidden">
+                      (откроется в новой вкладке)
+                    </span>
+                  </a>
+                </li>
               ))}
-            </h2>
+            </ul>
           </div>
-          <p>{homepageContent.social.emptyEditorial}</p>
-        </div>
-        <div className="container container--wide home-social__links">
-          {homepageContent.social.links.map((item, index) => (
-            <a
-              className={`home-social-card home-social-card--${index + 1}`}
-              data-home-social-card
-              href={item.href}
-              key={item.href}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{item.label}</strong>
-              <span aria-hidden="true">↗</span>
-              {"note" in item ? <small>{item.note}</small> : null}
-            </a>
-          ))}
+          {content.social.links.map((item) =>
+            "note" in item ? (
+              <p className="cx-note hm-news__note" key={item.href}>
+                {item.note}
+              </p>
+            ) : null,
+          )}
         </div>
       </section>
 
-      <section aria-labelledby="faq-title" className="home-faq" id="faq">
-        <div className="container container--wide home-faq__layout">
-          <div data-home-reveal>
-            <p className="home-kicker">Коротко о главном</p>
-            <h2 className="home-section-title" id="faq-title">
-              Вопросы
-              <br />и ответы
+      {/* FAQ ------------------------------------------------------------ */}
+      <section
+        aria-labelledby="faq-title"
+        className="cx-section cx-tone-white cx-faq"
+        id="faq"
+      >
+        <div className="cx-wrap cx-split">
+          <div className="cx-split__sticky">
+            <p className="cx-kicker" data-fade>
+              <span>07</span>
+              <span>Коротко о главном</span>
+            </p>
+            <h2 className="cx-h2" data-lines id="faq-title">
+              <Lines lines={["Вопросы", "и ответы"]} />
             </h2>
           </div>
-          <div data-home-reveal>
+          <div data-fade>
             <Accordion items={faqItems} />
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="final-cta-title" className="home-final-cta">
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="home-final-cta__symbol"
-          height={1000}
-          src="/assets/brand/symbols/cider-house-colibri-white.svg"
-          width={609}
-        />
-        <div
-          className="container container--wide home-final-cta__layout"
-          data-home-reveal
-        >
-          <div className="home-final-cta__copy">
-            <p className="home-kicker home-kicker--light">Cider House</p>
-            <h2 className="home-section-title" id="final-cta-title">
-              {homepageContent.finalCta.title}
-            </h2>
-            <div className="home-actions">
-              {homepageContent.finalCta.actions.map((action, index) => (
-                <ButtonLink
-                  className={
-                    index === 0
-                      ? "home-button home-button--light"
-                      : "home-button home-button--outline-light"
-                  }
-                  href={action.href}
-                  key={action.href}
-                  variant={index === 0 ? "inverse" : "secondary"}
-                >
-                  {action.label}
-                </ButtonLink>
-              ))}
-            </div>
-          </div>
-          <div
-            aria-label="Одобренная бутылка Mister Bee"
-            className="home-final-cta__product"
-            data-home-final-product
-          >
-            <span aria-hidden="true">CIDER HOUSE · 18+</span>
-            <div className="home-final-cta__products">
-              {homepageContent.finalCta.assets.map((asset) => (
-                <Image
-                  alt={`${asset.alt}; упаковка показана без изменений`}
-                  data-home-final-bottle
-                  height={870}
-                  key={asset.src}
-                  sizes="(max-width: 768px) 24vw, 9vw"
-                  src={asset.src}
-                  unoptimized
-                  width={182}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <Closing />
       <BackToTop />
-    </HomeMotion>
+    </SiteMotion>
   );
 }

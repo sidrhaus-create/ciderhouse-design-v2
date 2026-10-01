@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef } from "react";
 import { productFamilies } from "@/data/catalog-content";
 import { homepageContent } from "@/data/homepage-content";
 import { foundationNavigation, isPreviewRoute } from "@/lib/navigation";
@@ -13,35 +13,20 @@ const brandLinks = productFamilies.map((family) => ({
   label: family.navLabel,
 }));
 
+const WHERE_TO_BUY = "/where-to-buy";
+
+type NavItem = { label: string; href: string; kind?: string };
+
 export function SiteHeader() {
   const pathname = usePathname();
-  const isHomepage = pathname === "/";
   const isPreview = isPreviewRoute(pathname);
-  const [isScrolled, setIsScrolled] = useState(false);
   const menuRef = useRef<HTMLDialogElement>(null);
   const menuTitleId = useId();
-  const navigation = isPreview
+  const navigation: readonly NavItem[] = isPreview
     ? foundationNavigation
     : homepageContent.navigation;
-
-  useEffect(() => {
-    if (!isHomepage) return;
-
-    let frame = 0;
-    const update = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() =>
-        setIsScrolled(window.scrollY > 40),
-      );
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-    };
-  }, [isHomepage]);
+  const isCurrent = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 
   useEffect(() => {
     const menu = menuRef.current;
@@ -54,14 +39,35 @@ export function SiteHeader() {
       });
   }, [pathname]);
 
-  useEffect(
-    () => () => {
-      const menu = menuRef.current;
+  useEffect(() => {
+    /* Close the desktop brands disclosure on outside click or Escape. */
+    function closeBrands(event: Event) {
+      document
+        .querySelectorAll<HTMLDetailsElement>(
+          ".desktop-nav details[data-brands-menu][open]",
+        )
+        .forEach((details) => {
+          if (
+            event.type === "keydown" ||
+            !details.contains(event.target as Node)
+          ) {
+            details.open = false;
+          }
+        });
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") closeBrands(event);
+    }
+    const menu = menuRef.current;
+    document.addEventListener("click", closeBrands);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", closeBrands);
+      document.removeEventListener("keydown", onKey);
       if (menu?.open) menu.close();
       document.documentElement.classList.remove("is-overlay-open");
-    },
-    [],
-  );
+    };
+  }, []);
 
   function openMenu() {
     const menu = menuRef.current;
@@ -76,41 +82,17 @@ export function SiteHeader() {
   }
 
   return (
-    <header
-      className={`site-header ${isHomepage ? "site-header--home" : "site-header--foundation"}`}
-      data-scrolled={isScrolled ? "true" : "false"}
-    >
-      <div className="site-header__inner container container--wide">
+    <header className="site-header site-header--cx">
+      <div className="site-header__inner">
         <Link aria-label="Cider House — главная" className="wordmark" href="/">
-          {isHomepage ? (
-            <>
-              <Image
-                alt=""
-                className="wordmark__image wordmark__image--home-light"
-                height={1000}
-                priority
-                src="/assets/brand/master-logo/cider-house-logo-horizontal-white.svg"
-                width={3775}
-              />
-              <Image
-                alt=""
-                className="wordmark__image wordmark__image--home-dark"
-                height={1000}
-                priority
-                src="/assets/brand/master-logo/cider-house-logo-horizontal-black.svg"
-                width={3094}
-              />
-            </>
-          ) : (
-            <Image
-              alt=""
-              className="wordmark__image"
-              height={1000}
-              priority
-              src="/assets/brand/master-logo/cider-house-logo-horizontal-black.svg"
-              width={3094}
-            />
-          )}
+          <Image
+            alt=""
+            className="wordmark__image"
+            height={1000}
+            priority
+            src="/assets/brand/master-logo/cider-house-logo-horizontal-white.svg"
+            width={3775}
+          />
         </Link>
         <nav
           aria-label={
@@ -118,52 +100,52 @@ export function SiteHeader() {
           }
           className="desktop-nav"
         >
-          {navigation.map((item) =>
-            item.href === "/#product-worlds" ? (
-              <details
-                className="desktop-nav__brands"
-                data-brands-menu
-                key={item.href}
-              >
-                <summary className="desktop-nav__link">
+          {navigation
+            .filter((item) => item.href !== WHERE_TO_BUY)
+            .map((item) =>
+              item.kind === "brands" ? (
+                <details
+                  className="desktop-nav__brands"
+                  data-brands-menu
+                  key={item.href}
+                >
+                  <summary className="desktop-nav__link">
+                    {item.label}
+                    <span aria-hidden="true" className="desktop-nav__caret">
+                      ▾
+                    </span>
+                  </summary>
+                  <div className="desktop-nav__brands-menu">
+                    {brandLinks.map((brand) => (
+                      <Link
+                        aria-current={
+                          pathname === brand.href ? "page" : undefined
+                        }
+                        href={brand.href}
+                        key={brand.href}
+                      >
+                        {brand.label}
+                      </Link>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <Link
+                  aria-current={isCurrent(item.href) ? "page" : undefined}
+                  className="desktop-nav__link"
+                  href={item.href}
+                  key={item.href}
+                >
                   {item.label}
-                  <span aria-hidden="true" className="desktop-nav__caret">
-                    ▾
-                  </span>
-                </summary>
-                <div className="desktop-nav__brands-menu">
-                  {brandLinks.map((brand) => (
-                    <Link
-                      aria-current={
-                        pathname === brand.href ? "page" : undefined
-                      }
-                      href={brand.href}
-                      key={brand.href}
-                    >
-                      {brand.label}
-                    </Link>
-                  ))}
-                </div>
-              </details>
-            ) : (
-              <Link
-                aria-current={
-                  !isHomepage && pathname === item.href ? "page" : undefined
-                }
-                className="desktop-nav__link"
-                href={item.href}
-                key={item.href}
-              >
-                {item.label}
-              </Link>
-            ),
-          )}
+                </Link>
+              ),
+            )}
         </nav>
-        {isHomepage ? (
-          <Link className="header-cta" href="/where-to-buy">
-            Где купить
+        {isPreview ? null : (
+          <Link className="header-cta" href={WHERE_TO_BUY}>
+            Где купить <span aria-hidden="true">→</span>
           </Link>
-        ) : null}
+        )}
         <button
           aria-haspopup="dialog"
           className="menu-button"
@@ -180,7 +162,7 @@ export function SiteHeader() {
 
       <dialog
         aria-labelledby={menuTitleId}
-        className={`mobile-menu ${isHomepage ? "mobile-menu--home" : ""}`}
+        className="mobile-menu mobile-menu--cx"
         onCancel={closeMenu}
         onClose={() =>
           document.documentElement.classList.remove("is-overlay-open")
@@ -196,8 +178,8 @@ export function SiteHeader() {
               src="/assets/brand/master-logo/cider-house-logo-horizontal-white.svg"
               width={3775}
             />
-            <p className="mobile-menu__eyebrow" id={menuTitleId}>
-              {isPreview ? "Foundation navigation" : "Навигация"}
+            <p className="visually-hidden" id={menuTitleId}>
+              Навигация
             </p>
             <button
               aria-label="Закрыть меню"
@@ -209,14 +191,17 @@ export function SiteHeader() {
             </button>
           </div>
           <nav aria-label="Мобильная навигация" className="mobile-menu__nav">
-            {!isHomepage ? (
-              <Link className="mobile-menu__link" href="/" onClick={closeMenu}>
-                <span className="mobile-menu__index">00</span>
-                Главная
-              </Link>
-            ) : null}
+            <Link
+              aria-current={pathname === "/" ? "page" : undefined}
+              className="mobile-menu__link"
+              href="/"
+              onClick={closeMenu}
+            >
+              <span className="mobile-menu__index">00</span>
+              Главная
+            </Link>
             {navigation.map((item, index) =>
-              item.href === "/#product-worlds" ? (
+              item.kind === "brands" ? (
                 <details
                   className="mobile-menu__brands"
                   data-brands-menu
@@ -250,9 +235,7 @@ export function SiteHeader() {
                 </details>
               ) : (
                 <Link
-                  aria-current={
-                    !isHomepage && pathname === item.href ? "page" : undefined
-                  }
+                  aria-current={isCurrent(item.href) ? "page" : undefined}
                   className="mobile-menu__link"
                   href={item.href}
                   key={item.href}
@@ -266,11 +249,13 @@ export function SiteHeader() {
               ),
             )}
           </nav>
-          <p className="mobile-menu__note">
-            {isPreview
-              ? "Preview shell · native scroll · keyboard ready"
-              : "Сидр и медовуха · 18+"}
-          </p>
+          <div className="mobile-menu__foot">
+            <p className="mobile-menu__note">
+              {isPreview
+                ? "Preview shell · native scroll · keyboard ready"
+                : "Сидр · медовуха · 0% · 18+"}
+            </p>
+          </div>
         </div>
       </dialog>
     </header>

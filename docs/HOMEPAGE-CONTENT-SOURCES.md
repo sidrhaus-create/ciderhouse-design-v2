@@ -251,3 +251,60 @@ The source artwork itself uses `0%` and `NON-ALCOHOLIC` packaging language. No s
 | White Phoenix Grapefruit-Passionfruit photography | <https://static.tildacdn.com/tild3331-6466-4364-b830-313333656436/IMG_20240814_160748_.jpg> | Source found; not ingested |
 | Double Tree 0.75 l product photography | <https://static.tildacdn.com/tild6334-3934-4639-a335-373566333262/noroot.png> | Source found; not ingested |
 | Mixed White Phoenix and Double Tree photography | <https://static.tildacdn.com/tild3536-3166-4464-b933-313637393931/IMG_20240904_105410_.jpg> | Source found; not ingested |
+
+## Asset corrections and additions — 2026-10-01
+
+Every bottle file was re-verified by reading the label art in the image itself. The per-SKU tables above record the original CDN URL correctly, but several rows paired a URL with the wrong flavour name. Files were **renamed** (bytes untouched) so each filename now matches the label it contains; `data/catalog-content.ts` needed no change because every record already pointed at the file named after its flavour.
+
+| Renamed file (now truthful) | Label art it contains |
+| --- | --- |
+| `double-tree-045-green-apple-front.png` | Green Apple (was stored as `…-dark-cherry-…`) |
+| `double-tree-045-red-apple-front.png` | Red Apple (was `…-green-apple-…`) |
+| `double-tree-045-raspberry-front.png` | Raspberry (was `…-red-apple-…`) |
+| `double-tree-045-forest-berries-front.png` | Wild Berries (was `…-raspberry-…`) |
+| `double-tree-045-dark-cherry-front.png` | Dark Cherry (was `…-forest-berries-…`) |
+| `double-tree-045-coconut-raspberry-front.png` | Coconut & Raspberry (was `…-pomegranate-mint-…`) |
+| `double-tree-045-pomegranate-mint-front.png` | Pomegranate & Mint (was `…-coconut-raspberry-…`) |
+| `double-tree-075-dark-cherry-front.png` | Cherry Cider (was `…-075-red-apple-…`) |
+| `double-tree-075-red-apple-front.png` | Apple Cider, semi-sweet (was `…-075-green-apple-…`) |
+| `double-tree-075-green-apple-front.png` | Apple Cider, semi-dry (was `…-075-dark-cherry-…`) |
+| `white-phoenix-coconut-citrus-front.png` | Coconut Citrus (was `…-strawberry-…`) |
+| `white-phoenix-strawberry-front.png` | Strawberry (was `…-grapefruit-passionfruit-…`) |
+| `white-phoenix-grapefruit-passionfruit-front.png` | Label reads "Grape & Passion Fruit" with grapefruit art (was `…-coconut-citrus-…`) |
+| `white-phoenix-mango-citrus-front.png` | Mango Citrus (was `…-pomegranate-raspberry-…`) |
+| `white-phoenix-pomegranate-raspberry-front.png` | Pomegranate Raspberry (was `…-mango-citrus-…`) |
+
+Open point: the 0,75 л "Зелёное яблоко" / "Красное яблоко" assignment between the semi-dry and semi-sweet Apple Cider labels is inferred from the label illustration (green vs. blush apple) and should be confirmed by the brand owner. The White Phoenix label printed "Grape & Passion Fruit" is published by the catalog as «Грейпфрут-маракуйя»; the catalog name is kept.
+
+### Mister Bee catalog cutouts — corrected URL ↔ label mapping
+
+The "Mister Bee catalog bottle cutouts" table above pairs URLs with the wrong labels. Verified mapping (91×435 transparent PNG unless noted):
+
+| CDN file | Label it actually shows | Repository file | SHA-256 |
+| --- | --- | --- | --- |
+| `tild3339-…/__4.png` | Cranberry | `products/mister-bee/mister-bee-catalog-cranberry-front.png` | `a0d9a54ba643ec747a39752c8a48379bca3f414bf12693e33e3cb4c57b61172f` |
+| `tild3564-…/__6.png` | Feijoa | `products/mister-bee/mister-bee-catalog-feijoa-front.png` | `abdedf060cd75397c06b60dddf29b43460bda0a7b4ee32ff341f4fb720d195d7` |
+| `tild3732-…/__5.png` | Plum | `products/mister-bee/mister-bee-catalog-plum-front.png` | `6275b10b0b952a834422ed70b1b245890f208f85e66b43203d5fb111612bf32f` |
+| `tild6535-…/__7.png` | Cherry Banana | `products/mister-bee/mister-bee-catalog-cherry-banana-front.png` | `e2983dbb232cde3d81a3c1d5c88e3210e30c5b79d468bf6289ca2afaa96ce884` |
+| `tild6139-…/__2.png` | Lemon | not ingested (product-lock file is used) | — |
+| `tild6631-…/__1.png` (213×630) | Classic | not ingested (product-lock file is used) | — |
+| `tild6338-…/__3.png` | Pomegranate Grape | not ingested (product-lock file is used) | — |
+
+The four new files are byte-for-byte downloads and give the four previously image-less catalog flavours (Яркая клюква, Ароматная фейхоа, Сочная слива, Тропический банан-вишня) a real bottle. They are low resolution (the official site publishes nothing larger), so the UI only shows them at small sizes. Status in `data/catalog-content.ts`: `sourced`.
+
+### Official photography ingested
+
+Byte-for-byte downloads of the four photographs listed under "Additional official product photography found". The original table's subject labels for two of them were swapped; the files are named after what the photograph shows.
+
+| Repository file | CDN file | Subject | SHA-256 |
+| --- | --- | --- | --- |
+| `photography/white-phoenix-mango-citrus-fruit-bowl.jpg` | `tild3834-…/IMG_5738.jpg` (1680×1260) | White Phoenix Mango Citrus bottles on ice with citrus fruit | `8450d054a16608157b70802df47131a0b36e93deb7bcd17f7ef5b744494fa919` |
+| `photography/double-tree-apple-bottles-cans.jpg` | `tild3331-…/IMG_20240814_160748_.jpg` (1680×2240) | Double Tree Green Apple bottles and cans with apples | `3a6eff61a37c11e4962ffc77e6040095d79c567989aff3251b148830c967486b` |
+| `photography/white-phoenix-black-cherry-cocktail.jpg` | `tild3536-…/IMG_20240904_105410_.jpg` (1680×2283) | White Phoenix Black Cherry bottle with a cocktail glass | `b3e1563892a26cbcf46ebf050b2ab777bc41c79095a096cf959c7f34428ea1f8` |
+| `photography/double-tree-075-trio-purple.png` | `tild6334-…/noroot.png` (580×787) | Three Double Tree 0,75 л bottles on purple | `348edab2850286af01fa50d29642de02882f232b9da2e10c74e54804c40c4321` |
+
+Photographs are lifestyle imagery, not packshots: they are shown with `object-fit: cover` (edges may be cropped by the frame, the labels stay in view) and are never recoloured or retouched.
+
+### Content reuse on the new pages (2026-10-01)
+
+`/about`, `/where-to-buy`, `/partners` and `/contacts` are now real routes (`data/site-content.ts`). They introduce no new facts: every sentence is taken from `data/homepage-content.ts` or is a neutral navigation phrase. `/partners` rewords the sourced `/clients` description ("materials for partners, product photos, logos, flyers, contacts") into one sentence; no form is published. `/where-to-buy` shows the same six representative cities plus a note that they are examples — no store or retailer data. The live site's `/merch`, `/festival` and news feed are not reproduced because no verified content for them exists in the repository; `ciderhouse.ru` itself and its Wayback copy were unreachable from the build machine on 2026-10-01, so this pass relied on the audits in this folder plus the official CDN assets above.

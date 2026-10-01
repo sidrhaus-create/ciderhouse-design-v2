@@ -1,0 +1,473 @@
+/* ==========================================================================
+   CIDER HOUSE — homepage ("campaign")
+
+   Structure: poster slider → flavour ticker → manifesto → full-bleed photo →
+   horizontal runway → family panels → production → where to buy → partners →
+   channels → FAQ → closing banner. Shared pieces live in app/site.css.
+   ========================================================================== */
+
+/* ---- Flavour ticker ------------------------------------------------------ */
+
+.hm-ticker {
+  --marquee-duration: 90s;
+  --marquee-stroke: var(--cx-white);
+  padding-block: clamp(1.5rem, 3.4vw, 3rem);
+  background: var(--cx-purple);
+  color: var(--cx-white);
+}
+
+/* ---- Manifesto ----------------------------------------------------------- */
+
+.hm-manifesto .cx-display .cx-line:nth-child(2) {
+  color: var(--cx-purple);
+}
+
+.hm-manifesto__body {
+  display: grid;
+  gap: 2rem;
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+  justify-items: start;
+}
+
+.hm-manifesto__text {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.8vw, 2.9rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+}
+
+.hm-manifesto__stats {
+  margin-top: clamp(3.5rem, 8vw, 7rem);
+}
+
+@media (min-width: 64rem) {
+  .hm-manifesto__body {
+    margin-left: 33%;
+  }
+}
+
+/* ---- Campaign photograph ------------------------------------------------- */
+
+.hm-campaign .cx-mega {
+  line-height: 0.88;
+}
+
+/* ---- Runway -------------------------------------------------------------- */
+
+.hm-runway {
+  position: relative;
+  overflow: clip;
+  padding-block: var(--cx-pad-sm);
+}
+
+.hm-runway__head {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  justify-items: start;
+}
+
+.hm-runway__head .cx-kicker {
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .hm-runway__head {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
+
+.hm-runway__viewport {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.hm-runway__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.hm-runway__track {
+  --bottle-h: clamp(13rem, 38svh, 21rem);
+  display: flex;
+  align-items: flex-end;
+  width: max-content;
+  gap: clamp(1.75rem, 4.5vw, 5.5rem);
+  margin: 0;
+  padding: 0 var(--cx-gutter);
+  list-style: none;
+}
+
+.hm-runway__track > li {
+  flex: none;
+  scroll-snap-align: start;
+  scroll-margin-left: var(--cx-gutter);
+}
+
+.hm-runway__item {
+  display: grid;
+  min-width: 10.5rem;
+  gap: 0.3rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hm-runway__num {
+  color: var(--cx-muted);
+  font-size: var(--cx-t-label);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.hm-runway__item .cx-bottle {
+  margin: 1rem 0 1.25rem;
+}
+
+/* 0,75 л bottles are physically taller — keep the true size relationship */
+.hm-runway__item .cx-bottle.is-large-format {
+  height: calc(var(--bottle-h) * 1.08);
+}
+
+.hm-runway__item .cx-bottle__lift {
+  transition: transform 520ms var(--cx-ease);
+}
+
+.hm-runway__item:hover .cx-bottle__lift,
+.hm-runway__item:focus-visible .cx-bottle__lift {
+  transform: translateY(-3.5%);
+}
+
+.hm-runway__name {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.35vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.hm-runway__family {
+  color: var(--cx-muted);
+  font-size: 0.85rem;
+}
+
+.hm-runway__end a {
+  display: grid;
+  width: clamp(15rem, 28vw, 26rem);
+  min-height: calc(var(--bottle-h) + 5rem);
+  align-content: end;
+  padding: 1.5rem;
+  background: var(--cx-purple);
+  color: var(--cx-white);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  text-decoration: none;
+  transition: background-color 320ms var(--cx-ease);
+}
+
+.hm-runway__end a:hover {
+  background: var(--cx-white);
+  color: var(--cx-black);
+}
+
+.hm-runway__end a span:last-child {
+  margin-top: 1rem;
+}
+
+/* pinned mode: the section holds while the range travels sideways */
+@media (min-width: 64rem) {
+  .cx-page[data-motion="full"] .hm-runway {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    height: 100svh;
+    min-height: 40rem;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-block: calc(var(--cx-header-h) + 1.75rem) 2rem;
+  }
+
+  .cx-page[data-motion="full"] .hm-runway__viewport {
+    display: grid;
+    align-items: end;
+    overflow: visible;
+  }
+
+  .cx-page[data-motion="full"] .hm-runway__track {
+    --bottle-h: min(46svh, 30rem);
+    will-change: transform;
+  }
+}
+
+/* ---- Family panels ------------------------------------------------------- */
+
+.hm-worlds {
+  display: grid;
+}
+
+.hm-world {
+  position: relative;
+  display: grid;
+  min-height: 32rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 1fr;
+  gap: 1rem 1.25rem;
+  overflow: clip;
+  padding: 1.5rem var(--cx-gutter) 2rem;
+  isolation: isolate;
+}
+
+.hm-world__meta {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  margin: 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--cx-rule-strong);
+}
+
+.hm-world__name {
+  margin: 0;
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 13vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+
+.hm-world__media {
+  --bottle-h: clamp(15rem, 44svh, 22rem);
+  display: grid;
+  grid-column: 2;
+  grid-row: 3;
+  place-items: end center;
+}
+
+.hm-world__composite {
+  display: block;
+  width: min(46vw, 15rem);
+  height: auto;
+}
+
+.hm-world__copy {
+  display: grid;
+  align-content: end;
+  gap: 1.25rem;
+  grid-column: 1;
+  grid-row: 3;
+  justify-items: start;
+}
+
+.hm-world__copy p {
+  max-width: 24rem;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.hm-world__link::after {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  content: "";
+}
+
+.hm-world .cx-bottle__lift {
+  transition: transform 700ms var(--cx-ease);
+}
+
+@media (min-width: 64rem) {
+  .hm-worlds {
+    display: flex;
+    height: calc(100svh - var(--cx-header-h));
+    min-height: 42rem;
+    max-height: 62rem;
+  }
+
+  .hm-world {
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    flex: 1 1 0;
+    padding: 1.5rem clamp(1rem, 1.6vw, 1.75rem) 2rem;
+    transition: flex-grow 800ms var(--cx-ease);
+  }
+
+  .hm-world + .hm-world {
+    border-left: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  .hm-world__name {
+    position: absolute;
+    bottom: 2rem;
+    left: clamp(0.6rem, 1.2vw, 1.25rem);
+    font-size: clamp(2.8rem, 5vw, 5.4rem);
+    line-height: 1;
+    white-space: nowrap;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+  }
+
+  .hm-world__media {
+    --bottle-h: min(58svh, 36rem);
+    position: absolute;
+    right: clamp(1rem, 2vw, 2.5rem);
+    bottom: 2rem;
+    left: clamp(5rem, 8vw, 8.5rem);
+    justify-items: start;
+  }
+
+  .hm-world__composite {
+    width: min(100%, 52svh, 26rem);
+  }
+
+  .hm-world:has(.hm-world__composite) .hm-world__media {
+    left: clamp(3.75rem, 6vw, 6.5rem);
+    right: 0.75rem;
+  }
+
+  .hm-world__copy {
+    position: absolute;
+    top: 5rem;
+    right: clamp(1rem, 2vw, 2.5rem);
+    width: min(21rem, 46%);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 420ms var(--cx-ease),
+      transform 600ms var(--cx-ease);
+  }
+
+  .hm-worlds:not(:hover, :focus-within) .hm-world:first-of-type,
+  .hm-world:hover,
+  .hm-world:focus-within {
+    flex-grow: 2.6;
+  }
+
+  .hm-worlds:not(:hover, :focus-within) .hm-world:first-of-type .hm-world__copy,
+  .hm-world:hover .hm-world__copy,
+  .hm-world:focus-within .hm-world__copy {
+    opacity: 1;
+    transform: none;
+    transition-delay: 220ms;
+  }
+
+  .hm-world:hover .cx-bottle__lift,
+  .hm-world:focus-within .cx-bottle__lift {
+    transform: translateY(-2.5%) scale(1.03);
+  }
+}
+
+/* touch screens at desktop width: no hover, so every panel shows its copy */
+@media (min-width: 64rem) and (hover: none) {
+  .hm-worlds .hm-world {
+    flex-grow: 1 !important;
+  }
+
+  .hm-worlds .hm-world__copy {
+    top: 4.5rem;
+    left: clamp(5rem, 8vw, 8.5rem);
+    width: auto;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hm-world__media {
+    --bottle-h: min(44svh, 28rem);
+  }
+}
+
+/* ---- Production ---------------------------------------------------------- */
+
+.hm-production {
+  min-height: 0;
+  padding-block: var(--cx-pad);
+}
+
+.hm-production .cx-photo__frame::after {
+  background: rgb(0 0 0 / 0.68);
+}
+
+.hm-production__inner {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  justify-items: start;
+}
+
+.hm-production__inner > .cx-kicker,
+.hm-production__inner > .cx-slider {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.hm-production__inner {
+  --cx-rule: rgb(255 255 255 / 0.2);
+  --cx-rule-strong: rgb(255 255 255 / 0.55);
+  --cx-muted: rgb(255 255 255 / 0.7);
+}
+
+.hm-production__head {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hm-production__head .cx-display {
+  font-size: var(--cx-t-h2);
+}
+
+.hm-production .cx-slider__button:not(:disabled):hover {
+  background: var(--cx-white);
+  color: var(--cx-black);
+}
+
+.hm-stage {
+  display: grid;
+  width: clamp(15.5rem, 24vw, 23rem);
+  min-height: 17rem;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem 1.6rem;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  background: rgb(0 0 0 / 0.5);
+}
+
+.hm-stage__num {
+  color: transparent;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 5.6vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  -webkit-text-stroke: 1.5px var(--cx-white);
+}
+
+.hm-stage p {
+  margin: 0;
+  color: rgb(255 255 255 / 0.74);
+  line-height: 1.5;
+}
+
+/* ---- Where to buy -------------------------------------------------------- */
+
+.hm-where {
+  padding-top: var(--cx-pad-sm);
+}
+
+.hm-where__cities {
+  --marquee-duration: 48s;
+  --marquee-stroke: var(--cx-white);
+  margin-bottom: clamp(3rem, 7vw, 6rem);
+  font-size: clamp(2.6rem, 9vw, 9.6rem);
+}
+
+.hm-news__note {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+}
