@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { BrandLink } from "./BrandLink";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/motion";
 import { BRANDS, brandType, brandVars, type BrandSlug } from "@/data/brands";
@@ -57,8 +58,7 @@ export function BrandIndex({ heading = "h2", first = false }: { heading?: "h1" |
               const on = i === active;
               return (
                 <li key={x.slug} data-row className="border-t border-current last:border-b">
-                  <Link
-                    href={`/brands/${x.slug}/`}
+                  <BrandLink b={x}
                     onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}
                     className="group relative block py-3 transition-opacity duration-500 md:py-4"
                     style={{ opacity: on ? 1 : 0.22 }}
@@ -74,12 +74,12 @@ export function BrandIndex({ heading = "h2", first = false }: { heading?: "h1" |
                           <span className="flex flex-wrap items-center gap-2">
                             <span className="chip">{x.family === "zero" ? "направление 0%" : "алкогольный портфель"}</span>
                             <span className="chip">{x.kind}</span>
-                            <span className="chip chip-solid">{x.status === "coming-soon" ? "следить →" : "к бренду →"}</span>
+                            <span className="chip chip-solid">{x.site ? x.site.replace("https://", "") + " ↗" : x.status === "coming-soon" ? "следить →" : "к бренду →"}</span>
                           </span>
                         </span>
                       </span>
                     </span>
-                  </Link>
+                  </BrandLink>
                 </li>
               );
             })}

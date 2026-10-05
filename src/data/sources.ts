@@ -21,9 +21,8 @@ export const OFFICIAL_PAGES = [
   { path: "/katalog", title: "Ассортимент CIDER HOUSE" },
   { path: "/map", title: "Где купить Cider House" },
   { path: "/contact", title: "Сотрудничество с Cider House" },
-  { path: "/merch", title: "Фирменный мерч Cider House" },
   { path: "/production", title: "Производство" },
   { path: "/non-alcoholic", title: "Безалкогольное направление" },
   { path: "/clients", title: "Партнёры" },
-  { path: "/blog", title: "Новости" },
+  { path: "/blog", title: "Новости" } /* migrated to /news — see src/data/news.ts */,
 ] as const;

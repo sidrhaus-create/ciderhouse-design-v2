@@ -14,16 +14,21 @@
   --ch-purple: #6b3077;
   --ch-black: #000000;
   --ch-white: #ffffff;
+  /* warm surfaces (completion pass): the site sits on cream, steps down to sand, lifts to paper; black is no longer a background */
+  --ch-cream: #f3ede4;
+  --ch-sand: #e5dbcd;
+  --ch-paper: #faf6f0;
+  --ch-ink: #1b1320;   /* deep plum near-black for type and hairlines */
 
   /* 2 — sub-brands (bg / ink / accent). Values come from logos and packaging; see CONTENT_SOURCES.md */
   --wp-bg: #ece4dc;      /* White Phoenix label paper, sampled from the original bottle photo */
-  --wp-ink: #000000;     /* logo is black */
+  --wp-ink: #1b1320;     /* logo is black */
   --wp-accent: #6b3077;  /* phoenix crown cap */
   --dt-bg: #1c1b1d;      /* Double Tree label black, sampled */
   --dt-ink: #ffffff;
   --dt-accent: #8cc63f;  /* label green (illustration + D mark), approximate */
-  --zero-bg: #ffffff;    /* ZER° CIDER: corporate purple on white */
-  --zero-ink: #000000;
+  --zero-bg: #faf6f0;    /* ZER° CIDER: corporate purple on white */
+  --zero-ink: #1b1320;
   --zero-accent: #6b3077;
   --mb-bg: #66381a;      /* Mister Bee: brown / honey — swatches measured in the owner's logo file, not stated as codes */
   --mb-ink: #efc657;
@@ -31,8 +36,8 @@
   --bc-bg: #14100f;      /* Bumble Coffee (Black Phoenix): fills measured in the logobook, not stated as codes */
   --bc-ink: #fcdfa5;
   --bc-accent: #c71880;
-  --mg-bg: #ffffff;      /* Migliore: logo is black only; no palette stated → master colours */
-  --mg-ink: #000000;
+  --mg-bg: #f3ede4;      /* Migliore: logo is black only; no palette stated → master colours */
+  --mg-ink: #1b1320;
   --mg-accent: #6b3077;
 
   /* 3 — flavour accents (secondary, product-specific; never a page identity) */
@@ -46,8 +51,8 @@
   --fl-neutral: #bdb7b0;
 
   /* 4 — UI state */
-  --field: var(--ch-white);  /* colour of the plane an element sits on */
-  --on: var(--ch-black);     /* text colour on that plane */
+  --field: var(--ch-cream);  /* colour of the plane an element sits on */
+  --on: var(--ch-ink);       /* text colour on that plane */
   --ui-accent: var(--ch-purple);
   --ui-rule: color-mix(in srgb, currentColor 22%, transparent);
   --ui-muted: color-mix(in srgb, currentColor 62%, transparent);
@@ -70,9 +75,9 @@
   --ease-io: cubic-bezier(0.77, 0, 0.18, 1);
 
   /* legacy aliases */
-  --ink: var(--ch-black);
-  --paper: var(--ch-white);
-  --milk: var(--ch-white);
+  --ink: var(--ch-ink);
+  --paper: var(--ch-paper);
+  --milk: var(--ch-paper);
   --plum: var(--ch-purple);
   --rule: var(--ui-rule);
   --muted: var(--ui-muted);
@@ -80,9 +85,13 @@
 
 @theme inline {
   --color-purple: var(--ch-purple);
-  --color-ink: var(--ch-black);
-  --color-paper: var(--ch-white);
-  --color-milk: var(--ch-white);
+  --color-ink: var(--ch-ink);
+  --color-black: var(--ch-ink);
+  --color-white: var(--ch-paper);
+  --color-cream: var(--ch-cream);
+  --color-sand: var(--ch-sand);
+  --color-paper: var(--ch-paper);
+  --color-milk: var(--ch-paper);
   --color-plum: var(--ch-purple);
   --color-muted: var(--ui-muted);
   --font-display: var(--f-brand);
@@ -92,12 +101,12 @@
 }
 
 @layer base {
-  html { background: var(--ch-black); color: var(--ch-black); -webkit-text-size-adjust: 100%; }
+  html { background: var(--ch-sand); color: var(--ch-ink); -webkit-text-size-adjust: 100%; }
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-stopped { overflow: hidden; }
   body {
-    background: var(--ch-white);
+    background: var(--ch-cream);
     font-family: var(--f-body);
     font-size: 16px;
     line-height: 1.5;
@@ -106,21 +115,22 @@
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
-  ::selection { background: var(--ch-purple); color: var(--ch-white); }
+  ::selection { background: var(--ch-purple); color: var(--ch-paper); }
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; border-radius: 0; }
   :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-  .skip-link { position: fixed; left: 12px; top: -60px; z-index: 200; padding: 10px 16px; background: var(--ch-black); color: var(--ch-white); font-weight: 600; }
+  .skip-link { position: fixed; left: 12px; top: -60px; z-index: 200; padding: 10px 16px; background: var(--ch-ink); color: var(--ch-paper); font-weight: 600; }
   .skip-link:focus { top: 12px; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 
 @layer components {
   /* ───────────────── Fields: the three master planes ───────────────── */
-  .field-white  { --field: var(--ch-white);  --on: var(--ch-black); --ui-accent: var(--ch-purple); background: var(--field); color: var(--on); }
-  .field-black  { --field: var(--ch-black);  --on: var(--ch-white); --ui-accent: var(--ch-white);  background: var(--field); color: var(--on); }
-  .field-purple { --field: var(--ch-purple); --on: var(--ch-white); --ui-accent: var(--ch-white);  background: var(--field); color: var(--on); }
+  .field-white  { --field: var(--ch-cream);  --on: var(--ch-ink);   --ui-accent: var(--ch-purple); background: var(--field); color: var(--on); }
+  /* historical name: this is now the darker warm plane (sand), not black */
+  .field-black  { --field: var(--ch-sand);   --on: var(--ch-ink);   --ui-accent: var(--ch-purple); background: var(--field); color: var(--on); }
+  .field-purple { --field: var(--ch-purple); --on: var(--ch-paper); --ui-accent: var(--ch-paper); --liquid: var(--ch-paper); background: var(--field); color: var(--on); }
   .field-brand  { background: var(--field); color: var(--on); } /* --field / --on / --ui-accent / --f-brand set inline from brand tokens */
 
   /* brand voices */
@@ -203,9 +213,9 @@
   .btn:hover::after { translate: 5px 0; }
   .btn-solid { background: var(--on); color: var(--field); }
   .btn-solid::before { background: var(--ch-purple); }
-  .btn-solid:hover { color: var(--ch-white); border-color: var(--ch-purple); }
-  .field-purple .btn-solid::before { background: var(--ch-black); }
-  .field-purple .btn-solid:hover { border-color: var(--ch-black); }
+  .btn-solid:hover { color: var(--ch-paper); border-color: var(--ch-purple); }
+  .field-purple .btn-solid::before { background: var(--ch-ink); }
+  .field-purple .btn-solid:hover { border-color: var(--ch-ink); }
   .btn-plain::after { content: none; }
 
   /* ───────────────── Marquee ───────────────── */
@@ -216,6 +226,21 @@
 
 @keyframes mq { to { transform: translateX(-100%); } }
 @keyframes spin { to { rotate: 360deg; } }
+
+/* production illustrations: ink lines draw themselves, the accent marks the liquid */
+/* dash = 2 path lengths: with non-scaling-stroke the browser measures dashes in screen space, so on a drawing scaled up to 2x a dash of 1 would stop halfway */
+.art path, .art circle { stroke-dasharray: 2; stroke-dashoffset: 2; vector-effect: non-scaling-stroke; transition: stroke-dashoffset 1.1s var(--ease-io); transition-delay: calc(var(--k, 0) * 0.11s); }
+.art .acc { stroke: var(--ui-accent, var(--ch-purple)); stroke-width: 2.4; }
+.art .lbl { font: 600 13px var(--f-master); letter-spacing: 0.06em; fill: currentColor; stroke: none; opacity: 0; transition: opacity 0.5s linear; transition-delay: calc(var(--k, 0) * 0.11s); }
+.art.is-on path, .art.is-on circle { stroke-dashoffset: 0; }
+.art.is-on .lbl { opacity: 1; }
+html:not(.js) .art path, html:not(.js) .art circle { stroke-dashoffset: 0; }
+html:not(.js) .art .lbl { opacity: 1; }
+
+/* fermentation: bubbles keep rising while a drawing is on */
+.art .bub { transform-box: fill-box; transform-origin: center; }
+.art.is-on .bub { animation: bubRise 2.8s ease-in-out calc(1.3s + var(--k, 0) * 0.3s) infinite; }
+@keyframes bubRise { 0% { transform: translateY(0); opacity: 1; } 70% { opacity: 1; } 100% { transform: translateY(-22px); opacity: 0; } }
 
 /* page transition: the master purple plane leaves upward on every route change */
 .route-wipe { position: fixed; inset: 0; z-index: 110; background: var(--ch-purple); pointer-events: none; animation: routeWipe .75s var(--ease-io) both; }
@@ -234,6 +259,28 @@
   .js [data-reveal], .js [data-slap], .js [data-split] .line-mask > span { opacity: 1 !important; transform: none !important; clip-path: none !important; }
   .marquee__track { animation: none; }
   .route-wipe { display: none; }
+  .art .bub { animation: none !important; }
+  [data-step] { opacity: 1 !important; }
+  .art path, .art circle { stroke-dashoffset: 0 !important; }
+  .art .lbl { opacity: 1 !important; }
   /* pinned bottle scene: one static beat */
   [data-plane]:not(:first-of-type), [data-bottle]:not(:nth-of-type(4)) { display: none; }
 }
+
+/* external links: a small arrow, so it is clear the click leaves the site */
+a[data-external] { cursor: pointer; }
+a[data-external].btn::after { content: "↗"; }
+
+/* news rows: the purple plane wipes in behind the title */
+.news-row { background: linear-gradient(var(--ch-purple), var(--ch-purple)) 0 0 / 0% 100% no-repeat; transition: background-size 0.6s var(--ease-out), color 0.4s linear; }
+.news-row:hover, .news-row:focus-visible { background-size: 100% 100%; color: var(--ch-paper); --on: var(--ch-paper); --field: var(--ch-purple); }
+
+/* scroll-to-top: a compact square in the system, bottom right */
+.to-top { position: fixed; right: 16px; bottom: 16px; z-index: 70; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: var(--ch-ink); color: var(--ch-paper); border: 1px solid var(--ch-ink); opacity: 0; pointer-events: none; translate: 0 12px; transition: opacity 0.3s linear, translate 0.4s var(--ease-out), background-color 0.3s; }
+.to-top.is-on { opacity: 1; pointer-events: auto; translate: 0 0; }
+.to-top:hover { background: var(--ch-purple); border-color: var(--ch-purple); }
+.to-top span { transition: translate 0.35s var(--ease-out); }
+.to-top:hover span { translate: 0 -3px; }
+@media (min-width: 768px) { .to-top { right: 24px; bottom: 24px; } }
+/* desktop: sits above the corridor's brand index and the footer's legal line */
+@media (min-width: 1024px) { .to-top { bottom: 72px; } }

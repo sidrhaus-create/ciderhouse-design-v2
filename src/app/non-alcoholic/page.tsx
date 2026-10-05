@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BrandLink } from "@/components/BrandLink";
 import { ZeroReel } from "@/components/ZeroReel";
 import { MarketRows } from "@/components/Blocks";
+import { ProcessTeaser } from "@/components/ProcessTeaser";
 import { Bottle, Chapter, Fit, Swatch } from "@/components/primitives";
 import { VERIFIED } from "@/data/catalog";
 import { BRANDS, brandType, brandVars } from "@/data/brands";
@@ -10,7 +12,7 @@ import { flavourAccent } from "@/lib/flavour";
 
 export const metadata: Metadata = {
   title: "Безалкогольное направление 0%",
-  description: "ZER° CIDER — безалкогольный сидр 0,0% от CIDERHOUSE: зелёное яблоко, вишня, гранат-малина. А также Bumble Coffee (Black Phoenix) и Migliore.",
+  description: "ZER° CIDER — безалкогольный сидр 0,0% от CIDERHOUSE: зелёное яблоко, вишня, гранат — малина. А также Bumble Coffee (Black Phoenix) и Migliore.",
   alternates: { canonical: "/non-alcoholic/" },
 };
 
@@ -39,7 +41,8 @@ export default function Zero() {
               </div>
               <img src="/assets/brand/zero-percent-900.webp" srcSet="/assets/brand/zero-percent-480.webp 480w, /assets/brand/zero-percent-900.webp 900w" sizes="(max-width: 768px) 40vw, 18vw" alt="Фирменный знак 0% безалкогольной линейки" width={900} height={901} loading="lazy" className="w-[clamp(110px,12vw,190px)]" />
               <div className="flex flex-wrap">
-                <a href="#z-buy" className="btn btn-solid">Где купить</a>
+                <a href="https://zerocider.ru" target="_blank" rel="noopener noreferrer" data-external="" className="btn btn-solid">zerocider.ru</a>
+                <a href="#z-buy" className="btn -ml-px">Где купить</a>
                 <Link href="/production/" className="btn -ml-px">Технология 0,0%</Link>
               </div>
             </div>
@@ -47,7 +50,7 @@ export default function Zero() {
               <div aria-hidden="true" data-slap className="absolute inset-y-0 left-1/2 w-[86%] -translate-x-1/2 bg-purple" />
               {VERIFIED.map((p, i) => (
                 <Link key={p.slug} href={`/katalog/${p.slug}/`} className="group relative flex flex-col items-center" aria-label={`${p.nameRu} — подробнее`}>
-                  <Bottle base={p.image!} alt={p.name} priority={i === 1} sizes="(max-width:768px) 28vw, 13vw" className="h-[40svh] translate-y-[4%] transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:translate-y-0 md:h-[56svh]" />
+                  <Bottle base={p.image!} alt={`ZER° CIDER — ${p.nameRu}`} priority={i === 1} sizes="(max-width:768px) 28vw, 13vw" className="h-[40svh] translate-y-[4%] transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:translate-y-0 md:h-[56svh]" />
                   <span className="chip absolute bottom-4 hidden whitespace-nowrap bg-white text-black md:inline-flex"><Swatch color={flavourAccent(p.name)} className="text-[14px]" />{p.nameRu}</span>
                 </Link>
               ))}
@@ -71,6 +74,14 @@ export default function Zero() {
               </li>
             ))}
           </ol>
+          <div className="mt-10 grid grid-cols-1 items-end gap-6 md:grid-cols-12">
+            <div className="md:col-span-4">
+              <p className="t-tag mb-3">Как это сделано</p>
+              <p className="text-[15px] leading-snug opacity-90">Яблочный сок, брожение и лабораторная проверка каждой партии.</p>
+              <Link href="/production/" className="t-tag fill-link mt-4 inline-block">Как создаётся CIDERHOUSE →</Link>
+            </div>
+            <div className="md:col-span-8"><ProcessTeaser pick={[0, 2, 3]} compact /></div>
+          </div>
         </div>
       </section>
 
@@ -93,14 +104,14 @@ export default function Zero() {
           <ul className="grid grid-cols-1 border-l border-t border-white md:grid-cols-3">
             {zeroWorld.map((b) => (
               <li key={b.slug} className="border-b border-r border-white">
-                <Link href={`/brands/${b.slug}/`} className="field-brand group flex min-h-[42vh] flex-col justify-between p-6" style={brandVars(b)}>
+                <BrandLink b={b} className="field-brand group flex min-h-[42vh] flex-col justify-between p-6" style={brandVars(b)}>
                   <span className="chip self-start">{b.kind}</span>
                   <span>
                     <span className="block text-[clamp(34px,3.8vw,64px)] leading-[0.95]" style={brandType(b)}>{b.name}</span>
                     <span className="mt-3 block text-[15px] font-medium leading-snug">{b.line}</span>
                   </span>
                   <span className="t-tag flex items-center gap-3">{b.status === "coming-soon" ? "скоро" : "к бренду"}<span aria-hidden="true" className="sq">→</span></span>
-                </Link>
+                </BrandLink>
               </li>
             ))}
           </ul>

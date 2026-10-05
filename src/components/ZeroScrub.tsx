@@ -86,13 +86,14 @@ export function ZeroScrub() {
             </p>
             <div className="mt-[clamp(18px,3vw,44px)] flex items-center gap-3">
               <span className="relative block h-2 flex-1 overflow-hidden border border-current"><span ref={bar} className="absolute inset-0 origin-left bg-plum" style={{ transform: "scaleX(0)" }} /></span>
-              <span className="t-tag w-[13.5em] shrink-0 chip text-center transition-colors duration-300" style={cold ? { background: "var(--ch-purple)", color: "var(--ch-white)", borderColor: "var(--ch-purple)" } : undefined}>
+              <span className="t-tag w-[13.5em] shrink-0 chip text-center transition-colors duration-300" style={cold ? { background: "var(--ch-purple)", color: "var(--ch-paper)", borderColor: "var(--ch-purple)" } : undefined}>
                 {cold ? "остановлено холодом" : "брожение идёт"}
               </span>
             </div>
             <p className="t-lead mt-6">Брожение доходит до 0,5% — и его останавливают холодом. Дальше напиток бережно доводят до 0,0%, сохраняя вкус и характер сидра.</p>
             <div className="mt-7 flex flex-wrap gap-2.5">
-              <Link href="/non-alcoholic/" className="btn btn-solid">Мир ZER°</Link>
+              <a href="https://zerocider.ru" target="_blank" rel="noopener noreferrer" data-external="" className="btn btn-solid">zerocider.ru</a>
+              <Link href="/non-alcoholic/" className="btn -ml-px">Направление 0%</Link>
               <Link href="/production/" className="btn">Как это сделано</Link>
             </div>
           </div>

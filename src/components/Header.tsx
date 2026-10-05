@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
+import { BrandLink } from "./BrandLink";
+import { ContactLines, Socials } from "./Contacts";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { NAV, SITE } from "@/data/site";
 import { BRANDS, brandType } from "@/data/brands";
 import { useMotion } from "@/lib/motion";
 
-const QUICK = [["/brands/", "Бренды"], ["/katalog/", "Ассортимент"], ["/non-alcoholic/", "0%"], ["/production/", "Производство"], ["/map/", "Где купить"]] as const;
+const QUICK = [["/brands/", "Бренды"], ["/katalog/", "Ассортимент"], ["/non-alcoholic/", "0%"], ["/production/", "Производство"], ["/news/", "Новости"], ["/map/", "Где купить"]] as const;
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -49,12 +51,12 @@ export function Header() {
     <>
       <a href="#main" className="skip-link">К содержанию</a>
       <header
-        className={`field-black fixed inset-x-0 top-0 z-[90] border-b border-white/25 transition-transform duration-500 ${hidden && !open ? "-translate-y-full" : ""}`}
+        className={`field-black fixed inset-x-0 top-0 z-[90] border-b border-current/25 transition-transform duration-500 ${hidden && !open ? "-translate-y-full" : ""}`}
         style={{ transitionTimingFunction: "var(--ease-out)" }}
       >
         <div className="flex h-14 items-stretch justify-between md:h-16">
           <Link href="/" className="flex items-center gap-3 pl-[var(--gutter)] pr-6" aria-label="CIDERHOUSE — на главную">
-            <img src="/assets/brand/ciderhouse-logo-white.svg" alt="CIDERHOUSE" width={524} height={137} className="h-7 w-auto md:h-8" />
+            <img src="/assets/brand/ciderhouse-logo-purple.svg" alt="CIDERHOUSE" width={524} height={137} className="h-7 w-auto md:h-8" />
           </Link>
           <nav aria-label="Быстрая навигация" className="flex items-stretch">
             {QUICK.map(([href, label]) => {
@@ -71,7 +73,7 @@ export function Header() {
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
               aria-controls="site-menu"
-              className="t-tag flex items-center gap-4 bg-purple px-[var(--gutter)] text-white transition-colors duration-300 hover:bg-white hover:text-black md:px-7"
+              className="t-tag flex items-center gap-4 bg-purple px-[var(--gutter)] text-white transition-colors duration-300 hover:bg-[var(--on)] hover:text-[var(--field)] md:px-7"
             >
               <span>{open ? "Закрыть" : "Меню"}</span>
               <span className="relative block h-3 w-5" aria-hidden="true">
@@ -98,15 +100,15 @@ export function Header() {
           @keyframes menuIn{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
           @keyframes menuItem{from{transform:translateY(110%)}to{transform:none}}
           .menu-row{background:linear-gradient(var(--ch-purple),var(--ch-purple)) 0 0/0% 100% no-repeat;transition:background-size .5s var(--ease-out)}
-          .menu-row:hover,.menu-row:focus-visible{background-size:100% 100%}
+          .menu-row:hover,.menu-row:focus-visible{background-size:100% 100%;color:var(--ch-paper)}
         `}</style>
         <div className="grid min-h-full grid-cols-1 pt-14 md:pt-16 lg:grid-cols-12">
-          <nav aria-label="Основное меню" className="lg:col-span-8 lg:border-r lg:border-white/25">
+          <nav aria-label="Основное меню" className="lg:col-span-8 lg:border-r lg:border-current/25">
             <ul>
               {NAV.map((n, i) => {
                 const active = i === activeIdx;
                 return (
-                  <li key={n.href} className="overflow-hidden border-b border-white/25">
+                  <li key={n.href} className="overflow-hidden border-b border-current/25">
                     <Link
                       href={n.href}
                       className="menu-row group flex items-center justify-between gap-4 px-[var(--gutter)] py-[min(1.5vh,14px)]"
@@ -131,20 +133,20 @@ export function Header() {
           <aside className="flex flex-col justify-between gap-10 px-[var(--gutter)] py-8 lg:col-span-4" aria-label="Бренды">
             <div>
               <p className="t-tag mb-5 opacity-60">Бренды · {SITE.name}</p>
-              <ul className="border-t border-white/25">
+              <ul className="border-t border-current/25">
                 {BRANDS.map((b) => (
-                  <li key={b.slug} className="border-b border-white/25">
-                    <Link href={`/brands/${b.slug}/`} className="group flex items-center justify-between gap-4 py-3">
+                  <li key={b.slug} className="border-b border-current/25">
+                    <BrandLink b={b} className="group flex items-center justify-between gap-4 py-3">
                       <span className="text-[clamp(22px,2.1vw,32px)] leading-none" style={brandType(b)}>{b.name}</span>
-                      <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
-                    </Link>
+                      <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1.5">{b.site ? "↗" : "→"}</span>
+                    </BrandLink>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
               <p className="t-voice max-w-[16ch]">Мы создаём настоящий сидр</p>
-              <a href={`mailto:${SITE.wholesaleEmail}`} className="btn mt-6">Опт · {SITE.wholesaleEmail}</a>
+              <div className="mt-6 grid grid-cols-2 gap-6"><ContactLines /><Socials /></div>
             </div>
           </aside>
         </div>

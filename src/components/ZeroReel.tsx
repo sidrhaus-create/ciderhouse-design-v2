@@ -83,7 +83,7 @@ export function ZeroReel({ className = "" }: { className?: string }) {
       data-cursor
       tabIndex={reduced ? -1 : 0}
       role="img"
-      aria-label="Студийный фильм: три бутылки ZER° CIDER 0,0% — вишня, зелёное яблоко, гранат-малина. Перетаскивайте или используйте стрелки, чтобы управлять камерой."
+      aria-label="Студийный фильм: три бутылки ZER° CIDER 0,0% — вишня, зелёное яблоко, гранат — малина. Перетаскивайте или используйте стрелки, чтобы управлять камерой."
       onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onKeyDown={onKey}
       style={{ touchAction: "pan-y", cursor: ready ? "grab" : undefined }}
     >
@@ -93,7 +93,7 @@ export function ZeroReel({ className = "" }: { className?: string }) {
       {ready && (
         <div className="pointer-events-none absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
           <span className="t-tag">← тяните — управляйте камерой →</span>
-          <button className="t-tag pointer-events-auto border border-white/60 px-3 py-1.5" onClick={() => play(0)}>Повторить дубль</button>
+          <button className="t-tag pointer-events-auto border border-current/60 px-3 py-1.5" onClick={() => play(0)}>Повторить дубль</button>
         </div>
       )}
     </div>

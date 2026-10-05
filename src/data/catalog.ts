@@ -1,12 +1,13 @@
 import type { BrandSlug } from "./brands";
 import type { SourceId } from "./sources";
 import PACKS from "./packs.json";
+import { flavourRu } from "./flavours";
 
 export type Product = {
   slug: string;
   brand: BrandSlug;
-  name: string; // as printed on the label
-  nameRu: string;
+  name: string; // as printed on the label — internal (flavour accents, sources); never shown as website text
+  nameRu: string; // the display name: src/data/flavours.ts
   abv: "0,0%" | null; // only stated where verified
   format: ("бутылка" | "банка")[];
   volumes: string[];
@@ -29,10 +30,10 @@ const zero: Product[] = [
     slug: "zero-green-apple",
     brand: "zero",
     name: "Double Tree 0% Green Apple",
-    nameRu: "Зелёное яблоко",
+    nameRu: flavourRu("zero-green-apple"),
     abv: "0,0%",
     format: ["бутылка"],
-    volumes: [],
+    volumes: ["0,45 л"], // label: 450 ML
     verified: true,
     image: Z + "dt-green-apple-0",
     tone: "#D9A441",
@@ -47,10 +48,10 @@ const zero: Product[] = [
     slug: "zero-cherry",
     brand: "zero",
     name: "White Phoenix 0% Cherry",
-    nameRu: "Вишня",
+    nameRu: flavourRu("zero-cherry"),
     abv: "0,0%",
     format: ["бутылка"],
-    volumes: [],
+    volumes: ["0,45 л"], // label: 450 ML
     verified: true,
     image: Z + "wp-cherry-0",
     tone: "#B3263A",
@@ -65,10 +66,10 @@ const zero: Product[] = [
     slug: "zero-pomegranate-raspberry",
     brand: "zero",
     name: "White Phoenix 0% Pomegranate Raspberry",
-    nameRu: "Гранат · Малина",
+    nameRu: flavourRu("zero-pomegranate-raspberry"),
     abv: "0,0%",
     format: ["бутылка"],
-    volumes: [],
+    volumes: ["0,45 л"], // label: 450 ML
     verified: true,
     image: Z + "wp-pomegranate-raspberry-0",
     tone: "#C2304F",
@@ -82,7 +83,7 @@ const zero: Product[] = [
 ];
 
 // ---------- FROM PACKAGING: packshots from the owner's materials, mapped by slug in packs.json (scripts/brand-packshots.mjs) ----------
-// `name` is exactly what is printed on the label. No translated names are published for these products.
+// `name` is exactly what is printed on the label; the website shows `nameRu` from the flavour dictionary.
 const VOLUME: Partial<Record<BrandSlug, (slug: string) => string[]>> = {
   "white-phoenix": () => ["0,45 л"],                                   // label: 450 ML
   "double-tree": (slug) => [slug.includes("-075-") ? "0,75 л" : "0,45 л"],
@@ -94,7 +95,7 @@ const BRAND_OF = (slug: string) => (["white-phoenix", "double-tree", "mister-bee
 const packed: Product[] = Object.entries(PACKS as Record<string, { src: string; w: number; h: number; label: string }>).map(([slug, v]) => {
   const brand = BRAND_OF(slug);
   return {
-    slug, brand, name: v.label, nameRu: v.label, abv: null,
+    slug, brand, name: v.label, nameRu: flavourRu(slug), abv: null,
     format: FORMAT[brand] ?? ["бутылка"], volumes: VOLUME[brand]?.(slug) ?? [],
     verified: false, pack: { src: v.src, w: v.w, h: v.h }, sources: ["owner-archive"],
   };

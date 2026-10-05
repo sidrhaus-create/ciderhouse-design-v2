@@ -1,5 +1,7 @@
 import type { SourceId } from "./sources";
 
+/** ONE source of truth for public company data. Every page, the header, the footer and the structured metadata read from here —
+ *  change a phone, an e-mail or a social URL in this file and it changes everywhere. Nothing below is repeated in components. */
 export const SITE = {
   url: "https://ciderhouse.ru",
   name: "CIDERHOUSE",
@@ -7,40 +9,61 @@ export const SITE = {
   tagline: "Мы создаём настоящий сидр", // official homepage title
   description:
     "CIDERHOUSE — производитель сидра и медовухи: White Phoenix, Mister Bee, Double Tree и безалкогольное направление 0% — ZER° CIDER, Bumble Coffee, Migliore.",
-  wholesaleEmail: "opt@whitephoenix.ru", // owner materials
+  since: 2017, // on the market since — official site
   locale: "ru_RU",
 };
 
+// Contacts and socials: ciderhouse.ru (footer of the official site, checked 2026-10-05) + owner confirmation.
+export const CONTACTS = {
+  phone: { label: "+7 (495) 177-12-64", href: "tel:+74951771264" },
+  emails: ["info@ciderhouse.ru", "a@ciderhouse.ru"],
+} as const;
+/** The address used by single-button calls to action. */
+export const EMAIL = CONTACTS.emails[0];
+export const mailto = (subject?: string, to: string = EMAIL) => `mailto:${to}${subject ? `?subject=${encodeURIComponent(subject)}` : ""}`;
+
+export const SOCIALS = [
+  { name: "ВКонтакте", href: "https://vk.com/cider_house" },
+  { name: "Telegram", href: "https://t.me/ciderhousee" },
+  { name: "YouTube", href: "https://www.youtube.com/@ciderhouse6372" },
+] as const;
+
 export const NAV = [
   { href: "/", label: "Дом", hint: "CIDERHOUSE" },
+  { href: "/about/", label: "О компании", hint: `с ${SITE.since} года` },
   { href: "/brands/", label: "Бренды", hint: "6 характеров" },
   { href: "/katalog/", label: "Ассортимент", hint: "каталог" },
   { href: "/non-alcoholic/", label: "0%", hint: "безалкогольное" },
-  { href: "/production/", label: "Производство", hint: "от яблока до бутылки" },
+  { href: "/production/", label: "Производство", hint: "от сока и мёда до розлива" },
   { href: "/map/", label: "Где купить", hint: "магазины и маркетплейсы" },
   { href: "/clients/", label: "Партнёры", hint: "сети" },
-  { href: "/contact/", label: "Сотрудничество", hint: "опт · HoReCa" },
-  { href: "/merch/", label: "Мерч", hint: "фирменный" },
-  { href: "/blog/", label: "Журнал", hint: "новости" },
+  { href: "/news/", label: "Новости", hint: "журнал дома" },
+  { href: "/contact/", label: "Контакты", hint: "опт · HoReCa" },
 ] as const;
 
-// Production process — owner materials (ZER° CIDER 0,0% technology). Order and wording preserved, lightly edited.
+// Company facts — official site (ciderhouse.ru) and owner brief. Evergreen wording: "с 2017 года", never a count of years.
+export const ABOUT_FACTS: { v: string; k: string; note: string }[] = [
+  { v: `С ${SITE.since}`, k: "года на рынке", note: "Разрабатываем и производим сидр и медовуху." },
+  { v: "Сидр и медовуха", k: "две основы", note: "Яблочный сок и мёд, натуральные фруктовые соки." },
+  { v: "Бутылки и кеги", k: "два формата", note: "Для полки магазина и для бара." },
+  { v: "Два региона", k: "производство", note: "Краснодарский край и Тверская область." },
+];
+
+// Production story — house-wide, from the official site and the owner brief. No temperatures, timings, recipes or capacities.
 export const PROCESS: { n: string; title: string; text: string; glyph?: string; source: SourceId }[] = [
-  { n: "01", title: "Всё начинается с яблок", text: "Для сидра выбирают сорта с правильным балансом сладости и кислотности.", source: "owner-repo" },
-  { n: "02", title: "Яблочный сок — основа", text: "Концентрированный сок поступает на завод, где его подготавливают и направляют в ёмкости для дальнейшего производства напитка.", source: "owner-repo" },
-  { n: "03", title: "Брожение", text: "Брожение идёт на восстановленном яблочном соке и сахаре с добавлением винных дрожжей.", source: "owner-repo" },
-  { n: "04", title: "Остановка брожения", text: "Брожение идёт до 0,5% — затем процесс останавливают охлаждением и доводят напиток до 0,0%.", glyph: "0,5 → 0,0", source: "owner-repo" },
-  { n: "05", title: "Фильтрация и карбонизация", text: "Из напитка удаляют лишние частицы, осадок и остатки дрожжей, затем насыщают углекислым газом — так появляются мягкие пузырьки.", glyph: "CO₂", source: "owner-repo" },
-  { n: "06", title: "Контроль качества", text: "Каждая партия проходит лабораторную проверку: вкус, аромат, карбонизация и строгое соответствие 0,0%.", source: "owner-repo" },
-  { n: "07", title: "Розлив", text: "Готовый сидр разливают в фирменные бутылки на автоматической линии — без контакта с воздухом.", source: "owner-repo" },
-  { n: "08", title: "Отгрузка", text: "Со склада — в маркетплейсы, магазины и бары по всей России.", source: "owner-repo" },
+  { n: "01", title: "Основа: яблочный сок и мёд", text: "Сидр начинается с яблочного сока, медовуха — с мёда. Это основа каждого напитка дома.", glyph: "сок · мёд", source: "official" },
+  { n: "02", title: "Натуральные фруктовые соки", text: "К основе добавляют натуральные фруктовые и ягодные соки — так появляются необычные сочетания вкусов.", source: "official" },
+  { n: "03", title: "Брожение", text: "Напиток рождается в естественном брожении. Мы работаем по европейской технологии производства.", source: "official" },
+  { n: "04", title: "Контроль качества", text: "Процесс контролируют на каждом этапе, а каждую партию проверяет лаборатория.", glyph: "каждая партия", source: "official" },
+  { n: "05", title: "Розлив", text: "Готовый напиток разливают в бутылки и кеги.", glyph: "бутылки · кеги", source: "official" },
+  { n: "06", title: "Два производства", text: "Напитки CIDERHOUSE производят в Краснодарском крае и Тверской области.", glyph: "юг · центр", source: "official" },
 ];
 
 export const ZERO_FACTS = [
   { k: "01", title: "Сделано в России", text: "Безалкогольный сидр российского производства." },
   { k: "02", title: "Классическая технология", text: "Полный цикл сидроделия — вкус и характер сидра сохранены." },
   { k: "03", title: "Категория 0,0%", text: "Один из самых быстрорастущих сегментов напитков в мире." },
-  { k: "04", title: "Три характера", text: "Зелёное яблоко, вишня и гранат-малина." },
+  { k: "04", title: "Три характера", text: "Зелёное яблоко, вишня и гранат — малина." },
 ];
 
 export const PARTNERS = [
@@ -59,10 +82,4 @@ export const MARKETPLACES = [
   { name: "OZON", note: "Все три вкуса ZER° с доставкой", href: "https://www.ozon.ru" },
   { name: "Wildberries", note: "Наборы и отдельные вкусы", href: "https://www.wildberries.ru" },
   { name: "Яндекс Маркет", note: "Экспресс-доставка", href: "https://market.yandex.ru" },
-];
-
-// Journal: posts confirmed in the index of the official domain. Linked to originals.
-export const JOURNAL = [
-  { title: "Топ-6 фактов о сидре", href: "https://ciderhouse.ru/tpost/a7ligjlro1-top-6-faktov-o-sidre", tag: "Культура" },
-  { title: "Кинокомпания «CIDERHOUSE» и фильм «Неуловимые»", href: "https://ciderhouse.ru/tpost/ij9mvktgy1-kinokompaniya-ciderhouse-i-film-neulovim", tag: "Новости" },
 ];

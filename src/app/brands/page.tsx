@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BrandLink } from "@/components/BrandLink";
 import { BRANDS, brandType } from "@/data/brands";
 import { BrandIndex } from "@/components/BrandIndex";
 import { Chapter } from "@/components/primitives";
@@ -32,10 +33,10 @@ export default function Brands() {
                 <ul className="mt-8 border-t border-current">
                   {BRANDS.filter((b) => b.family === f.id).map((b) => (
                     <li key={b.slug} className="border-b border-current last:border-b-0">
-                      <Link href={`/brands/${b.slug}/`} className="group flex items-center justify-between gap-4 py-3">
+                      <BrandLink b={b} className="group flex items-center justify-between gap-4 py-3">
                         <span className="text-[clamp(24px,2.6vw,40px)] leading-none transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:translate-x-2" style={brandType(b)}>{b.name}</span>
-                        <span aria-hidden="true" className="sq">→</span>
-                      </Link>
+                        <span aria-hidden="true" className="sq">{b.site ? "↗" : "→"}</span>
+                      </BrandLink>
                     </li>
                   ))}
                 </ul>

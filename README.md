@@ -46,6 +46,8 @@ Brand faces are applied through `brandType(b)` / `.voice-*`; files live in `publ
 
 **Brand corridor (home).** `BrandCorridor`: Double Tree → White Phoenix → Mister Bee → 0% as one horizontal journey. Desktop: one pinned frame, vertical scroll moves the track sideways (0.75 viewport per scene, soft snap); touch layouts: native swipe rail with scroll-snap and a peek of the next scene. A persistent index shows the active brand and jumps on click. Photography lives in `public/assets/photography` (four official shots); Mister Bee has no lifestyle photography, its scene is built from the packshots.
 
+**Production storytelling.** One thin-line illustration language for the eight verified stages (`ProcessArt`, drawn by `stroke-dashoffset`, purple marks the liquid). `ProcessStory` (production page): sticky drawing board + story, a liquid line climbs with the scroll; plain vertical sequence on touch layouts. `ProcessTeaser`: compressed strip — four moments on the homepage, three on the 0% page and product pages. No pinning; with reduced motion every drawing is shown complete. Stage texts come only from `PROCESS` in `src/data/site.ts`.
+
 **Provenance rules.** No invented renders or logos; names from retail listings carry the «сверяется» marker. Slogan of the 0% line is quoted exactly: «Свобода выбирать вкус, а не градусы».
 
 V1 components and the unused lettering/logo sources are parked in `archive-v1/` (outside `src`, excluded from TypeScript).

@@ -6,8 +6,9 @@ import "./globals.css";
 import { MotionProvider } from "@/lib/motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ScrollTop } from "@/components/ScrollTop";
 import { Threshold } from "@/components/Threshold";
-import { SITE } from "@/data/site";
+import { SITE, EMAIL, CONTACTS, SOCIALS } from "@/data/site";
 import { BRANDS } from "@/data/brands";
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export const viewport: Viewport = { themeColor: "#6b3077", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#f3ede4", width: "device-width", initialScale: 1 };
 
 const orgLd = {
   "@context": "https://schema.org",
@@ -37,7 +38,11 @@ const orgLd = {
   alternateName: "Cider House",
   url: SITE.url,
   logo: `${SITE.url}/assets/brand/ciderhouse-logo-purple.svg`,
-  email: SITE.wholesaleEmail,
+  email: EMAIL,
+  telephone: CONTACTS.phone.label,
+  foundingDate: String(SITE.since),
+  sameAs: SOCIALS.map((s) => s.href),
+  contactPoint: [{ "@type": "ContactPoint", telephone: CONTACTS.phone.label, email: EMAIL, contactType: "sales", availableLanguage: "ru" }],
   brand: BRANDS.map((b) => ({ "@type": "Brand", name: b.name })),
 };
 
@@ -54,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          <ScrollTop />
         </MotionProvider>
       </body>
     </html>

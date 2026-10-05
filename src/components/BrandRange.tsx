@@ -43,12 +43,11 @@ export function BrandRange({ b, items, offset = 0 }: { b: Brand; items: Product[
 
   const p = items[Math.min(active, items.length - 1)];
   if (!p) return null;
-  const type = brandType(b);
+  // flavour names are Russian: Latin-only brand faces (Sauna SmallCaps, Friz Quadrata) hand them to the master face
+  const type = b.face.cyr ? brandType(b) : ({ fontFamily: "var(--f-master)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "-0.03em" } as const);
   const short = items.length <= 4; // short ranges get a lower stage: no dead space under three lines
-  // Latin-only brand faces (Sauna SmallCaps, Friz Quadrata) set the name as printed on the label
-  const title = (x: Product) => (b.face.cyr ? x.nameRu : x.name);
-  const sub = (x: Product) => { const s = b.face.cyr ? x.name : x.nameRu; return s === title(x) ? "" : s; };
-  const spec = (x: Product) => [sub(x), x.format.join(" / "), x.volumes.join(" / "), x.abv ?? ""].filter(Boolean).join(" · ");
+  const title = (x: Product) => x.nameRu;
+  const spec = (x: Product) => [x.format.join(" / "), x.volumes.join(" / "), x.abv ?? ""].filter(Boolean).join(" · ");
   const count = `${String(active + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
 
   // bring a line to the focus band (bottle wall click)

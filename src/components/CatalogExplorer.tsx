@@ -1,18 +1,24 @@
 "use client";
 import Link from "next/link";
+import { BrandLink } from "./BrandLink";
 import { useEffect, useMemo, useState } from "react";
 import { PRODUCTS } from "@/data/catalog";
 import { brandBySlug, brandType, brandVars, type BrandSlug } from "@/data/brands";
 import { BrandRange } from "./BrandRange";
+import { FormatMark, Formats } from "./Formats";
+import { BRAND_FORMATS, FORMATS, brandsWith, formatOf, type FormatId } from "@/data/formats";
 
 type World = "all" | BrandSlug;
-type Fmt = "all" | "бутылка" | "банка";
+type Fmt = "all" | FormatId;
+// exact per-position formats come from the labels; kegs are verified for a family, so "Кеги" opens a family-level sheet instead of a product list
+const FMTS: Fmt[] = ["all", "bottle-045", "bottle-075", "can", "keg"];
 const ORDER: BrandSlug[] = ["zero", "white-phoenix", "double-tree", "mister-bee", "bumble-coffee"];
 const WORLDS: { id: World; label: string }[] = [{ id: "all", label: "Все" }, ...ORDER.map((id) => ({ id, label: brandBySlug(id)!.name }))];
 
 function readParams() {
   const sp = new URLSearchParams(window.location.search);
-  return { w: (sp.get("brand") as World) || "all", f: (sp.get("format") as Fmt) || "all" };
+  const f = sp.get("format") as Fmt;
+  return { w: (sp.get("brand") as World) || "all", f: FMTS.includes(f) ? f : "all" };
 }
 
 /** The range as an environment: a ruled filter strip, then each brand on its own plane with a sticky stage and an index. */
@@ -29,37 +35,63 @@ export function CatalogExplorer() {
     window.history.replaceState(null, "", q ? `?${q}` : window.location.pathname);
   }, [world, fmt]);
 
-  const list = useMemo(() => PRODUCTS.filter((p) => (world === "all" || p.brand === world) && (fmt === "all" || p.format.includes(fmt))), [world, fmt]);
+  const list = useMemo(() => PRODUCTS.filter((p) => (world === "all" || p.brand === world) && (fmt === "all" || formatOf(p) === fmt)), [world, fmt]);
   const groups = useMemo(() => ORDER.map((b) => ({ b: brandBySlug(b)!, items: list.filter((p) => p.brand === b) })).filter((g) => g.items.length), [list]);
+  const kegBrands = useMemo(() => brandsWith("keg"), []);
   const photos = list.filter((p) => p.image || p.pack).length;
-  const tab = (on: boolean) => `t-tag shrink-0 border-r border-white/25 px-4 py-4 transition-colors duration-300 md:px-5 ${on ? "bg-purple text-white" : "hover:bg-white hover:text-black"}`;
+  const tab = (on: boolean) => `t-tag shrink-0 border-r border-current/25 px-4 py-4 transition-colors duration-300 md:px-5 ${on ? "bg-purple text-white" : "hover:bg-[var(--on)] hover:text-[var(--field)]"}`;
 
   return (
     <div className="relative">
       {/* filter strip: part of the page structure, not a floating widget */}
-      <div className="field-black sticky top-0 z-30 border-y border-white/25">
+      <div className="field-black sticky top-0 z-30 border-y border-current/25">
         <div className="flex items-stretch overflow-x-auto [scrollbar-width:none]">
           <div role="group" aria-label="Бренд" className="flex">
             {WORLDS.map((w) => <button key={w.id} aria-pressed={world === w.id} onClick={() => setWorld(w.id)} className={tab(world === w.id)}>{w.label}</button>)}
           </div>
-          <div role="group" aria-label="Формат" className="flex md:ml-auto md:border-l md:border-white/25">
-            {(["all", "бутылка", "банка"] as Fmt[]).map((f) => <button key={f} aria-pressed={fmt === f} onClick={() => setFmt(f)} className={tab(fmt === f)}>{f === "all" ? "любой формат" : f}</button>)}
+          <div role="group" aria-label="Формат" className="flex md:ml-auto md:border-l md:border-current/25">
+            {FMTS.map((f) => <button key={f} aria-pressed={fmt === f} onClick={() => setFmt(f)} className={tab(fmt === f)}>{f === "all" ? "все форматы" : FORMATS[f].short}</button>)}
           </div>
-          <span className="t-tag t-num flex shrink-0 items-center px-5 opacity-70" aria-live="polite">{list.length} поз. · {photos} с фото</span>
+          <span className="t-tag t-num flex shrink-0 items-center px-5 opacity-70" aria-live="polite">{fmt === "keg" ? `${kegBrands.length} линейки` : `${list.length} поз. · ${photos} с фото`}</span>
         </div>
       </div>
 
-      {groups.length === 0 && (
+      {fmt === "keg" && (
+        <section className="field-white relative" aria-labelledby="keg-title">
+          <div className="wrap grid grid-cols-1 gap-10 py-[clamp(48px,6vw,96px)] md:grid-cols-12">
+            <div className="md:col-span-5">
+              <FormatMark id="keg" className="mb-6 h-24 w-20" />
+              <h2 id="keg-title" className="t-xl">Кеги</h2>
+              <p className="t-m mt-5 max-w-[30ch]">Напитки дома разливают не только в бутылки, но и в кеги — для баров и магазинов разливных напитков.</p>
+              <Link href="/contact/" className="btn btn-solid mt-8">Запросить ассортимент в кегах</Link>
+            </div>
+            <ul className="self-end border-t border-current md:col-span-7">
+              {kegBrands.filter((b) => world === "all" || b.slug === world).map((b) => (
+                <li key={b.slug} className="border-b border-current">
+                  <BrandLink b={b} className="group flex items-center justify-between gap-6 py-5">
+                    <span className="text-[clamp(28px,3.6vw,60px)] leading-none transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:translate-x-2" style={brandType(b)}>{b.name}</span>
+                    <span className="t-tag text-right opacity-80">{b.kind}<br />линейка в кегах</span>
+                  </BrandLink>
+                </li>
+              ))}
+              <li className="py-4 text-[14px] leading-snug opacity-70">Кеги подтверждены для линеек целиком. Какие вкусы доступны в кегах сейчас — уточняйте у менеджера.</li>
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {fmt !== "keg" && groups.length === 0 && (
         <section className="field-white relative"><div className="wrap sheet-pad"><p className="t-m">В этом формате пока ничего нет — выберите другой фильтр.</p></div></section>
       )}
 
-      {groups.map(({ b, items }) => (
+      {fmt !== "keg" && groups.map(({ b, items }) => (
         <section key={b.slug} aria-labelledby={`g-${b.slug}`} className="field-brand relative" style={brandVars(b)}>
           <header className="wrap flex flex-wrap items-end justify-between gap-4 pb-6 pt-[clamp(40px,4.6vw,70px)]">
             <h2 id={`g-${b.slug}`} className="text-[clamp(34px,5.6vw,96px)] leading-[0.96]" style={brandType(b)}>{b.name}</h2>
             <div className="flex items-center gap-3 pb-2">
+              {BRAND_FORMATS[b.slug] && <Formats ids={BRAND_FORMATS[b.slug]!} strong="keg" className="hidden lg:flex" />}
               <span className="chip t-num">{String(items.length).padStart(2, "0")} в индексе</span>
-              <Link href={`/brands/${b.slug}/`} className="btn">О бренде</Link>
+              <BrandLink b={b} className="btn">О бренде</BrandLink>
             </div>
           </header>
           <BrandRange b={b} items={items} offset={49} />

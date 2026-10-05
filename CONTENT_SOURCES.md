@@ -45,3 +45,34 @@ Packshots added from the owner's archive (`scripts/brand-packshots.mjs`): Mister
 - To confirm with the owner: White Phoenix «Grapefruit & Passion Fruit» (small label, read at low resolution) and the Double Tree 0,75 l line, whose handwritten labels read «Cherry / Apple / Pomegranate / Pear Cider» — the two «Apple Cider» bottles differ only by illustration.
 - Category wording is taken from the labels: White Phoenix — «hand-crafted naturally brewed drink» (5,6 % alc.), Double Tree — «premium craft cider», Mister Bee — «hand crafted brewed mead».
 - Not found: vector logos for White Phoenix / Double Tree; Mister Bee and Migliore logos exist only as PDF; no production photography.
+
+## Completion pass (2026-10-05)
+
+- Official brand sites confirmed by the owner: ZER° CIDER → https://zerocider.ru, Bumble Coffee → https://bumblephoenix.ru (`site` in `src/data/brands.ts`; every brand entry point uses `BrandLink`). Double Tree, White Phoenix, Mister Bee, Migliore: no standalone site found in project materials — they link to their internal pages.
+- Merch removed from navigation, sitemap and routes (page kept in `archive-v1/merch-page`).
+- News lists only the two publications verified on ciderhouse.ru; no dates or excerpts are shown because none are verified.
+- Surfaces: warm cream / sand / paper tokens (`--ch-cream`, `--ch-sand`, `--ch-paper`, `--ch-ink`) replace black backgrounds; `.field-black` is now the sand plane.
+
+## Content + data consistency pass (2026-10-05)
+
+ciderhouse.ru was reachable again and was used as the primary source.
+
+- **Contacts / socials** — one source: `src/data/site.ts` (`CONTACTS`, `EMAIL`, `mailto()`, `SOCIALS`), rendered only by `src/components/Contacts.tsx`. Phone +7 (495) 177-12-64, info@ciderhouse.ru, a@ciderhouse.ru; VK, Telegram, YouTube as linked from the official footer. `opt@whitephoenix.ru` removed (purpose not verified). The official footer also links Instagram — not published here, owner decision pending.
+- **Flavour names** — one dictionary: `src/data/flavours.ts` (44 names, keyed by product slug, each with its evidence: official catalogue / owner materials / reading of the label). `Product.nameRu` reads it; English label text stays only inside pack images.
+- **About** — `/about/`: since 2017, cider and mead, natural fruit juices, bottles and kegs, Krasnodar Krai and Tver Region (official home page + owner brief). No year counts, no flavour counts.
+- **Production** — `PROCESS` is now the house-wide story in six stages (base of apple juice and honey, natural juices, fermentation by European technology, quality control with laboratory check of every batch, bottling into bottles and kegs, two regions). Durations, temperatures, volumes and the artesian-well detail published on the official page are deliberately not used.
+- **News** — dates and the text of «Топ-6 фактов о сидре» taken from the official posts; the film post has no body on the official site and links there. Cover images were not copied.
+- **ZER° CIDER / Bumble Coffee** — `/brands/zero/`, `/brands/bumble-coffee/` are noindex redirect pages to the official sites and are out of the sitemap; `/merch/` redirects home.
+
+## Formats + news routing (2026-10-05)
+
+- **Formats** — `src/data/formats.ts`: family level from ciderhouse.ru (Double Tree: bottles, kegs, 0,75 l bottle; White Phoenix: bottles, kegs); bottle volumes from the labels. Kegs are never attached to a single flavour and no keg size is stated. No keg photograph exists in the project or on the official site pages checked, so kegs are shown as a diagram (`src/components/Formats.tsx`).
+- **News** — `/news/` and `/news/<slug>/`. 27 publications migrated from the official feed (`scripts/news-migrate.py`, `scripts/news-images.mjs` → `src/data/news.json`, images in `public/assets/news/`). `sourceUrl` is provenance only and is not rendered. The merch announcement (2024-07-11) was not migrated. Embedded videos of the old posts were not carried over. `/blog/` redirects to `/news/`.
+
+## News system: Telegram as a source (2026-10-05)
+
+- Channel reviewed: public preview of @ciderhousee, 91 posts (27 March - 4 October 2026).
+- Seven stories were written for the site in `src/data/news-current.ts`; each keeps `sourceType`, `sourceChannel`, `sourcePostIds`, `sourceUrl`. Media: the posts own photos (preview size, max 800 px), optimised locally by `scripts/news-telegram-images.mjs`.
+- Not published: giveaways (incl. the one "in honour of the move" - no facts about the move itself are stated in the channel), polls, memes, Friday and zodiac posts, recipes, the label-redesign post of 27 March (product not named in the text).
+- Nothing is loaded from Telegram at runtime.
+

@@ -4,10 +4,12 @@ import { Tape } from "@/components/Tape";
 import { Manifesto } from "@/components/Manifesto";
 import { BrandCorridor } from "@/components/BrandCorridor";
 import { ZeroScrub } from "@/components/ZeroScrub";
-import { Conveyor } from "@/components/Conveyor";
+import { ProcessTeaser } from "@/components/ProcessTeaser";
+import { HomeNews } from "@/components/HomeNews";
+import { Formats } from "@/components/Formats";
 import { PartnersBand } from "@/components/PartnersBand";
 import { Chapter, Reveal } from "@/components/primitives";
-import { SITE } from "@/data/site";
+import { SITE, EMAIL, CONTACTS, mailto } from "@/data/site";
 
 export default function Home() {
   return (
@@ -37,29 +39,35 @@ export default function Home() {
       {/* 04 — zero: scroll-scrubbed studio film */}
       <ZeroScrub />
 
-      {/* 05 — production conveyor */}
+      {/* 05 — production: a compressed sequence, the gateway to the full story */}
       <section aria-labelledby="prod-title" className="field-black relative">
-        <Conveyor
-          header={
-            <div className="flex flex-col gap-5 border-b border-current pb-6 md:flex-row md:items-end md:justify-between">
-              <div>
-                <Chapter n="05" label="Производство" className="mb-6" />
-                <h2 id="prod-title" className="t-xl">От яблока<br />до бутылки</h2>
-              </div>
-              <div className="flex items-center gap-6">
-                <p className="t-tag hidden text-right lg:block">Восемь шагов<br />листайте →</p>
-                <Link href="/production/" className="btn">Весь процесс</Link>
-              </div>
+        <div className="wrap py-[clamp(56px,7vw,112px)]">
+          <div className="mb-8 grid grid-cols-1 items-end gap-6 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <Chapter n="05" label="Производство" className="mb-6" />
+              <h2 id="prod-title" className="t-xl">От сока и мёда<br />до бутылки</h2>
             </div>
-          }
-        />
+            <div className="md:col-span-5 md:pb-2">
+              <p className="t-m">Яблочный сок и мёд, натуральные соки, брожение, лаборатория, розлив.</p>
+              <Link href="/production/" className="btn btn-solid mt-6">Как создаётся CIDERHOUSE</Link>
+            </div>
+          </div>
+          <ProcessTeaser />
+          <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <Formats ids={["bottle-045", "bottle-075", "keg"]} />
+            <Link href="/katalog/" className="t-tag fill-link self-start md:self-auto">Ассортимент по форматам →</Link>
+          </div>
+        </div>
       </section>
 
-      {/* 06 — shelves */}
+      {/* 06 — news: what is happening in the house now */}
+      <HomeNews n="06" />
+
+      {/* 07 — shelves */}
       <section aria-labelledby="shelf-title" className="field-white relative overflow-hidden">
         <div className="wrap flex flex-col gap-6 pb-10 pt-[clamp(60px,7.3vw,109px)] md:flex-row md:items-end md:justify-between">
           <div>
-            <Chapter n="06" label="Партнёры" className="mb-6" />
+            <Chapter n="07" label="Партнёры" className="mb-6" />
             <h2 id="shelf-title" className="t-xl">На полках<br />страны</h2>
           </div>
           <Link href="/clients/" className="btn self-start md:self-auto">Все партнёры</Link>
@@ -72,19 +80,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 07 — wholesale */}
+      {/* 08 — wholesale */}
       <section aria-labelledby="opt-title" className="field-purple relative overflow-hidden">
         <div className="wrap relative pb-[clamp(60px,7.3vw,109px)] pt-[clamp(60px,7.3vw,109px)]">
           <div className="mb-6 flex items-center justify-between">
-            <Chapter n="07" label="Сотрудничество" />
+            <Chapter n="08" label="Сотрудничество" />
             <span className="t-tag">Напрямую от производителя</span>
           </div>
           <h2 id="opt-title" className="t-xl">Опт · HoReCa · сети</h2>
           <div className="mt-8 grid grid-cols-1 items-end gap-8 border-t border-current pt-8 md:grid-cols-12">
             <Reveal className="t-m balance md:col-span-6">Для магазинов, баров и ресторанов. Напишите — пришлём условия и актуальный ассортимент.</Reveal>
             <div className="flex flex-wrap md:col-span-6 md:justify-end">
-              <a className="btn btn-solid" href={`mailto:${SITE.wholesaleEmail}`}>{SITE.wholesaleEmail}</a>
-              <Link className="btn -ml-px" href="/contact/">Условия</Link>
+              <a className="btn btn-solid" href={mailto("Сотрудничество с CIDERHOUSE")}>{EMAIL}</a>
+              <a className="btn -ml-px" href={CONTACTS.phone.href}>{CONTACTS.phone.label}</a>
+              <Link className="btn -ml-px" href="/contact/">Контакты</Link>
             </div>
           </div>
         </div>

@@ -2,13 +2,13 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useIsoLayoutEffect, useMotion } from "@/lib/motion";
-import { brandBySlug, brandType, brandVars, type BrandSlug } from "@/data/brands";
+import { brandBySlug, brandType, brandVars, siteLabel, type BrandSlug } from "@/data/brands";
+import { BrandLink } from "./BrandLink";
 import { PRODUCTS, productsOf } from "@/data/catalog";
 import { Pack } from "./primitives";
 
 const ORDER: BrandSlug[] = ["double-tree", "white-phoenix", "mister-bee", "zero"];
 const LABEL: Partial<Record<BrandSlug, string>> = { zero: "0%" };
-const HREF: Partial<Record<BrandSlug, string>> = { zero: "/non-alcoholic/" };
 const P = "/assets/photography/";
 const photoSet = (name: string) => ({ src: `${P}${name}-900.webp`, srcSet: `${P}${name}-900.webp 900w, ${P}${name}-1800.webp 1800w` });
 const packs = (...slugs: string[]) => slugs.map((s) => PRODUCTS.find((p) => p.slug === s)!).filter(Boolean);
@@ -108,7 +108,7 @@ export function BrandCorridor() {
         <p className="max-w-[34ch] text-[15px] leading-snug lg:text-[17px]">{b.line}</p>
         {children}
         <div className="mt-1 flex flex-wrap items-center gap-4">
-          <Link href={HREF[slug] ?? `/brands/${slug}/`} className="btn btn-solid">{slug === "zero" ? "Мир 0%" : "К бренду"}</Link>
+          <BrandLink b={b} className="btn btn-solid">{b.site ? siteLabel(b) : "К бренду"}</BrandLink>
           <span className="t-tag t-num opacity-80">{String(count).padStart(2, "0")} в ассортименте</span>
         </div>
       </>
@@ -118,7 +118,7 @@ export function BrandCorridor() {
   const dt = brandBySlug("double-tree")!, wp = brandBySlug("white-phoenix")!, mb = brandBySlug("mister-bee")!, zero = brandBySlug("zero")!;
 
   return (
-    <section ref={root} aria-labelledby="corridor-title" className="relative overflow-hidden bg-black text-white">
+    <section ref={root} aria-labelledby="corridor-title" className="field-black relative overflow-hidden">
       <div className="wrap flex items-end justify-between gap-4 pb-5 pt-10 lg:hidden">
         <h2 className="t-l">Четыре мира<br />одного дома</h2>
         <p className="t-tag pb-1">листайте →</p>
@@ -151,8 +151,8 @@ export function BrandCorridor() {
                   <Copy slug="white-phoenix" n={2} />
                 </div>
                 <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-8 lg:h-auto">
-                  <Photo name="white-phoenix-mango-citrus-fruit-bowl" alt="White Phoenix Mango Citrus среди манго и цитрусов" className="absolute inset-y-0 left-0 hidden w-[44%] lg:block lg:top-[14%] lg:bottom-[20%]" sizes="26vw" />
-                  <Photo name="white-phoenix-black-cherry-cocktail" alt="White Phoenix Black Cherry с коктейлем и вишней" className="absolute inset-0 lg:left-[50%] lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:-mb-16" pos="50% 40%" />
+                  <Photo name="white-phoenix-mango-citrus-fruit-bowl" alt="White Phoenix «Манго — цитрус» среди манго и цитрусов" className="absolute inset-y-0 left-0 hidden w-[44%] lg:block lg:top-[14%] lg:bottom-[20%]" sizes="26vw" />
+                  <Photo name="white-phoenix-black-cherry-cocktail" alt="White Phoenix «Тёмная вишня» с коктейлем и вишней" className="absolute inset-0 lg:left-[50%] lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:-mb-16" pos="50% 40%" />
                   <div data-cor-packs className="pointer-events-none absolute bottom-2 left-3 z-10 flex items-end gap-1 lg:bottom-0 lg:left-[30%] lg:gap-2">
                     {packs("white-phoenix-passionfruit-cherry", "white-phoenix-dragon-fruit-kiwi").map((p) => <Pack key={p.slug} p={p} sizes="12vw" className={packH} />)}
                   </div>
@@ -203,14 +203,14 @@ export function BrandCorridor() {
         </div>
 
         {/* persistent index: where you are, and a way to jump */}
-        <nav aria-label="Бренды" className="relative z-20 flex items-stretch border-t border-white/25 bg-black text-white lg:absolute lg:inset-x-0 lg:bottom-0 lg:h-12">
+        <nav aria-label="Бренды" className="relative z-20 flex items-stretch field-black border-t border-current/25 lg:absolute lg:inset-x-0 lg:bottom-0 lg:h-12">
           <span className="t-tag hidden items-center px-[var(--gutter)] opacity-60 lg:flex">Бренды дома</span>
           <ol className="flex flex-1 items-stretch overflow-x-auto [scrollbar-width:none]">
             {ORDER.map((slug, i) => {
               const on = i === active;
               return (
                 <li key={slug} className="flex flex-1 items-stretch">
-                  <button type="button" onClick={() => jump(i)} aria-current={on ? "true" : undefined} className={`t-tag relative flex w-full items-center gap-2 whitespace-nowrap border-l border-white/25 px-3 py-3.5 text-left transition-opacity duration-300 lg:px-5 ${on ? "opacity-100" : "opacity-55 hover:opacity-100"}`}>
+                  <button type="button" onClick={() => jump(i)} aria-current={on ? "true" : undefined} className={`t-tag relative flex w-full items-center gap-2 whitespace-nowrap border-l border-current/25 px-3 py-3.5 text-left transition-opacity duration-300 lg:px-5 ${on ? "opacity-100" : "opacity-55 hover:opacity-100"}`}>
                     <span className="t-num">{String(i + 1).padStart(2, "0")}</span>
                     <span className="hidden sm:inline">{LABEL[slug] ?? brandBySlug(slug)!.name}</span>
                     <span className="sm:hidden">{LABEL[slug] ?? brandBySlug(slug)!.name.split(" ")[0]}</span>
@@ -220,7 +220,7 @@ export function BrandCorridor() {
               );
             })}
           </ol>
-          <Link href="/brands/" className="t-tag hidden items-center border-l border-white/25 px-[var(--gutter)] transition-colors duration-300 hover:bg-white hover:text-black lg:flex">Все бренды →</Link>
+          <Link href="/brands/" className="t-tag hidden items-center border-l border-current/25 px-[var(--gutter)] transition-colors duration-300 hover:bg-[var(--on)] hover:text-[var(--field)] lg:flex">Все бренды →</Link>
         </nav>
       </div>
     </section>

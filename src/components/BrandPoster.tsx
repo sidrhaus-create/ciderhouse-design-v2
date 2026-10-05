@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { brandType, brandVars, type Brand } from "@/data/brands";
+import { brandType, brandVars, siteLabel, type Brand } from "@/data/brands";
 import { productsOf } from "@/data/catalog";
 import { Fit, Pack } from "./primitives";
 
@@ -73,6 +73,7 @@ export function BrandPoster({ b, index, total }: { b: Brand; index: number; tota
                 <Link href="/katalog/" className="btn btn-solid">Ассортимент</Link>
               )}
               {b.family === "zero" && <Link href="/non-alcoholic/" className="btn -ml-px">Мир 0%</Link>}
+              {b.site && <a href={b.site} target="_blank" rel="noopener noreferrer" data-external="" className="btn -ml-px">{siteLabel(b)}</a>}
               <Link href="/brands/" className="btn -ml-px">Все бренды</Link>
             </div>
           </div>

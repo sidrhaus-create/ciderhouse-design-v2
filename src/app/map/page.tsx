@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { MarketRows } from "@/components/Blocks";
 import { Chapter } from "@/components/primitives";
-import { PARTNERS, SITE } from "@/data/site";
+import { PARTNERS, SITE, EMAIL, mailto } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Где купить",
@@ -57,8 +57,8 @@ export default function WhereToBuy() {
           <div className="mt-8 grid grid-cols-1 items-end gap-8 md:grid-cols-12">
             <p className="t-m balance md:col-span-6">Для магазинов, баров и ресторанов — напрямую от производителя.</p>
             <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
-              <a className="btn" href={`mailto:${SITE.wholesaleEmail}`}>{SITE.wholesaleEmail}</a>
-              <Link className="btn btn-solid" href="/contact/">Сотрудничество</Link>
+              <a className="btn" href={mailto("Сотрудничество с CIDERHOUSE")}>{EMAIL}</a>
+              <Link className="btn btn-solid" href="/contact/">Контакты</Link>
             </div>
           </div>
         </div>

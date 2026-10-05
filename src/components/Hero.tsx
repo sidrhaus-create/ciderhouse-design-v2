@@ -95,16 +95,16 @@ export function Hero() {
       {/* plates — strict labels on the grid; they can be dragged */}
       <div className="absolute inset-0 z-30 [&>*]:absolute [&>*]:pointer-events-none [&_.plate]:pointer-events-auto">
         <div data-par="0.5" className="right-[var(--gutter)] top-[46%] md:top-[42%]">
-          <div data-h="pop"><Plate drag bg="var(--ch-black)" fg="var(--ch-white)" className="flex-col px-4 py-3 text-[clamp(28px,2.8vw,44px)]"><span>0,0%<small>ZER° CIDER</small></span></Plate></div>
+          <div data-h="pop"><Plate drag bg="var(--ch-ink)" fg="var(--ch-paper)" className="flex-col px-4 py-3 text-[clamp(28px,2.8vw,44px)]"><span>0,0%<small>ZER° CIDER</small></span></Plate></div>
         </div>
         <div data-par="0.8" className="left-[var(--gutter)] top-[44%] md:hidden">
-          <div data-h="pop"><Plate drag bg="var(--ch-white)" line="var(--ch-black)" className="text-[15px]">сидр &amp; медовуха</Plate></div>
+          <div data-h="pop"><Plate drag bg="var(--ch-paper)" line="var(--ch-ink)" className="text-[15px]">сидр &amp; медовуха</Plate></div>
         </div>
         {/* flavour plates: one ruled column on the right edge, aligned to the grid */}
         {order.map((p, i) => (
           <div key={p.slug} data-par={[0.3, 0.45, 0.6][i]} className={["top-[60%]", "top-[calc(60%+46px)]", "top-[calc(60%+92px)]"][i] + " right-[var(--gutter)] hidden md:block"}>
             <div data-h="pop">
-              <Plate drag bg="var(--ch-white)" line="var(--ch-black)" className="w-[clamp(180px,15vw,230px)] justify-start gap-[0.6em] text-[clamp(12px,1vw,15px)]"><Swatch color={flavourAccent(p.name)} />{p.nameRu}</Plate>
+              <Plate drag bg="var(--ch-paper)" line="var(--ch-ink)" className="w-[clamp(180px,15vw,230px)] justify-start gap-[0.6em] text-[clamp(12px,1vw,15px)]"><Swatch color={flavourAccent(p.name)} />{p.nameRu}</Plate>
             </div>
           </div>
         ))}
@@ -125,7 +125,7 @@ export function Hero() {
         </div>
       </div>
       <p data-h="fade" className="t-tag absolute bottom-0 left-1/2 z-30 hidden -translate-x-1/2 whitespace-nowrap bg-black px-3 py-1.5 text-white md:left-[60%] xl:block">
-        На фото: ZER° CIDER 0,0% — Cherry · Green Apple · Pomegranate Raspberry
+        На фото: ZER° CIDER 0,0% — вишня · зелёное яблоко · гранат — малина
       </p>
     </section>
   );

@@ -1,3 +1,4 @@
+import { brandBySlug } from "@/data/brands";
 import { isValidElement, type CSSProperties, type ElementType, type ReactNode } from "react";
 import { BOTTLE_RATIO, srcSet, type Product } from "@/data/catalog";
 
@@ -55,9 +56,11 @@ export function Bottle({
   );
 }
 
+const packAlt = (p: Product) => `${brandBySlug(p.brand)?.name ?? "CIDERHOUSE"} — ${p.nameRu}`;
+
 /** A product's original pack shot, whatever its source: the ZER° cutouts (cropped above the reflection) or archive packshots. Height-driven, never stretched. */
 export function Pack({ p, className = "", sizes, priority = false }: { p: Product; className?: string; sizes?: string; priority?: boolean }) {
-  if (p.image) return <Bottle base={p.image} alt={p.name} sizes={sizes} priority={priority} className={className} />;
+  if (p.image) return <Bottle base={p.image} alt={packAlt(p)} sizes={sizes} priority={priority} className={className} />;
   if (!p.pack) return null;
   return (
     <img
@@ -66,7 +69,7 @@ export function Pack({ p, className = "", sizes, priority = false }: { p: Produc
       sizes={sizes}
       width={p.pack.w}
       height={p.pack.h}
-      alt={p.name}
+      alt={packAlt(p)}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       draggable={false}

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { VERIFIED, productBySlug } from "@/data/catalog";
 import { SITE } from "@/data/site";
 import { MarketRows } from "@/components/Blocks";
+import { ProcessTeaser } from "@/components/ProcessTeaser";
 import { flavourAccent } from "@/lib/flavour";
 import { Bottle, Chapter, Fit, Reveal, Swatch } from "@/components/primitives";
 
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${p.nameRu} — ZER° CIDER 0,0%`,
     description: p.description,
     alternates: { canonical: `/katalog/${p.slug}/` },
-    openGraph: { images: [{ url: `${p.image}-600.webp`, alt: p.name }] },
+    openGraph: { images: [{ url: `${p.image}-600.webp`, alt: `ZER° CIDER — ${p.nameRu}` }] },
   };
 }
 
@@ -26,10 +27,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const idx = VERIFIED.indexOf(p);
   const next = VERIFIED[(idx + 1) % VERIFIED.length];
   const accent = flavourAccent(p.name), nextAccent = flavourAccent(next.name);
-  const lines = p.nameRu.includes(" · ") ? p.nameRu.split(" · ") : p.nameRu.split(" ");
+  const lines = p.nameRu.includes(" — ") ? p.nameRu.split(" — ") : p.nameRu.split(" ");
   const specs: [string, string][] = [["Характер", p.character ?? "—"], ["Крепость", p.abv ?? "—"], ["Идеален для", p.idealFor ?? "—"]];
   const ld = {
-    "@context": "https://schema.org", "@type": "Product", name: p.name, alternateName: `ZER° CIDER ${p.nameRu}`,
+    "@context": "https://schema.org", "@type": "Product", name: `ZER° CIDER ${p.nameRu}`,
     description: p.description, image: `${SITE.url}${p.image}-900.webp`, brand: { "@type": "Brand", name: "ZER° CIDER" },
     manufacturer: { "@type": "Organization", name: "CIDERHOUSE" },
   };
@@ -50,7 +51,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div>
               <p className="t-tag mb-4 flex items-center gap-3"><span className="text-purple">{p.abv}</span><span className="h-px w-10 bg-current" />{p.character} · безалкогольный сидр</p>
               <h1><span className="sr-only">{p.nameRu}</span><span aria-hidden="true">{lines.map((l, i) => <Fit key={i} max={220} delay={i * 0.08}>{l}</Fit>)}</span></h1>
-              <p className="t-tag mt-5">{p.name}</p>
+              <p className="t-tag mt-5">ZER° CIDER · безалкогольный сидр</p>
             </div>
             <Reveal className="border-t border-current pt-5">
               <p className="t-m max-w-[20ch]">{p.motto}</p>
@@ -60,7 +61,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="relative flex min-h-[64svh] items-end justify-center md:col-span-5 md:min-h-0">
             <div aria-hidden="true" data-slap className="absolute inset-y-0 left-1/2 w-[64%] -translate-x-1/2" style={{ background: accent }} />
             <span aria-hidden="true" className="t-num absolute left-0 top-[10%] bg-purple px-3 py-2 text-[clamp(34px,4.4vw,68px)] font-bold leading-none tracking-[-0.04em] text-white">{p.abv}</span>
-            <div data-par-y="0.1" className="relative z-10 translate-y-[13%]"><Bottle base={p.image!} alt={`${p.name} — оригинальная фотография бутылки`} priority sizes="(max-width:768px) 52vw, 26vw" className="h-[60svh] md:h-[80svh]" /></div>
+            <div data-par-y="0.1" className="relative z-10 translate-y-[13%]"><Bottle base={p.image!} alt={`ZER° CIDER, ${p.nameRu} — оригинальная фотография бутылки`} priority sizes="(max-width:768px) 52vw, 26vw" className="h-[60svh] md:h-[80svh]" /></div>
           </div>
         </div>
       </section>
@@ -78,6 +79,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </dl>
+            <div className="mt-10 flex flex-col gap-4 md:flex-row md:items-end md:gap-8">
+              <div className="md:w-[58%]"><ProcessTeaser pick={[2, 3, 4]} compact /></div>
+              <Link href="/production/" className="t-tag fill-link self-start md:self-end">Как это сделано →</Link>
+            </div>
           </div>
         </div>
       </section>

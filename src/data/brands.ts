@@ -14,6 +14,7 @@ export type Brand = {
   status: "active" | "coming-soon";
   mark?: string; // official logo file, if we have the original
   logo?: string; // full logo (mark + wordmark) from the brand archive
+  site?: string; // verified official standalone website (owner-confirmed); brand entry points link there
   /** colours come from brand tokens in globals.css (never raw HEX in components) */
   theme: { bg: string; ink: string; accent: string };
   /** brand display face: family token, weight, case — from the brand guide where assigned, master face otherwise */
@@ -78,6 +79,7 @@ export const BRANDS: Brand[] = [
     kindVerified: true,
     line: "Ноль градусов. Сто процентов сидра.",
     status: "active",
+    site: "https://zerocider.ru",
     mark: "/assets/brand/zerocider-logo.svg",
     logo: "/assets/brand/zero-lockup-purple.svg",
     theme: { bg: "var(--zero-bg)", ink: "var(--zero-ink)", accent: "var(--zero-accent)" },
@@ -94,6 +96,7 @@ export const BRANDS: Brand[] = [
     kindVerified: true,
     line: "Кофейное выражение Black Phoenix: смело, модно, без компромиссов.",
     status: "active",
+    site: "https://bumblephoenix.ru",
     logo: "/assets/brand/bumble-coffee-logo.svg",
     theme: { bg: "var(--bc-bg)", ink: "var(--bc-ink)", accent: "var(--bc-accent)" },
     face: { family: "var(--f-bc)", weight: 800, upper: true, tracking: "-0.02em", verified: false, cyr: true },
@@ -121,3 +124,6 @@ export const brandBySlug = (s: string) => BRANDS.find((b) => b.slug === s);
 /** CSS variables + type for a brand plane. Spread into `style`, pair with className "field-brand". */
 export const brandVars = (b: Brand) => ({ "--field": b.theme.bg, "--on": b.theme.ink, "--ui-accent": b.theme.accent, "--f-brand": b.face.family }) as Record<string, string>;
 export const brandType = (b: Brand) => ({ fontFamily: b.face.family, fontWeight: b.face.weight, textTransform: b.face.upper ? "uppercase" : "none", letterSpacing: b.face.tracking }) as const;
+/** Where a click on the brand leads. */
+export const brandHref = (b: Brand) => b.site ?? `/brands/${b.slug}/`;
+export const siteLabel = (b: Brand) => (b.site ?? "").replace(/^https?:\/\//, "");
