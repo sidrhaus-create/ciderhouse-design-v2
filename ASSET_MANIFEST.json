@@ -1,0 +1,516 @@
+[
+  {
+    "type": "CIDERHOUSE round seal (Double Tree · White Phoenix)",
+    "brand": "CIDERHOUSE",
+    "source": "sidrhaus-create/si/assets/round-logo.svg",
+    "local": "/assets/brand/ciderhouse-round.svg"
+  },
+  {
+    "type": "White Phoenix bird mark (title in file: White Phoenix)",
+    "brand": "White Phoenix",
+    "source": "sidrhaus-create/si/assets/phoenix-mark.svg",
+    "local": "/assets/brand/white-phoenix-mark.svg"
+  },
+  {
+    "type": "ZER° CIDER wordmark with seal",
+    "brand": "ZER° CIDER",
+    "source": "sidrhaus-create/si/assets/zerocider_logo.svg",
+    "local": "/assets/brand/zerocider-logo.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "perekrestok",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (1).svg",
+    "local": "/assets/partners/perekrestok.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "pyaterochka",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (2).svg",
+    "local": "/assets/partners/pyaterochka.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "magnit",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (3).svg",
+    "local": "/assets/partners/magnit.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "da",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (4).svg",
+    "local": "/assets/partners/da.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "lenta",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (5).svg",
+    "local": "/assets/partners/lenta.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "okey",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (6).svg",
+    "local": "/assets/partners/okey.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "monetka",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (7).svg",
+    "local": "/assets/partners/monetka.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "x5-group",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (8).svg",
+    "local": "/assets/partners/x5-group.svg"
+  },
+  {
+    "type": "retail partner logo",
+    "brand": "vinlab",
+    "source": "sidrhaus-create/si/assets/partners/partner-01 (9).svg",
+    "local": "/assets/partners/vinlab.svg"
+  },
+  {
+    "type": "product cutout (original photography, trimmed to shared box)",
+    "brand": "White Phoenix 0% Pomegranate Raspberry",
+    "source": "sidrhaus-create/si/assets/zerocider_asset_01_19e505f673.png",
+    "local": "/assets/products/zero/wp-pomegranate-raspberry-0-{240,400,600,900}.webp"
+  },
+  {
+    "type": "product cutout (original photography, trimmed to shared box)",
+    "brand": "Double Tree 0% Green Apple",
+    "source": "sidrhaus-create/si/assets/zerocider_asset_02_d7f5462e4a.png",
+    "local": "/assets/products/zero/dt-green-apple-0-{240,400,600,900}.webp"
+  },
+  {
+    "type": "product cutout (original photography, trimmed to shared box)",
+    "brand": "White Phoenix 0% Cherry",
+    "source": "sidrhaus-create/si/assets/zerocider_asset_03_37d162af20.png",
+    "local": "/assets/products/zero/wp-cherry-0-{240,400,600,900}.webp"
+  },
+  {
+    "type": "studio film frames x49",
+    "brand": "ZER° trio",
+    "source": "sidrhaus-create/si/assets/zerocider_asset_04..52",
+    "local": "/assets/zero/reel/NN(.|-s).webp"
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "mister-bee",
+    "sku": "mister-bee-orange-grapefruit",
+    "label": "Orange Grapefruit",
+    "source": "Бренды/CiderHouse/CIDERHOUSE_SORTED/05_MISTER_BEE/05_ФОТО_И_ВИДЕО/ПРОДУКЦИЯ/Фотографии/Mister Bee/Лицевая этикетка/Апельсин-грейпфрут (1).png",
+    "local": "/assets/products/mister-bee/orange-grapefruit-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "mister-bee",
+    "sku": "mister-bee-mandarin",
+    "label": "Mandarin",
+    "source": "Бренды/CiderHouse/CIDERHOUSE_SORTED/05_MISTER_BEE/05_ФОТО_И_ВИДЕО/ПРОДУКЦИЯ/Фотографии/Mister Bee/Лицевая этикетка/Мандарин (1).png",
+    "local": "/assets/products/mister-bee/mandarin-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "mister-bee",
+    "sku": "mister-bee-cherry-blossom",
+    "label": "Cherry Blossom",
+    "source": "Бренды/CiderHouse/CIDERHOUSE_SORTED/05_MISTER_BEE/05_ФОТО_И_ВИДЕО/ПРОДУКЦИЯ/Фотографии/Mister Bee/Лицевая этикетка/Цветочная вишня (1).png",
+    "local": "/assets/products/mister-bee/cherry-blossom-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-cherry",
+    "label": "Cherry",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/cherry.png",
+    "local": "/assets/products/bumble-coffee/cherry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-orange",
+    "label": "Orange",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/orange.png",
+    "local": "/assets/products/bumble-coffee/orange-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-pomegranate",
+    "label": "Pomegranate",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/pomegranate.png",
+    "local": "/assets/products/bumble-coffee/pomegranate-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-raspberry",
+    "label": "Raspberry",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/raspberry.png",
+    "local": "/assets/products/bumble-coffee/raspberry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-wild-berries",
+    "label": "Wild Berries",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/wild-berries.png",
+    "local": "/assets/products/bumble-coffee/wild-berries-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "bumble-coffee",
+    "sku": "bumble-coffee-zero-cola",
+    "label": "Zero Cola",
+    "source": "Бренды/Bumble Coffee/bumble-tilda/public/assets/zero-cola.png",
+    "local": "/assets/products/bumble-coffee/zero-cola-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-passionfruit-cherry",
+    "label": "Passionfruit Cherry",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-cherry-passionfruit-front.png",
+    "local": "/assets/products/white-phoenix/passionfruit-cherry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-coconut-citrus",
+    "label": "Coconut Citrus",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-coconut-citrus-front.png",
+    "local": "/assets/products/white-phoenix/coconut-citrus-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-black-cherry",
+    "label": "Black Cherry",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-dark-cherry-front.png",
+    "local": "/assets/products/white-phoenix/black-cherry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-grape-mandarin",
+    "label": "Grape & Mandarin",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-grape-mandarin-front.png",
+    "local": "/assets/products/white-phoenix/grape-mandarin-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-grapefruit-passion-fruit",
+    "label": "Grapefruit & Passion Fruit",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-grapefruit-passionfruit-front.png",
+    "local": "/assets/products/white-phoenix/grapefruit-passion-fruit-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-mango-chilli",
+    "label": "Mango Chilli",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-mango-chili-front.png",
+    "local": "/assets/products/white-phoenix/mango-chilli-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-mango-citrus",
+    "label": "Mango Citrus",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-mango-citrus-front.png",
+    "local": "/assets/products/white-phoenix/mango-citrus-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-melon-mint",
+    "label": "Melon & Mint",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-melon-mint-front.png",
+    "local": "/assets/products/white-phoenix/melon-mint-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-peach-apricot",
+    "label": "Peach & Apricot",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-peach-apricot-front.png",
+    "local": "/assets/products/white-phoenix/peach-apricot-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-peach-banana",
+    "label": "Peach & Banana",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-peach-banana-front.png",
+    "local": "/assets/products/white-phoenix/peach-banana-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-dragon-fruit-kiwi",
+    "label": "Dragon Fruit Kiwi",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-pitaya-kiwi-front.png",
+    "local": "/assets/products/white-phoenix/dragon-fruit-kiwi-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-pomegranate-raspberry",
+    "label": "Pomegranate Raspberry",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-pomegranate-raspberry-front.png",
+    "local": "/assets/products/white-phoenix/pomegranate-raspberry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-sea-buckthorn-orange-lemon",
+    "label": "Sea Buckthorn, Orange & Lemon",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-sea-buckthorn-lemon-front.png",
+    "local": "/assets/products/white-phoenix/sea-buckthorn-orange-lemon-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-red-orange-spritz",
+    "label": "Red Orange Spritz",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-sicilian-orange-front.png",
+    "local": "/assets/products/white-phoenix/red-orange-spritz-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "white-phoenix",
+    "sku": "white-phoenix-strawberry",
+    "label": "Strawberry",
+    "source": "ciderhouse-codex-starter/public/assets/products/white-phoenix/white-phoenix-strawberry-front.png",
+    "local": "/assets/products/white-phoenix/strawberry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-black-currant",
+    "label": "Black Currant",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-black-currant-front.png",
+    "local": "/assets/products/double-tree/black-currant-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-caribbean-kiwi",
+    "label": "Caribbean Kiwi",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-caribbean-kiwi-front.png",
+    "local": "/assets/products/double-tree/caribbean-kiwi-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-coconut-raspberry",
+    "label": "Coconut & Raspberry",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-coconut-raspberry-front.png",
+    "local": "/assets/products/double-tree/coconut-raspberry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-dark-cherry",
+    "label": "Dark Cherry",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-dark-cherry-front.png",
+    "local": "/assets/products/double-tree/dark-cherry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-wild-berries",
+    "label": "Wild Berries",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-forest-berries-front.png",
+    "local": "/assets/products/double-tree/wild-berries-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-green-apple",
+    "label": "Green Apple",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-green-apple-front.png",
+    "local": "/assets/products/double-tree/green-apple-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-lemon-lime",
+    "label": "Lemon Lime",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-lemon-lime-front.png",
+    "local": "/assets/products/double-tree/lemon-lime-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-yellow-pear",
+    "label": "Yellow Pear",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-pear-front.png",
+    "local": "/assets/products/double-tree/yellow-pear-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-pomegranate-mint",
+    "label": "Pomegranate & Mint",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-pomegranate-mint-front.png",
+    "local": "/assets/products/double-tree/pomegranate-mint-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-raspberry",
+    "label": "Raspberry",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-raspberry-front.png",
+    "local": "/assets/products/double-tree/raspberry-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-red-apple",
+    "label": "Red Apple",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-red-apple-front.png",
+    "local": "/assets/products/double-tree/red-apple-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-watermelon-mint",
+    "label": "Watermelon & Mint",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-045-watermelon-mint-front.png",
+    "local": "/assets/products/double-tree/watermelon-mint-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-075-cherry-cider",
+    "label": "Cherry Cider",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-075-dark-cherry-front.png",
+    "local": "/assets/products/double-tree/075-cherry-cider-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-075-apple-cider-green",
+    "label": "Apple Cider",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-075-green-apple-front.png",
+    "local": "/assets/products/double-tree/075-apple-cider-green-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-075-pomegranate-cider",
+    "label": "Pomegranate Cider",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-075-pomegranate-raspberry-front.png",
+    "local": "/assets/products/double-tree/075-pomegranate-cider-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-075-apple-cider-red",
+    "label": "Apple Cider",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-075-red-apple-front.png",
+    "local": "/assets/products/double-tree/075-apple-cider-red-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "packshot (label-verified)",
+    "brand": "double-tree",
+    "sku": "double-tree-075-pear-cider",
+    "label": "Pear Cider",
+    "source": "ciderhouse-codex-starter/public/assets/products/double-tree/double-tree-075-yellow-pear-front.png",
+    "local": "/assets/products/double-tree/075-pear-cider-{700,1400}.webp",
+    "verified": true
+  },
+  {
+    "type": "brand asset: logo (raster extraction, bird + wordmark)",
+    "brand": "white-phoenix",
+    "source": "ciderhouse-codex-starter/public/assets/brand/family-logos/white-phoenix-logo-raster-source.png",
+    "local": "/assets/brand/white-phoenix-logo-{black,white}.png",
+    "verified": true
+  },
+  {
+    "type": "brand asset: logo (190 px source)",
+    "brand": "double-tree",
+    "source": "Бренды/CiderHouse/CIDERHOUSE_SORTED/01_DOUBLE_TREE/01_БРЕНДБУК_И_ЛОГОТИПЫ/.../DOUBLE TREE Лого (2).png",
+    "local": "/assets/brand/double-tree-logo-{black,white}.png",
+    "verified": true
+  },
+  {
+    "type": "brand asset: ZER° CIDER lockup",
+    "brand": "zero",
+    "source": "Бренды/Zero Cider/zero.svg",
+    "local": "/assets/brand/zero-lockup-purple.svg",
+    "verified": true
+  },
+  {
+    "type": "brand asset: 0% graphic",
+    "brand": "zero",
+    "source": "Бренды/Zero Cider/nol.svg",
+    "local": "/assets/brand/zero-percent-{480,900}.webp",
+    "verified": true
+  },
+  {
+    "type": "brand asset: logo",
+    "brand": "bumble-coffee",
+    "source": "Бренды/CiderHouse/CIDERHOUSE_SORTED/10_BUMBLE_COFFEE/01_БРЕНДБУК_И_ЛОГОТИПЫ/Логотипы/Bumble Coffee-02.svg",
+    "local": "/assets/brand/bumble-coffee-logo.svg",
+    "verified": true
+  },
+  {
+    "type": "brand asset: logo (not used yet)",
+    "brand": "black-phoenix",
+    "source": "Бренды/Black Phoenix/logo black phoenix-01.svg",
+    "local": "/assets/brand/black-phoenix-logo.svg",
+    "verified": true
+  },
+  {
+    "type": "brand asset: fonts",
+    "brand": "white-phoenix / double-tree / mister-bee",
+    "source": "Windows fonts + Бренды/.../SaunaSmallCaps.ttf, Friz Quadrata Bold.ttf",
+    "local": "/fonts/brand/*.ttf",
+    "verified": true
+  }
+]

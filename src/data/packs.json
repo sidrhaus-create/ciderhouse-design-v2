@@ -1,0 +1,289 @@
+{
+ "mister-bee-orange-grapefruit": {
+  "src": "/assets/products/mister-bee/orange-grapefruit",
+  "w": 542,
+  "h": 2024,
+  "label": "Orange Grapefruit",
+  "source": "Апельсин-грейпфрут (1).png"
+ },
+ "mister-bee-mandarin": {
+  "src": "/assets/products/mister-bee/mandarin",
+  "w": 540,
+  "h": 2022,
+  "label": "Mandarin",
+  "source": "Мандарин (1).png"
+ },
+ "mister-bee-cherry-blossom": {
+  "src": "/assets/products/mister-bee/cherry-blossom",
+  "w": 541,
+  "h": 2023,
+  "label": "Cherry Blossom",
+  "source": "Цветочная вишня (1).png"
+ },
+ "bumble-coffee-cherry": {
+  "src": "/assets/products/bumble-coffee/cherry",
+  "w": 528,
+  "h": 1382,
+  "label": "Cherry",
+  "source": "cherry.png"
+ },
+ "bumble-coffee-orange": {
+  "src": "/assets/products/bumble-coffee/orange",
+  "w": 528,
+  "h": 1382,
+  "label": "Orange",
+  "source": "orange.png"
+ },
+ "bumble-coffee-pomegranate": {
+  "src": "/assets/products/bumble-coffee/pomegranate",
+  "w": 520,
+  "h": 1377,
+  "label": "Pomegranate",
+  "source": "pomegranate.png"
+ },
+ "bumble-coffee-raspberry": {
+  "src": "/assets/products/bumble-coffee/raspberry",
+  "w": 520,
+  "h": 1377,
+  "label": "Raspberry",
+  "source": "raspberry.png"
+ },
+ "bumble-coffee-wild-berries": {
+  "src": "/assets/products/bumble-coffee/wild-berries",
+  "w": 517,
+  "h": 1374,
+  "label": "Wild Berries",
+  "source": "wild-berries.png"
+ },
+ "bumble-coffee-zero-cola": {
+  "src": "/assets/products/bumble-coffee/zero-cola",
+  "w": 520,
+  "h": 1377,
+  "label": "Zero Cola",
+  "source": "zero-cola.png"
+ },
+ "white-phoenix-passionfruit-cherry": {
+  "src": "/assets/products/white-phoenix/passionfruit-cherry",
+  "w": 447,
+  "h": 1660,
+  "label": "Passionfruit Cherry",
+  "source": "white-phoenix-cherry-passionfruit-front.png"
+ },
+ "white-phoenix-coconut-citrus": {
+  "src": "/assets/products/white-phoenix/coconut-citrus",
+  "w": 165,
+  "h": 635,
+  "label": "Coconut Citrus",
+  "source": "white-phoenix-coconut-citrus-front.png"
+ },
+ "white-phoenix-black-cherry": {
+  "src": "/assets/products/white-phoenix/black-cherry",
+  "w": 167,
+  "h": 636,
+  "label": "Black Cherry",
+  "source": "white-phoenix-dark-cherry-front.png"
+ },
+ "white-phoenix-grape-mandarin": {
+  "src": "/assets/products/white-phoenix/grape-mandarin",
+  "w": 166,
+  "h": 636,
+  "label": "Grape & Mandarin",
+  "source": "white-phoenix-grape-mandarin-front.png"
+ },
+ "white-phoenix-grapefruit-passion-fruit": {
+  "src": "/assets/products/white-phoenix/grapefruit-passion-fruit",
+  "w": 166,
+  "h": 636,
+  "label": "Grapefruit & Passion Fruit",
+  "source": "white-phoenix-grapefruit-passionfruit-front.png"
+ },
+ "white-phoenix-mango-chilli": {
+  "src": "/assets/products/white-phoenix/mango-chilli",
+  "w": 165,
+  "h": 637,
+  "label": "Mango Chilli",
+  "source": "white-phoenix-mango-chili-front.png"
+ },
+ "white-phoenix-mango-citrus": {
+  "src": "/assets/products/white-phoenix/mango-citrus",
+  "w": 166,
+  "h": 636,
+  "label": "Mango Citrus",
+  "source": "white-phoenix-mango-citrus-front.png"
+ },
+ "white-phoenix-melon-mint": {
+  "src": "/assets/products/white-phoenix/melon-mint",
+  "w": 165,
+  "h": 637,
+  "label": "Melon & Mint",
+  "source": "white-phoenix-melon-mint-front.png"
+ },
+ "white-phoenix-peach-apricot": {
+  "src": "/assets/products/white-phoenix/peach-apricot",
+  "w": 166,
+  "h": 634,
+  "label": "Peach & Apricot",
+  "source": "white-phoenix-peach-apricot-front.png"
+ },
+ "white-phoenix-peach-banana": {
+  "src": "/assets/products/white-phoenix/peach-banana",
+  "w": 165,
+  "h": 635,
+  "label": "Peach & Banana",
+  "source": "white-phoenix-peach-banana-front.png"
+ },
+ "white-phoenix-dragon-fruit-kiwi": {
+  "src": "/assets/products/white-phoenix/dragon-fruit-kiwi",
+  "w": 449,
+  "h": 1661,
+  "label": "Dragon Fruit Kiwi",
+  "source": "white-phoenix-pitaya-kiwi-front.png"
+ },
+ "white-phoenix-pomegranate-raspberry": {
+  "src": "/assets/products/white-phoenix/pomegranate-raspberry",
+  "w": 167,
+  "h": 635,
+  "label": "Pomegranate Raspberry",
+  "source": "white-phoenix-pomegranate-raspberry-front.png"
+ },
+ "white-phoenix-sea-buckthorn-orange-lemon": {
+  "src": "/assets/products/white-phoenix/sea-buckthorn-orange-lemon",
+  "w": 166,
+  "h": 634,
+  "label": "Sea Buckthorn, Orange & Lemon",
+  "source": "white-phoenix-sea-buckthorn-lemon-front.png"
+ },
+ "white-phoenix-red-orange-spritz": {
+  "src": "/assets/products/white-phoenix/red-orange-spritz",
+  "w": 165,
+  "h": 636,
+  "label": "Red Orange Spritz",
+  "source": "white-phoenix-sicilian-orange-front.png"
+ },
+ "white-phoenix-strawberry": {
+  "src": "/assets/products/white-phoenix/strawberry",
+  "w": 166,
+  "h": 634,
+  "label": "Strawberry",
+  "source": "white-phoenix-strawberry-front.png"
+ },
+ "double-tree-black-currant": {
+  "src": "/assets/products/double-tree/black-currant",
+  "w": 447,
+  "h": 1663,
+  "label": "Black Currant",
+  "source": "double-tree-045-black-currant-front.png"
+ },
+ "double-tree-caribbean-kiwi": {
+  "src": "/assets/products/double-tree/caribbean-kiwi",
+  "w": 445,
+  "h": 1661,
+  "label": "Caribbean Kiwi",
+  "source": "double-tree-045-caribbean-kiwi-front.png"
+ },
+ "double-tree-coconut-raspberry": {
+  "src": "/assets/products/double-tree/coconut-raspberry",
+  "w": 446,
+  "h": 1661,
+  "label": "Coconut & Raspberry",
+  "source": "double-tree-045-coconut-raspberry-front.png"
+ },
+ "double-tree-dark-cherry": {
+  "src": "/assets/products/double-tree/dark-cherry",
+  "w": 445,
+  "h": 1659,
+  "label": "Dark Cherry",
+  "source": "double-tree-045-dark-cherry-front.png"
+ },
+ "double-tree-wild-berries": {
+  "src": "/assets/products/double-tree/wild-berries",
+  "w": 450,
+  "h": 1664,
+  "label": "Wild Berries",
+  "source": "double-tree-045-forest-berries-front.png"
+ },
+ "double-tree-green-apple": {
+  "src": "/assets/products/double-tree/green-apple",
+  "w": 498,
+  "h": 1661,
+  "label": "Green Apple",
+  "source": "double-tree-045-green-apple-front.png"
+ },
+ "double-tree-lemon-lime": {
+  "src": "/assets/products/double-tree/lemon-lime",
+  "w": 448,
+  "h": 1660,
+  "label": "Lemon Lime",
+  "source": "double-tree-045-lemon-lime-front.png"
+ },
+ "double-tree-yellow-pear": {
+  "src": "/assets/products/double-tree/yellow-pear",
+  "w": 448,
+  "h": 1666,
+  "label": "Yellow Pear",
+  "source": "double-tree-045-pear-front.png"
+ },
+ "double-tree-pomegranate-mint": {
+  "src": "/assets/products/double-tree/pomegranate-mint",
+  "w": 443,
+  "h": 1660,
+  "label": "Pomegranate & Mint",
+  "source": "double-tree-045-pomegranate-mint-front.png"
+ },
+ "double-tree-raspberry": {
+  "src": "/assets/products/double-tree/raspberry",
+  "w": 447,
+  "h": 1661,
+  "label": "Raspberry",
+  "source": "double-tree-045-raspberry-front.png"
+ },
+ "double-tree-red-apple": {
+  "src": "/assets/products/double-tree/red-apple",
+  "w": 444,
+  "h": 1661,
+  "label": "Red Apple",
+  "source": "double-tree-045-red-apple-front.png"
+ },
+ "double-tree-watermelon-mint": {
+  "src": "/assets/products/double-tree/watermelon-mint",
+  "w": 447,
+  "h": 1660,
+  "label": "Watermelon & Mint",
+  "source": "double-tree-045-watermelon-mint-front.png"
+ },
+ "double-tree-075-cherry-cider": {
+  "src": "/assets/products/double-tree/075-cherry-cider",
+  "w": 508,
+  "h": 1798,
+  "label": "Cherry Cider",
+  "source": "double-tree-075-dark-cherry-front.png"
+ },
+ "double-tree-075-apple-cider-green": {
+  "src": "/assets/products/double-tree/075-apple-cider-green",
+  "w": 515,
+  "h": 1799,
+  "label": "Apple Cider",
+  "source": "double-tree-075-green-apple-front.png"
+ },
+ "double-tree-075-pomegranate-cider": {
+  "src": "/assets/products/double-tree/075-pomegranate-cider",
+  "w": 508,
+  "h": 1797,
+  "label": "Pomegranate Cider",
+  "source": "double-tree-075-pomegranate-raspberry-front.png"
+ },
+ "double-tree-075-apple-cider-red": {
+  "src": "/assets/products/double-tree/075-apple-cider-red",
+  "w": 508,
+  "h": 1798,
+  "label": "Apple Cider",
+  "source": "double-tree-075-red-apple-front.png"
+ },
+ "double-tree-075-pear-cider": {
+  "src": "/assets/products/double-tree/075-pear-cider",
+  "w": 511,
+  "h": 1798,
+  "label": "Pear Cider",
+  "source": "double-tree-075-yellow-pear-front.png"
+ }
+}

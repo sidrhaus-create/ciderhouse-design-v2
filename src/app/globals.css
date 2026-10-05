@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* ───────────────── CIDERHOUSE brand system ─────────────────
+   Hierarchy:  1. master brand tokens   2. sub-brand tokens   3. flavour tokens   4. UI state tokens
+   Source of truth: corporate brand guide (colours page + brand fonts page). Geometry is strict: radius 0 everywhere. */
+
+/* Brand typefaces. Files are the owner's licensed copies (public/fonts/brand) — a web licence is required before going live. */
+@font-face { font-family: "Sauna SmallCaps"; src: url("/fonts/brand/SaunaSmallCaps.ttf") format("truetype"), local("Sauna SmallCaps"), local("SaunaSmallCaps"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Friz Quadrata"; src: url("/fonts/brand/FrizQuadrata-Bold.ttf") format("truetype"), local("Friz Quadrata Bold"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Cera Pro"; src: url("/fonts/brand/CeraPro-Medium.ttf") format("truetype"), local("Cera Pro Medium"), local("CeraPro-Medium"); font-weight: 500; font-style: normal; font-display: swap; }
+
+:root {
+  /* 1 — master brand (Pantone 7663 C + white + black) */
+  --ch-purple: #6b3077;
+  --ch-black: #000000;
+  --ch-white: #ffffff;
+
+  /* 2 — sub-brands (bg / ink / accent). Values come from logos and packaging; see CONTENT_SOURCES.md */
+  --wp-bg: #ece4dc;      /* White Phoenix label paper, sampled from the original bottle photo */
+  --wp-ink: #000000;     /* logo is black */
+  --wp-accent: #6b3077;  /* phoenix crown cap */
+  --dt-bg: #1c1b1d;      /* Double Tree label black, sampled */
+  --dt-ink: #ffffff;
+  --dt-accent: #8cc63f;  /* label green (illustration + D mark), approximate */
+  --zero-bg: #ffffff;    /* ZER° CIDER: corporate purple on white */
+  --zero-ink: #000000;
+  --zero-accent: #6b3077;
+  --mb-bg: #66381a;      /* Mister Bee: brown / honey — swatches measured in the owner's logo file, not stated as codes */
+  --mb-ink: #efc657;
+  --mb-accent: #f1b53d;
+  --bc-bg: #14100f;      /* Bumble Coffee (Black Phoenix): fills measured in the logobook, not stated as codes */
+  --bc-ink: #fcdfa5;
+  --bc-accent: #c71880;
+  --mg-bg: #ffffff;      /* Migliore: logo is black only; no palette stated → master colours */
+  --mg-ink: #000000;
+  --mg-accent: #6b3077;
+
+  /* 3 — flavour accents (secondary, product-specific; never a page identity) */
+  --fl-cherry: #c8102e;
+  --fl-apple: #7ab800;
+  --fl-pomegranate: #d6336c;
+  --fl-citrus: #f28c00;
+  --fl-honey: #f2b100;
+  --fl-berry: #5b2a86;
+  --fl-lemon: #d9d200;
+  --fl-neutral: #bdb7b0;
+
+  /* 4 — UI state */
+  --field: var(--ch-white);  /* colour of the plane an element sits on */
+  --on: var(--ch-black);     /* text colour on that plane */
+  --ui-accent: var(--ch-purple);
+  --ui-rule: color-mix(in srgb, currentColor 22%, transparent);
+  --ui-muted: color-mix(in srgb, currentColor 62%, transparent);
+  --ui-focus: var(--ch-purple);
+
+  /* typography */
+  --f-master: "Montserrat Variable", "Montserrat", "Helvetica Neue", Arial, sans-serif; /* the brand guide itself is set in Montserrat */
+  --f-wp: "Sauna SmallCaps", "Montserrat Variable", serif;
+  --f-dt: "Cera Pro", "Montserrat Variable", sans-serif;
+  --f-zero: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", "Montserrat Variable", system-ui, sans-serif; /* system font: not embeddable, resolves locally on Windows */
+  --f-mb: "Friz Quadrata", "Montserrat Variable", serif;                 /* named in the Mister Bee logo sheet */
+  --f-bc: "Unbounded Variable", "Montserrat Variable", sans-serif;       /* used in the Black Phoenix logobook; not an approved rule */
+  --f-brand: var(--f-master);
+  --f-body: var(--f-master);
+  --f-mono: var(--f-master);
+
+  --gutter: clamp(16px, 3.2vw, 48px);
+  --sheet-r: 0px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.18, 1);
+
+  /* legacy aliases */
+  --ink: var(--ch-black);
+  --paper: var(--ch-white);
+  --milk: var(--ch-white);
+  --plum: var(--ch-purple);
+  --rule: var(--ui-rule);
+  --muted: var(--ui-muted);
+}
+
+@theme inline {
+  --color-purple: var(--ch-purple);
+  --color-ink: var(--ch-black);
+  --color-paper: var(--ch-white);
+  --color-milk: var(--ch-white);
+  --color-plum: var(--ch-purple);
+  --color-muted: var(--ui-muted);
+  --font-display: var(--f-brand);
+  --font-master: var(--f-master);
+  --font-body: var(--f-body);
+  --font-mono: var(--f-mono);
+}
+
+@layer base {
+  html { background: var(--ch-black); color: var(--ch-black); -webkit-text-size-adjust: 100%; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  body {
+    background: var(--ch-white);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.5;
+    font-feature-settings: "kern", "liga", "calt";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection { background: var(--ch-purple); color: var(--ch-white); }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; border-radius: 0; }
+  :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .skip-link { position: fixed; left: 12px; top: -60px; z-index: 200; padding: 10px 16px; background: var(--ch-black); color: var(--ch-white); font-weight: 600; }
+  .skip-link:focus { top: 12px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+
+@layer components {
+  /* ───────────────── Fields: the three master planes ───────────────── */
+  .field-white  { --field: var(--ch-white);  --on: var(--ch-black); --ui-accent: var(--ch-purple); background: var(--field); color: var(--on); }
+  .field-black  { --field: var(--ch-black);  --on: var(--ch-white); --ui-accent: var(--ch-white);  background: var(--field); color: var(--on); }
+  .field-purple { --field: var(--ch-purple); --on: var(--ch-white); --ui-accent: var(--ch-white);  background: var(--field); color: var(--on); }
+  .field-brand  { background: var(--field); color: var(--on); } /* --field / --on / --ui-accent / --f-brand set inline from brand tokens */
+
+  /* brand voices */
+  .voice-wp   { --f-brand: var(--f-wp); }
+  .voice-dt   { --f-brand: var(--f-dt); }
+  .voice-zero { --f-brand: var(--f-zero); --f-body: var(--f-zero); font-family: var(--f-zero); }
+
+  /* ───────────────── Type ───────────────── */
+  .t-poster, .t-mega, .t-xl, .t-l { font-family: var(--f-brand); font-weight: 800; text-transform: uppercase; letter-spacing: -0.035em; }
+  .t-mega { font-size: clamp(52px, 12vw, 220px); line-height: 0.88; }
+  .t-xl   { font-size: clamp(32px, 5.6vw, 104px); line-height: 0.92; }
+  .t-l    { font-size: clamp(24px, 3vw, 52px); line-height: 1; }
+  .t-m    { font-family: var(--f-body); font-weight: 500; font-size: clamp(17px, 1.55vw, 24px); line-height: 1.28; letter-spacing: -0.015em; }
+  .t-voice, .t-hand { font-family: var(--f-body); font-weight: 300; font-style: italic; font-size: clamp(19px, 1.9vw, 30px); line-height: 1.16; letter-spacing: -0.015em; }
+  .t-lead { font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5; max-width: 42ch; }
+  .t-tag  { font-family: var(--f-master); font-weight: 600; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .t-num  { font-feature-settings: "tnum", "lnum"; }
+  /* brand faces carry their own weight and case */
+  .voice-wp :is(.t-poster, .t-mega, .t-xl, .t-l), .voice-wp.t-poster { font-weight: 400; letter-spacing: 0.01em; text-transform: none; }
+  .voice-dt :is(.t-poster, .t-mega, .t-xl, .t-l), .voice-dt.t-poster { font-weight: 500; letter-spacing: -0.01em; }
+  .voice-zero :is(.t-poster, .t-mega, .t-xl, .t-l), .voice-zero.t-poster { font-weight: 700; letter-spacing: -0.03em; font-variation-settings: "opsz" 36; }
+  .balance { text-wrap: balance; }
+  .pretty { text-wrap: pretty; }
+  .nobr { white-space: nowrap; }
+  .hyph { hyphens: auto; -webkit-hyphens: auto; }
+  .outline-type { -webkit-text-stroke: 1px currentColor; -webkit-text-fill-color: transparent; }
+
+  .line-mask { display: block; overflow: hidden; padding: .2em 0 .12em; margin: -.2em 0 -.12em; }
+  .line-mask > span { display: block; }
+  /* fit-to-width line */
+  .fit { display: block; container-type: inline-size; }
+  .fit > .line-mask > span { display: inline-block; white-space: nowrap; }
+
+  /* ───────────────── Layout ───────────────── */
+  .wrap { padding-inline: var(--gutter); }
+  .rule { border-color: var(--ui-rule); }
+  .sheet { position: relative; }
+  .sheet-pad { padding-block: clamp(56px, 7vw, 112px); }
+
+  /* bottle: cutout cropped above the studio reflection */
+  .bottle { aspect-ratio: 1322 / 4777; overflow: hidden; }
+  .bottle img { width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+
+  /* ───────────────── Plates: strict rectangular labels (replace every sticker / badge) ───────────────── */
+  .plate {
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+    padding: .5em .8em;
+    background: var(--pl-bg, transparent); color: var(--pl-fg, currentColor);
+    border: 1px solid var(--pl-line, currentColor);
+    font-family: var(--f-master); font-weight: 800; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em;
+    user-select: none; -webkit-user-select: none;
+  }
+  .plate small { display: block; margin-top: .5em; font-weight: 600; font-size: 10px; letter-spacing: .16em; line-height: 1.3; }
+  .plate em { font-style: italic; font-weight: 300; text-transform: none; }
+  [data-drag] { cursor: grab; touch-action: none; }
+  [data-drag]:active { cursor: grabbing; }
+  [data-drag].is-held { outline: 1px solid currentColor; outline-offset: 4px; }
+
+  /* chip: a ruled tag */
+  .chip { display: inline-flex; align-items: center; gap: .6em; padding: 6px 10px; border: 1px solid currentColor; font-family: var(--f-master); font-weight: 600; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; line-height: 1.2; }
+  .chip-solid { background: var(--on); color: var(--field); border-color: var(--on); }
+  .sq { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid currentColor; flex: none; transition: background-color .3s, color .3s; }
+  .group:hover .sq { background: var(--on); color: var(--field); }
+
+  /* ───────────────── Buttons & links: rectangles, rules, wipes ───────────────── */
+  .fill-link { background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; transition: background-size .45s var(--ease-out); }
+  .fill-link:hover { background-size: 0% 1px; background-position: 100% 100%; }
+
+  .btn {
+    position: relative; isolation: isolate; overflow: hidden;
+    display: inline-flex; align-items: center; gap: 1em; padding: 1.25em 1.7em;
+    border: 1px solid var(--on); color: var(--on); background: transparent;
+    font-family: var(--f-master); font-weight: 600; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; line-height: 1;
+    transition: color .45s var(--ease-out);
+  }
+  .btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--on); transform: scaleX(0); transform-origin: 100% 50%; transition: transform .55s var(--ease-out); }
+  .btn::after { content: "→"; font-size: 13px; letter-spacing: 0; transition: translate .45s var(--ease-out); }
+  .btn:hover { color: var(--field); }
+  .btn:hover::before { transform: scaleX(1); transform-origin: 0 50%; }
+  .btn:hover::after { translate: 5px 0; }
+  .btn-solid { background: var(--on); color: var(--field); }
+  .btn-solid::before { background: var(--ch-purple); }
+  .btn-solid:hover { color: var(--ch-white); border-color: var(--ch-purple); }
+  .field-purple .btn-solid::before { background: var(--ch-black); }
+  .field-purple .btn-solid:hover { border-color: var(--ch-black); }
+  .btn-plain::after { content: none; }
+
+  /* ───────────────── Marquee ───────────────── */
+  .marquee { display: flex; overflow: hidden; user-select: none; }
+  .marquee__track { display: flex; flex: none; align-items: center; gap: var(--mq-gap, 4vw); padding-right: var(--mq-gap, 4vw); animation: mq var(--mq-dur, 40s) linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+}
+
+@keyframes mq { to { transform: translateX(-100%); } }
+@keyframes spin { to { rotate: 360deg; } }
+
+/* page transition: the master purple plane leaves upward on every route change */
+.route-wipe { position: fixed; inset: 0; z-index: 110; background: var(--ch-purple); pointer-events: none; animation: routeWipe .75s var(--ease-io) both; }
+@keyframes routeWipe { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 100% 0); } }
+
+/* ───────────────── Reveals: masks and wipes, no bounce (CSS fallback keeps content visible without JS) ───────────────── */
+.js [data-reveal] { opacity: 0; transform: translateY(24px); }
+.js [data-reveal].is-in { opacity: 1; transform: none; transition: opacity .7s linear, transform .9s var(--ease-out); transition-delay: var(--d, 0s); }
+.js [data-slap] { clip-path: inset(0 100% 0 0); }
+.js [data-slap].is-in { clip-path: inset(0 0 0 0); transition: clip-path .8s var(--ease-io); transition-delay: var(--d, 0s); }
+.js [data-split] .line-mask > span { transform: translateY(112%); }
+.js [data-split].is-in .line-mask > span { transform: none; transition: transform 1.1s var(--ease-out); transition-delay: calc(var(--i, 0) * 0.08s + var(--d, 0s)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  .js [data-reveal], .js [data-slap], .js [data-split] .line-mask > span { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .marquee__track { animation: none; }
+  .route-wipe { display: none; }
+  /* pinned bottle scene: one static beat */
+  [data-plane]:not(:first-of-type), [data-bottle]:not(:nth-of-type(4)) { display: none; }
+}

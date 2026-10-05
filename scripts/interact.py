@@ -1,0 +1,72 @@
+"""Interaction QA: age gate, menu (open, focus, Esc), catalog filters + URL, product links, reel drag, keyboard tab order."""
+import time
+from playwright.sync_api import sync_playwright
+B = "http://localhost:3000"
+out = "/tmp/claude-0/qa"
+res = []
+def ok(name, cond, extra=""): res.append(("PASS" if cond else "FAIL", name, extra))
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    # 1 age gate
+    ctx = b.new_context(viewport={"width": 1440, "height": 900})
+    pg = ctx.new_page(); pg.goto(B + "/", wait_until="networkidle"); time.sleep(2.4)
+    pg.screenshot(path=f"{out}/i-gate.png")
+    ok("gate shows question", pg.get_by_text("Вам уже исполнилось 18 лет?").is_visible())
+    ok("gate focuses 'Да'", pg.evaluate("document.activeElement.textContent").startswith("Да"))
+    pg.keyboard.press("Enter"); time.sleep(1.6)
+    ok("gate dismissed", pg.locator("[aria-labelledby=threshold-q]").count() == 0)
+    pg.reload(wait_until="networkidle"); time.sleep(1)
+    ok("gate remembered", pg.locator("[aria-labelledby=threshold-q]").count() == 0)
+    # 2 menu
+    pg.get_by_role("button", name="Меню").click(); time.sleep(1.2)
+    ok("menu dialog visible", pg.locator("#site-menu").is_visible())
+    pg.screenshot(path=f"{out}/i-menu.png")
+    pg.hover("#site-menu >> text=Bumble Coffee"); time.sleep(0.8)
+    pg.screenshot(path=f"{out}/i-menu-hover.png")
+    ok("focus inside menu", pg.evaluate("!!document.activeElement.closest('#site-menu')"))
+    pg.keyboard.press("Escape"); time.sleep(0.5)
+    ok("menu closes on Esc", not pg.locator("#site-menu").is_visible())
+    pg.get_by_role("button", name="Меню").click(); time.sleep(0.8)
+    pg.locator("#site-menu").get_by_role("link", name="Производство").click(); time.sleep(1.5)
+    ok("menu link navigates", pg.url.endswith("/production/"), pg.url)
+    # 3 catalog
+    pg.goto(B + "/katalog/", wait_until="networkidle"); time.sleep(1.2)
+    pg.get_by_role("button", name="Double Tree").first.click(); time.sleep(0.6)
+    ok("filter updates URL", "brand=double-tree" in pg.url, pg.url)
+    n_dt = pg.locator("main li >> text=сверяется").count()
+    pg.get_by_role("button", name="банка").click(); time.sleep(0.6)
+    n_can = pg.locator("main li >> text=сверяется").count()
+    ok("format filter narrows", 0 < n_can < n_dt, f"{n_dt}->{n_can}")
+    pg.screenshot(path=f"{out}/i-catalog-dt.png")
+    pg.goto(B + "/katalog/?brand=zero", wait_until="networkidle"); time.sleep(1)
+    ok("URL state restored", pg.get_by_role("button", name="ZER° 0%").get_attribute("aria-pressed") == "true")
+    pg.locator("section[aria-labelledby=g-zero] >> text=Гранат · Малина").first.hover(); time.sleep(0.9)
+    pg.screenshot(path=f"{out}/i-catalog-zero.png")
+    pg.locator("section[aria-labelledby=g-zero]").get_by_role("link", name="Вишня").click(); time.sleep(1.5)
+    ok("product link", pg.url.endswith("/katalog/zero-cherry/"), pg.url)
+    pg.screenshot(path=f"{out}/i-product.png")
+    # 4 reel
+    pg.goto(B + "/non-alcoholic/", wait_until="networkidle"); time.sleep(0.5)
+    reel = pg.locator("[role=img][aria-label^='Студийный']")
+    reel.scroll_into_view_if_needed(); time.sleep(4)
+    ok("reel loaded", pg.get_by_role("button", name="Повторить дубль").count() == 1)
+    bb = reel.bounding_box()
+    pg.mouse.move(bb["x"] + bb["width"] * 0.8, bb["y"] + bb["height"] / 2); pg.mouse.down()
+    pg.mouse.move(bb["x"] + bb["width"] * 0.1, bb["y"] + bb["height"] / 2, steps=10); pg.mouse.up(); time.sleep(0.4)
+    reel.screenshot(path=f"{out}/i-reel-drag.png")
+    # 5 keyboard: first tab = skip link
+    pg.goto(B + "/", wait_until="networkidle"); time.sleep(1)
+    pg.keyboard.press("Tab")
+    ok("skip link first", pg.evaluate("document.activeElement.className").find("skip-link") >= 0)
+    # 6 mobile menu
+    m = b.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    m.add_init_script("localStorage.setItem('ch-age-ok','1')")
+    mp = m.new_page(); mp.goto(B + "/katalog/", wait_until="networkidle"); time.sleep(1)
+    mp.get_by_role("button", name="Меню").tap(); time.sleep(1.2)
+    mp.screenshot(path=f"{out}/i-menu-390.png")
+    mp.get_by_role("button", name="Закрыть").tap(); time.sleep(0.6)
+    mp.locator("main li button").first.tap(); time.sleep(0.6)
+    mp.screenshot(path=f"{out}/i-catalog-390-open.png", full_page=False)
+    ok("mobile row expands", mp.locator("[aria-expanded=true]").count() >= 1)
+    b.close()
+for r in res: print(*r)

@@ -1,0 +1,17 @@
+﻿node_modules/
+.next/
+out/
+archive-v1/
+
+*.tsbuildinfo
+*.log
+
+.env*
+!.env.example
+
+.vercel/
+
+preview-*.jpg
+
+.claude/launch.json
+.claude/settings.local.json
