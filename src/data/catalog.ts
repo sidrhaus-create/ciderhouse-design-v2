@@ -10,6 +10,7 @@ export type Product = {
   nameRu: string; // the display name: src/data/flavours.ts
   abv: "0,0%" | null; // only stated where verified
   format: ("бутылка" | "банка")[];
+  series?: "party"; // D TREE PARTY — a sub-line of Double Tree with its own label system
   volumes: string[];
   verified: boolean;
   image?: string; // base path without -<w>.webp
@@ -89,14 +90,13 @@ const VOLUME: Partial<Record<BrandSlug, (slug: string) => string[]>> = {
   "double-tree": (slug) => [slug.includes("-075-") ? "0,75 л" : "0,45 л"],
   "mister-bee": () => ["0,45 л"],                                      // label: 450 ml
 };
-const FORMAT: Partial<Record<BrandSlug, Product["format"]>> = { "bumble-coffee": ["банка"] };
-const BRAND_OF = (slug: string) => (["white-phoenix", "double-tree", "mister-bee", "bumble-coffee"] as BrandSlug[]).find((b) => slug.startsWith(b + "-"))!;
+const BRAND_OF = (slug: string) => (["white-phoenix", "double-tree", "mister-bee"] as BrandSlug[]).find((b) => slug.startsWith(b + "-"))!;
 
 const packed: Product[] = Object.entries(PACKS as Record<string, { src: string; w: number; h: number; label: string }>).map(([slug, v]) => {
   const brand = BRAND_OF(slug);
   return {
-    slug, brand, name: v.label, nameRu: flavourRu(slug), abv: null,
-    format: FORMAT[brand] ?? ["бутылка"], volumes: VOLUME[brand]?.(slug) ?? [],
+    slug, brand, name: v.label, nameRu: flavourRu(slug), abv: null, ...(slug.includes("-party-") ? { series: "party" as const } : {}),
+    format: ["бутылка"], volumes: VOLUME[brand]?.(slug) ?? [],
     verified: false, pack: { src: v.src, w: v.w, h: v.h }, sources: ["owner-archive"],
   };
 });
@@ -110,3 +110,6 @@ export const BOTTLE_RATIO = { w: 1322, h: 5478 }; // from public/assets/products
 /** share of the cutout height occupied by the bottle (rest = studio reflection) */
 export const BOTTLE_BODY = 0.872;
 export const srcSet = (base: string) => [240, 400, 600, 900].map((w) => `${base}-${w}.webp ${w}w`).join(", ");
+/** Double Tree without its Party sub-line / the Party sub-line alone. */
+export const mainLine = (ps: Product[]) => ps.filter((p) => !p.series);
+export const partyLine = (ps: Product[]) => ps.filter((p) => p.series === "party");

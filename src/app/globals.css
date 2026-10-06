@@ -33,12 +33,6 @@
   --mb-bg: #66381a;      /* Mister Bee: brown / honey — swatches measured in the owner's logo file, not stated as codes */
   --mb-ink: #efc657;
   --mb-accent: #f1b53d;
-  --bc-bg: #14100f;      /* Bumble Coffee (Black Phoenix): fills measured in the logobook, not stated as codes */
-  --bc-ink: #fcdfa5;
-  --bc-accent: #c71880;
-  --mg-bg: #f3ede4;      /* Migliore: logo is black only; no palette stated → master colours */
-  --mg-ink: #1b1320;
-  --mg-accent: #6b3077;
 
   /* 3 — flavour accents (secondary, product-specific; never a page identity) */
   --fl-cherry: #c8102e;
@@ -64,7 +58,6 @@
   --f-dt: "Cera Pro", "Montserrat Variable", sans-serif;
   --f-zero: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", "Montserrat Variable", system-ui, sans-serif; /* system font: not embeddable, resolves locally on Windows */
   --f-mb: "Friz Quadrata", "Montserrat Variable", serif;                 /* named in the Mister Bee logo sheet */
-  --f-bc: "Unbounded Variable", "Montserrat Variable", sans-serif;       /* used in the Black Phoenix logobook; not an approved rule */
   --f-brand: var(--f-master);
   --f-body: var(--f-master);
   --f-mono: var(--f-master);

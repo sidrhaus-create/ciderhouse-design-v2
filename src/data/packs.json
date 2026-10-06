@@ -1,66 +1,24 @@
 {
  "mister-bee-orange-grapefruit": {
   "src": "/assets/products/mister-bee/orange-grapefruit",
-  "w": 542,
-  "h": 2024,
+  "w": 298,
+  "h": 1201,
   "label": "Orange Grapefruit",
-  "source": "Апельсин-грейпфрут (1).png"
+  "source": "studio gallery #145"
  },
  "mister-bee-mandarin": {
   "src": "/assets/products/mister-bee/mandarin",
-  "w": 540,
-  "h": 2022,
+  "w": 297,
+  "h": 1199,
   "label": "Mandarin",
-  "source": "Мандарин (1).png"
+  "source": "studio gallery #147"
  },
  "mister-bee-cherry-blossom": {
   "src": "/assets/products/mister-bee/cherry-blossom",
-  "w": 541,
-  "h": 2023,
+  "w": 297,
+  "h": 1202,
   "label": "Cherry Blossom",
-  "source": "Цветочная вишня (1).png"
- },
- "bumble-coffee-cherry": {
-  "src": "/assets/products/bumble-coffee/cherry",
-  "w": 528,
-  "h": 1382,
-  "label": "Cherry",
-  "source": "cherry.png"
- },
- "bumble-coffee-orange": {
-  "src": "/assets/products/bumble-coffee/orange",
-  "w": 528,
-  "h": 1382,
-  "label": "Orange",
-  "source": "orange.png"
- },
- "bumble-coffee-pomegranate": {
-  "src": "/assets/products/bumble-coffee/pomegranate",
-  "w": 520,
-  "h": 1377,
-  "label": "Pomegranate",
-  "source": "pomegranate.png"
- },
- "bumble-coffee-raspberry": {
-  "src": "/assets/products/bumble-coffee/raspberry",
-  "w": 520,
-  "h": 1377,
-  "label": "Raspberry",
-  "source": "raspberry.png"
- },
- "bumble-coffee-wild-berries": {
-  "src": "/assets/products/bumble-coffee/wild-berries",
-  "w": 517,
-  "h": 1374,
-  "label": "Wild Berries",
-  "source": "wild-berries.png"
- },
- "bumble-coffee-zero-cola": {
-  "src": "/assets/products/bumble-coffee/zero-cola",
-  "w": 520,
-  "h": 1377,
-  "label": "Zero Cola",
-  "source": "zero-cola.png"
+  "source": "studio gallery #143"
  },
  "white-phoenix-passionfruit-cherry": {
   "src": "/assets/products/white-phoenix/passionfruit-cherry",
@@ -252,38 +210,171 @@
   "source": "double-tree-045-watermelon-mint-front.png"
  },
  "double-tree-075-cherry-cider": {
-  "src": "/assets/products/double-tree/075-cherry-cider",
-  "w": 508,
-  "h": 1798,
+  "src": "/assets/products/double-tree/075-cherry",
+  "w": 313,
+  "h": 1252,
   "label": "Cherry Cider",
-  "source": "double-tree-075-dark-cherry-front.png"
+  "source": "studio gallery #20"
  },
  "double-tree-075-apple-cider-green": {
-  "src": "/assets/products/double-tree/075-apple-cider-green",
-  "w": 515,
-  "h": 1799,
-  "label": "Apple Cider",
-  "source": "double-tree-075-green-apple-front.png"
+  "src": "/assets/products/double-tree/075-apple-green",
+  "w": 315,
+  "h": 1258,
+  "label": "Semi-Dry Apple Cider",
+  "source": "studio gallery #174"
  },
  "double-tree-075-pomegranate-cider": {
-  "src": "/assets/products/double-tree/075-pomegranate-cider",
-  "w": 508,
-  "h": 1797,
-  "label": "Pomegranate Cider",
-  "source": "double-tree-075-pomegranate-raspberry-front.png"
+  "src": "/assets/products/double-tree/075-pomegranate",
+  "w": 316,
+  "h": 1242,
+  "label": "Semi-Sweet Pomegranate Cider",
+  "source": "studio gallery #173"
  },
  "double-tree-075-apple-cider-red": {
-  "src": "/assets/products/double-tree/075-apple-cider-red",
-  "w": 508,
-  "h": 1798,
-  "label": "Apple Cider",
-  "source": "double-tree-075-red-apple-front.png"
+  "src": "/assets/products/double-tree/075-apple-red",
+  "w": 314,
+  "h": 1258,
+  "label": "Semi-Sweet Apple Cider",
+  "source": "studio gallery #171"
  },
  "double-tree-075-pear-cider": {
-  "src": "/assets/products/double-tree/075-pear-cider",
-  "w": 511,
-  "h": 1798,
-  "label": "Pear Cider",
-  "source": "double-tree-075-yellow-pear-front.png"
+  "src": "/assets/products/double-tree/075-pear",
+  "w": 314,
+  "h": 1241,
+  "label": "Semi-Sweet Pear Cider",
+  "source": "studio gallery #172"
+ },
+ "mister-bee-cherry-banana": {
+  "src": "/assets/products/mister-bee/cherry-banana",
+  "w": 295,
+  "h": 1201,
+  "label": "Cherry Banana",
+  "source": "studio gallery #91"
+ },
+ "mister-bee-feijoa": {
+  "src": "/assets/products/mister-bee/feijoa",
+  "w": 298,
+  "h": 1202,
+  "label": "Feijoa",
+  "source": "studio gallery #93"
+ },
+ "mister-bee-classic": {
+  "src": "/assets/products/mister-bee/classic",
+  "w": 299,
+  "h": 1199,
+  "label": "Classic",
+  "source": "studio gallery #95"
+ },
+ "mister-bee-plum": {
+  "src": "/assets/products/mister-bee/plum",
+  "w": 296,
+  "h": 1201,
+  "label": "Plum",
+  "source": "studio gallery #97"
+ },
+ "mister-bee-lemon": {
+  "src": "/assets/products/mister-bee/lemon",
+  "w": 295,
+  "h": 1199,
+  "label": "Lemon",
+  "source": "studio gallery #99"
+ },
+ "mister-bee-cranberry": {
+  "src": "/assets/products/mister-bee/cranberry",
+  "w": 295,
+  "h": 1200,
+  "label": "Cranberry",
+  "source": "studio gallery #101"
+ },
+ "mister-bee-pomegranate-grape": {
+  "src": "/assets/products/mister-bee/pomegranate-grape",
+  "w": 294,
+  "h": 1203,
+  "label": "Pomegranate Grape",
+  "source": "studio gallery #103"
+ },
+ "double-tree-075-apple-cider-golden": {
+  "src": "/assets/products/double-tree/075-apple-golden",
+  "w": 314,
+  "h": 1244,
+  "label": "Dry Apple Cider",
+  "source": "studio gallery #175"
+ },
+ "double-tree-grape-citrus": {
+  "src": "/assets/products/double-tree/grape-citrus",
+  "w": 298,
+  "h": 1189,
+  "label": "Grape Citrus",
+  "source": "studio gallery #105"
+ },
+ "double-tree-double-cherry": {
+  "src": "/assets/products/double-tree/double-cherry",
+  "w": 295,
+  "h": 1187,
+  "label": "Double Cherry",
+  "source": "studio gallery #107"
+ },
+ "double-tree-pomegranate-cherry": {
+  "src": "/assets/products/double-tree/pomegranate-cherry",
+  "w": 297,
+  "h": 1185,
+  "label": "Pomegranate Cherry",
+  "source": "studio gallery #109"
+ },
+ "double-tree-dry-apple": {
+  "src": "/assets/products/double-tree/dry-apple",
+  "w": 296,
+  "h": 1203,
+  "label": "Dry Apple Cider",
+  "source": "studio gallery #111"
+ },
+ "double-tree-party-plum": {
+  "src": "/assets/products/double-tree/party-plum",
+  "w": 292,
+  "h": 1204,
+  "label": "Plum Party Cider",
+  "source": "studio gallery #149"
+ },
+ "double-tree-party-pomegranate": {
+  "src": "/assets/products/double-tree/party-pomegranate",
+  "w": 294,
+  "h": 1203,
+  "label": "Pomegranate Party Cider",
+  "source": "studio gallery #151"
+ },
+ "double-tree-party-cherry": {
+  "src": "/assets/products/double-tree/party-cherry",
+  "w": 292,
+  "h": 1202,
+  "label": "Cherry Party Cider",
+  "source": "studio gallery #153"
+ },
+ "double-tree-party-raspberry": {
+  "src": "/assets/products/double-tree/party-raspberry",
+  "w": 294,
+  "h": 1203,
+  "label": "Raspberry Party Cider",
+  "source": "studio gallery #155"
+ },
+ "double-tree-party-apple": {
+  "src": "/assets/products/double-tree/party-apple",
+  "w": 295,
+  "h": 1204,
+  "label": "Apple Party Cider",
+  "source": "studio gallery #157"
+ },
+ "white-phoenix-pomelo-pineapple": {
+  "src": "/assets/products/white-phoenix/pomelo-pineapple",
+  "w": 296,
+  "h": 1194,
+  "label": "Pomelo Pineapple",
+  "source": "studio gallery #40"
+ },
+ "white-phoenix-bitter-lemon": {
+  "src": "/assets/products/white-phoenix/bitter-lemon",
+  "w": 297,
+  "h": 1184,
+  "label": "Bitter Lemon",
+  "source": "studio gallery #44"
  }
 }

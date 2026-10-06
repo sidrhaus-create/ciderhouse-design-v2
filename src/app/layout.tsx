@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/montserrat/index.css";
 import "@fontsource-variable/montserrat/wght-italic.css";
-import "@fontsource-variable/unbounded/index.css"; // Bumble Coffee / Black Phoenix display face
 import "./globals.css";
 import { MotionProvider } from "@/lib/motion";
 import { Header } from "@/components/Header";

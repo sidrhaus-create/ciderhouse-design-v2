@@ -3,12 +3,12 @@ import Link from "next/link";
 import { BrandLink } from "@/components/BrandLink";
 import { notFound } from "next/navigation";
 import { BRANDS, brandBySlug, brandType, brandVars } from "@/data/brands";
-import { productsOf } from "@/data/catalog";
+import { mainLine, partyLine, productsOf } from "@/data/catalog";
 import { BrandPoster } from "@/components/BrandPoster";
 import { BrandRange } from "@/components/BrandRange";
+import { PartyLine } from "@/components/PartyLine";
 import { Chapter, Fit } from "@/components/primitives";
 import { ProcessTeaser } from "@/components/ProcessTeaser";
-import { Formats } from "@/components/Formats";
 import { BRAND_FORMATS } from "@/data/formats";
 
 export const dynamicParams = false;
@@ -26,7 +26,8 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
   const i = BRANDS.indexOf(b);
   const next = BRANDS[(i + 1) % BRANDS.length];
   const items = productsOf(b.slug);
-  const count = `${items.length} ${items.length === 3 ? "характера" : "позиций"}`;
+  const main = mainLine(items);
+  const count = `${main.length} ${main.length === 3 ? "характера" : "позиций"}`;
 
   return (
     <>
@@ -38,18 +39,19 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
           <div className="wrap pb-8 pt-[clamp(50px,5.9vw,90px)]">
             <Chapter n="01" label="Линейка" className="mb-6" />
             <h2 id="line-title" className="t-xl" style={{ fontFamily: "var(--f-master)" }}>{count}</h2>
-            {BRAND_FORMATS[b.slug] && <Formats ids={BRAND_FORMATS[b.slug]!} strong="keg" className="mt-6" />}
             {BRAND_FORMATS[b.slug]?.includes("keg") && <p className="mt-3 max-w-[52ch] text-[14px] leading-snug opacity-75">Линейка выпускается и в кегах — для баров и магазинов разливных напитков. Ниже — бутылки.</p>}
           </div>
-          <BrandRange b={b} items={items} />
+          <BrandRange b={b} items={mainLine(items)} />
         </section>
       )}
+
+      <PartyLine b={b} items={partyLine(items)} />
 
       {items.length > 0 && b.family === "alcohol" && (
         <section className="field-white relative border-t border-current" aria-labelledby="made-title">
           <div className="wrap grid grid-cols-1 items-end gap-8 py-[clamp(44px,5vw,80px)] md:grid-cols-12">
             <div className="md:col-span-4">
-              <Chapter n="02" label="Производство" className="mb-5" />
+              <Chapter n={partyLine(items).length ? "03" : "02"} label="Производство" className="mb-5" />
               <h2 id="made-title" className="t-l">Как это<br />сделано</h2>
               <p className="mt-4 max-w-[34ch] text-[15px] leading-snug">{b.kind === "медовуха" ? "Мёд" : "Основа"}, натуральные соки, брожение и лабораторная проверка каждой партии.</p>
               <Link href="/production/" className="t-tag fill-link mt-5 inline-block">Как создаётся CIDERHOUSE →</Link>

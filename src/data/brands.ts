@@ -1,6 +1,6 @@
 import type { SourceId } from "./sources";
 
-export type BrandSlug = "white-phoenix" | "double-tree" | "mister-bee" | "zero" | "bumble-coffee" | "migliore";
+export type BrandSlug = "white-phoenix" | "double-tree" | "mister-bee" | "zero";
 
 export type Brand = {
   slug: BrandSlug;
@@ -15,6 +15,7 @@ export type Brand = {
   mark?: string; // official logo file, if we have the original
   logo?: string; // full logo (mark + wordmark) from the brand archive
   site?: string; // verified official standalone website (owner-confirmed); brand entry points link there
+  subline?: { name: string; note: string }; // a sub-line with its own label system (Double Tree → D TREE PARTY)
   /** colours come from brand tokens in globals.css (never raw HEX in components) */
   theme: { bg: string; ink: string; accent: string };
   /** brand display face: family token, weight, case — from the brand guide where assigned, master face otherwise */
@@ -64,6 +65,7 @@ export const BRANDS: Brand[] = [
     kindVerified: true,
     line: "Два дерева — одно яблоко. Сидр с графичным, городским характером.",
     status: "active",
+    subline: { name: "D TREE PARTY", note: "фруктовый сидр для вечеринки" },
     logo: "/assets/brand/double-tree-logo-white.png",
     theme: { bg: "var(--dt-bg)", ink: "var(--dt-ink)", accent: "var(--dt-accent)" },
     face: { family: "var(--f-dt)", weight: 500, upper: true, tracking: "-0.01em", verified: true, cyr: true },
@@ -86,36 +88,6 @@ export const BRANDS: Brand[] = [
     face: { family: "var(--f-zero)", weight: 700, upper: true, tracking: "-0.03em", verified: true, cyr: true },
     voice: "ice",
     sources: ["owner-repo", "owner-brief"],
-  },
-  {
-    slug: "bumble-coffee",
-    name: "Bumble Coffee",
-    display: "Bumble\nCoffee",
-    family: "zero",
-    kind: "Black Phoenix · кофе в банке",
-    kindVerified: true,
-    line: "Кофейное выражение Black Phoenix: смело, модно, без компромиссов.",
-    status: "active",
-    site: "https://bumblephoenix.ru",
-    logo: "/assets/brand/bumble-coffee-logo.svg",
-    theme: { bg: "var(--bc-bg)", ink: "var(--bc-ink)", accent: "var(--bc-accent)" },
-    face: { family: "var(--f-bc)", weight: 800, upper: true, tracking: "-0.02em", verified: false, cyr: true },
-    voice: "fashion",
-    sources: ["owner-brief", "owner-archive"],
-  },
-  {
-    slug: "migliore",
-    name: "Migliore",
-    display: "Migliore",
-    family: "zero",
-    kind: "закрытая комната",
-    kindVerified: true,
-    line: "Новое направление дома готовится к запуску.",
-    status: "coming-soon",
-    theme: { bg: "var(--mg-bg)", ink: "var(--mg-ink)", accent: "var(--mg-accent)" },
-    face: { family: "var(--f-master)", weight: 800, upper: true, tracking: "-0.035em", verified: false, cyr: true },
-    voice: "sealed",
-    sources: ["owner-brief"],
   },
 ];
 

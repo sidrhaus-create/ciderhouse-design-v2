@@ -72,7 +72,7 @@ export default function Production() {
           <span aria-hidden="true" className="absolute inset-y-0 left-1/3 w-px bg-white/35" />
           <span aria-hidden="true" className="absolute inset-y-0 left-2/3 w-px bg-white/35" />
           <figcaption className="t-tag absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 bg-black px-[var(--gutter)] py-3 text-white">
-            <span>Крышка с фениксом</span><span className="opacity-70">студийная съёмка</span>
+            <span>Крышка с фениксом</span><span className="opacity-70">CIDERHOUSE</span>
           </figcaption>
         </figure>
       </section>

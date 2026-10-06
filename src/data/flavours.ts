@@ -31,6 +31,8 @@ export const FLAVOURS: Record<string, Flavour> = {
   "white-phoenix-sea-buckthorn-orange-lemon": { ru: "Облепиха — апельсин — лимон", evidence: "owner" },
   "white-phoenix-red-orange-spritz": { ru: "Сицилийский апельсин", evidence: "official" },
   "white-phoenix-strawberry": { ru: "Клубника", evidence: "official" },
+  "white-phoenix-pomelo-pineapple": { ru: "Помело — ананас", evidence: "owner" }, // Telegram, 10.04.2026; archive file «Помело Ананас»
+  "white-phoenix-bitter-lemon": { ru: "Горький лимон", evidence: "label" },
 
   // Double Tree 0,45 — catalogue of ciderhouse.ru and the owner's price tags
   "double-tree-green-apple": { ru: "Зелёное яблоко", evidence: "official" },
@@ -45,6 +47,11 @@ export const FLAVOURS: Record<string, Flavour> = {
   "double-tree-lemon-lime": { ru: "Лимон — лайм", evidence: "label" },
   "double-tree-pomegranate-mint": { ru: "Гранат — мята", evidence: "label" },
   "double-tree-watermelon-mint": { ru: "Арбуз — мята", evidence: "label" },
+  // white label 0,45 and the special edition — studio gallery 22.07.25
+  "double-tree-grape-citrus": { ru: "Виноград — цитрус", evidence: "label" },
+  "double-tree-double-cherry": { ru: "Двойная вишня", evidence: "official" }, // news of 07.02.2022
+  "double-tree-pomegranate-cherry": { ru: "Гранат — вишня", evidence: "label" },
+  "double-tree-dry-apple": { ru: "Яблоко — сухой", evidence: "label" },
 
   // Double Tree 0,75 — the labels read "Apple / Cherry / Pear / Pomegranate Cider"
   "double-tree-075-apple-cider-green": { ru: "Зелёное яблоко", evidence: "owner" },
@@ -52,19 +59,27 @@ export const FLAVOURS: Record<string, Flavour> = {
   "double-tree-075-pear-cider": { ru: "Груша", evidence: "owner" },
   "double-tree-075-cherry-cider": { ru: "Вишня", evidence: "label" },
   "double-tree-075-pomegranate-cider": { ru: "Гранат", evidence: "label" },
+  "double-tree-075-apple-cider-golden": { ru: "Золотое яблоко", evidence: "owner" }, // archive file «Золотое Яблоко»
+
+  // D TREE PARTY — the labels themselves are in Russian: «фруктовый сливовый сидр» etc.
+  "double-tree-party-plum": { ru: "Слива", evidence: "official" },
+  "double-tree-party-pomegranate": { ru: "Гранат", evidence: "official" },
+  "double-tree-party-cherry": { ru: "Вишня", evidence: "official" },
+  "double-tree-party-raspberry": { ru: "Малина", evidence: "official" },
+  "double-tree-party-apple": { ru: "Яблоко", evidence: "official" },
 
   // Mister Bee — the owner's flavour archive
   "mister-bee-orange-grapefruit": { ru: "Апельсин — грейпфрут", evidence: "owner" },
   "mister-bee-mandarin": { ru: "Мандарин", evidence: "owner" },
   "mister-bee-cherry-blossom": { ru: "Цветочная вишня", evidence: "owner" },
-
-  // Bumble Coffee — the owner's flavour sheet (Bumble_Coffee_Вкусы_A5)
-  "bumble-coffee-cherry": { ru: "Вишня", evidence: "owner" },
-  "bumble-coffee-orange": { ru: "Апельсин", evidence: "owner" },
-  "bumble-coffee-pomegranate": { ru: "Гранат", evidence: "owner" },
-  "bumble-coffee-raspberry": { ru: "Малина", evidence: "owner" },
-  "bumble-coffee-wild-berries": { ru: "Лесные ягоды", evidence: "owner" },
-  "bumble-coffee-zero-cola": { ru: "Кола", evidence: "owner" },
+  // catalogue of ciderhouse.ru: «Тропический банан-вишня», «Ароматная фейхоа», «Классическая медовуха», «Сочная слива», «Лимонная свежесть», «Яркая клюква», «Терпкий гранат-виноград»
+  "mister-bee-cherry-banana": { ru: "Банан — вишня", evidence: "official" },
+  "mister-bee-feijoa": { ru: "Фейхоа", evidence: "official" },
+  "mister-bee-classic": { ru: "Классическая", evidence: "official" },
+  "mister-bee-plum": { ru: "Слива", evidence: "official" },
+  "mister-bee-lemon": { ru: "Лимон", evidence: "official" },
+  "mister-bee-cranberry": { ru: "Клюква", evidence: "official" },
+  "mister-bee-pomegranate-grape": { ru: "Гранат — виноград", evidence: "official" },
 };
 
 export const flavourRu = (slug: string): string => {

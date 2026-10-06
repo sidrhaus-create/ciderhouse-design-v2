@@ -5,6 +5,8 @@ import { VERIFIED, productBySlug } from "@/data/catalog";
 import { SITE } from "@/data/site";
 import { MarketRows } from "@/components/Blocks";
 import { ProcessTeaser } from "@/components/ProcessTeaser";
+import { StudioImg } from "@/components/Studio";
+import { FLAVOUR_SHOTS } from "@/data/photos";
 import { flavourAccent } from "@/lib/flavour";
 import { Bottle, Chapter, Fit, Reveal, Swatch } from "@/components/primitives";
 
@@ -86,6 +88,23 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       </section>
+
+      {FLAVOUR_SHOTS[p.slug] && (
+        <section className="field-white relative border-b border-current" aria-label="Студийная съёмка">
+          <div className="grid grid-cols-1 md:grid-cols-12">
+            <figure data-reveal className="relative aspect-[4/5] overflow-hidden md:col-span-5 md:aspect-auto md:min-h-[78svh] md:border-r md:border-current">
+              <StudioImg k={FLAVOUR_SHOTS[p.slug]} sizes="(max-width: 768px) 100vw, 42vw" className="absolute inset-0 h-full w-full object-cover" />
+            </figure>
+            <div className="flex flex-col justify-between gap-10 px-[var(--gutter)] py-[clamp(36px,4.6vw,72px)] md:col-span-7">
+              <p className="t-tag flex items-center gap-3"><Swatch color={accent} className="text-[14px]" />{p.nameRu} · {p.character}</p>
+              <div>
+                {p.motto && <p className="t-xl">{p.motto}</p>}
+                {p.idealFor && <p className="t-m mt-6 max-w-[34ch]">Для {p.idealFor}.</p>}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="field-white relative">
         <div className="wrap grid grid-cols-1 gap-10 py-[clamp(50px,5.9vw,90px)] md:grid-cols-12">

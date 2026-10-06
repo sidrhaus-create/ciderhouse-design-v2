@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { ContactLines, Socials } from "@/components/Contacts";
-import { Chapter, Reveal } from "@/components/primitives";
+import { ContactForm } from "@/components/ContactForm";
+import { Chapter } from "@/components/primitives";
 import { CONTACTS, EMAIL, mailto } from "@/data/site";
 import { BRANDS } from "@/data/brands";
 
@@ -74,17 +75,15 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="relative field-black" aria-labelledby="c-how">
-        <div className="wrap grid grid-cols-1 gap-10 pb-[clamp(43px,5.3vw,77px)] pt-[clamp(50px,5.9vw,90px)] md:grid-cols-12">
+      <section id="form" className="relative field-black scroll-mt-4" aria-labelledby="c-form">
+        <div className="wrap grid grid-cols-1 gap-10 pb-[clamp(50px,5.9vw,90px)] pt-[clamp(50px,5.9vw,90px)] md:grid-cols-12">
           <div className="md:col-span-4">
-            <Chapter n="02" label="В письме укажите" className="mb-5" />
-            <h2 id="c-how" className="t-voice max-w-[12ch]">чтобы ответить быстрее</h2>
-          </div>
-          <Reveal className="md:col-span-8">
-            <p className="t-m balance">Город, формат бизнеса и интересующие бренды: {BRANDS.map((b) => b.name).join(", ")}.</p>
-            <a href={mail} className="btn btn-solid mt-8">Написать письмо</a>
+            <Chapter n="02" label="Написать нам" className="mb-5" />
+            <h2 id="c-form" className="t-l">Форма<br />обратной связи</h2>
+            <p className="mt-6 max-w-[34ch] text-[15px] leading-snug opacity-80">Укажите город, формат бизнеса и интересующие бренды: {BRANDS.map((b) => b.name).join(", ")} — так мы ответим быстрее.</p>
             <ContactLines className="mt-8 opacity-80" />
-          </Reveal>
+          </div>
+          <div className="md:col-span-8 md:pt-2"><ContactForm /></div>
         </div>
       </section>
     </>

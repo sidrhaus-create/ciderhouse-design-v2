@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BrandLink } from "@/components/BrandLink";
 import { PageHero } from "@/components/PageHero";
 import { ProcessTeaser } from "@/components/ProcessTeaser";
+import { PhotoBand } from "@/components/Studio";
 import { Chapter, Reveal } from "@/components/primitives";
 import { BRANDS, brandType } from "@/data/brands";
 import { ABOUT_FACTS, SITE } from "@/data/site";
@@ -53,6 +54,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <PhotoBand k="dt-075-standing-beige" caption="Double Tree · бутылки 0,75 л" pos="50% 56%" />
 
       {/* brands of the house */}
       <section className="field-black relative" aria-labelledby="a-brands">

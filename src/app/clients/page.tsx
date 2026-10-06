@@ -5,6 +5,7 @@ import { PartnersBand } from "@/components/PartnersBand";
 import { Chapter, Plate } from "@/components/primitives";
 import { PARTNERS } from "@/data/site";
 import { FormatMark } from "@/components/Formats";
+import { PhotoBand } from "@/components/Studio";
 import { FORMATS, brandsWith, type FormatId } from "@/data/formats";
 
 export const metadata: Metadata = {
@@ -31,6 +32,8 @@ export default function Clients() {
         </div>
       </section>
 
+      <PhotoBand k="dt-075-six-beige" caption="Double Tree · бутылки 0,75 л" pos="50% 70%" height="h-[38svh] md:h-[56svh]" />
+
       <section className="relative field-black" aria-labelledby="cl-formats">
         <div className="wrap pb-8 pt-[clamp(50px,5.9vw,90px)]">
           <Chapter n="01" label="Для полки и для бара" className="mb-5" />
@@ -52,7 +55,7 @@ export default function Clients() {
         </ul>
         <div className="wrap flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between">
           <p className="max-w-[60ch] text-[14.5px] leading-snug opacity-80">Состав вкусов в каждом формате и условия поставки пришлём по запросу.</p>
-          <Link href="/contact/" className="btn btn-solid self-start md:self-auto">Запросить условия</Link>
+          <Link href="/contact/#form" className="btn btn-solid self-start md:self-auto">Запросить условия</Link>
         </div>
       </section>
 
@@ -61,7 +64,7 @@ export default function Clients() {
           <div className="md:col-span-4">
             <Chapter n="02" label="Список" className="mb-5" />
             <h2 id="cl-list" className="t-l">Сети</h2>
-            <Link href="/contact/" className="btn btn-solid mt-8">Стать партнёром</Link>
+            <Link href="/contact/#form" className="btn btn-solid mt-8">Написать нам</Link>
           </div>
           <ol className="md:col-span-8">
             {PARTNERS.map((p, i) => (

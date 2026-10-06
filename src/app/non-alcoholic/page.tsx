@@ -4,6 +4,7 @@ import { BrandLink } from "@/components/BrandLink";
 import { ZeroReel } from "@/components/ZeroReel";
 import { MarketRows } from "@/components/Blocks";
 import { ProcessTeaser } from "@/components/ProcessTeaser";
+import { ZeroTriptych } from "@/components/Studio";
 import { Bottle, Chapter, Fit, Swatch } from "@/components/primitives";
 import { VERIFIED } from "@/data/catalog";
 import { BRANDS, brandType, brandVars } from "@/data/brands";
@@ -12,7 +13,7 @@ import { flavourAccent } from "@/lib/flavour";
 
 export const metadata: Metadata = {
   title: "Безалкогольное направление 0%",
-  description: "ZER° CIDER — безалкогольный сидр 0,0% от CIDERHOUSE: зелёное яблоко, вишня, гранат — малина. А также Bumble Coffee (Black Phoenix) и Migliore.",
+  description: "ZER° CIDER — безалкогольный сидр 0,0% от CIDERHOUSE: зелёное яблоко, вишня, гранат — малина.",
   alternates: { canonical: "/non-alcoholic/" },
 };
 
@@ -20,7 +21,6 @@ export const metadata: Metadata = {
 const SLOGAN = "Свобода выбирать вкус, а не градусы";
 
 export default function Zero() {
-  const zeroWorld = BRANDS.filter((b) => b.family === "zero");
   return (
     <div className="voice-zero">
       <section className="field-white relative isolate overflow-hidden" aria-labelledby="z-title">
@@ -58,6 +58,8 @@ export default function Zero() {
           </div>
         </div>
       </section>
+
+      <ZeroTriptych />
 
       <section className="field-purple relative" aria-labelledby="z-facts">
         <div className="wrap py-[clamp(50px,5.9vw,90px)]">
@@ -97,31 +99,10 @@ export default function Zero() {
         </div>
       </section>
 
-      <section className="field-black relative" aria-labelledby="z-world">
-        <div className="wrap py-[clamp(50px,5.9vw,90px)]">
-          <Chapter n="03" label="Экосистема 0%" className="mb-6" />
-          <h2 id="z-world" className="t-xl mb-10">Мир без градуса</h2>
-          <ul className="grid grid-cols-1 border-l border-t border-white md:grid-cols-3">
-            {zeroWorld.map((b) => (
-              <li key={b.slug} className="border-b border-r border-white">
-                <BrandLink b={b} className="field-brand group flex min-h-[42vh] flex-col justify-between p-6" style={brandVars(b)}>
-                  <span className="chip self-start">{b.kind}</span>
-                  <span>
-                    <span className="block text-[clamp(34px,3.8vw,64px)] leading-[0.95]" style={brandType(b)}>{b.name}</span>
-                    <span className="mt-3 block text-[15px] font-medium leading-snug">{b.line}</span>
-                  </span>
-                  <span className="t-tag flex items-center gap-3">{b.status === "coming-soon" ? "скоро" : "к бренду"}<span aria-hidden="true" className="sq">→</span></span>
-                </BrandLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <section id="z-buy" className="field-white relative scroll-mt-4" aria-labelledby="z-buy-title">
         <div className="wrap grid grid-cols-1 gap-10 py-[clamp(50px,5.9vw,90px)] md:grid-cols-12">
           <div className="md:col-span-4">
-            <Chapter n="04" label="Где купить" className="mb-6" />
+            <Chapter n="03" label="Где купить" className="mb-6" />
             <h2 id="z-buy-title" className="t-voice max-w-[14ch] text-purple">{SLOGAN}</h2>
           </div>
           <div className="md:col-span-8"><MarketRows /></div>

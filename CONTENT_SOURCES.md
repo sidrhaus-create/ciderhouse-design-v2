@@ -76,3 +76,33 @@ ciderhouse.ru was reachable again and was used as the primary source.
 - Not published: giveaways (incl. the one "in honour of the move" - no facts about the move itself are stated in the channel), polls, memes, Friday and zodiac posts, recipes, the label-redesign post of 27 March (product not named in the text).
 - Nothing is loaded from Telegram at runtime.
 
+## Studio photography (2026-10-05)
+
+Source: seven wfolio galleries of photographer D. Murashov supplied by the owner (Studio_Banki 16.09.2026; Studio_Bottles 05.03.26, 12.05.26, 22.07.25, 10.06.26, 30.06.26, 26.08.26) - 185 frames reviewed, 25 used.
+Pipeline: `scripts/studio-photos.mjs` -> `public/assets/studio/<key>-{900,1800}.webp`; registry with sizes and alt texts: `src/data/photos.ts`. The galleries serve 1920 px previews; originals (up to 6000 px) were not pulled.
+Not used: D-Tree Party Cider and Sprizano frames (these products are not on the site), back-label shots.
+
+## Brand covers (2026-10-06)
+
+- One cover system (`src/components/BrandCover.tsx`, data `COVERS` in `src/data/photos.ts`): a photograph in a hairline frame and a solid strip of the brand's plane with the name in the brand's face. Used on /brands/ (tiles), brand posters, catalogue section covers and the 0% world.
+- Covers: Double Tree - golden-apple duo (tile) and 0,75 standing (wide); Mister Bee - trio on purple (tile) and trio on beige (wide); 0% - trio on purple (tile) and trio with fruit (wide); Bumble - the three can frames; White Phoenix - the existing lifestyle photograph (no studio still-life exists); Migliore - closed room. The house line-up frame (gallery 12.05.26, #90) opens /brands/.
+- The old vertical BrandIndex moved to archive-v1/.
+
+## Assortment from the studio galleries (2026-10-06)
+
+- `scripts/studio-cutouts.py` cuts single-bottle frames (white studio background) out locally and registers them in `packs.json` (source: "studio gallery #N").
+- Mister Bee: 10 positions (7 new from gallery 22.07.25 - Cherry Banana, Feijoa, Classic, Plum, Lemon, Cranberry, Pomegranate Grape; the three existing ones re-shot in 30.06.26). Russian names from the catalogue of ciderhouse.ru.
+- Double Tree 0,75: the five old renders replaced by the current white-label frames (26.08.26 / 05.03.26) + Golden apple (dry) added - 6 positions.
+- Double Tree 0,45 added: Grape Citrus, Double Cherry, Pomegranate Cherry, Dry Apple Cider (special edition) - gallery 22.07.25.
+- D TREE PARTY: sub-line of Double Tree (`Product.series = "party"`, `Brand.subline`), 5 positions from gallery 30.06.26; labels carry Russian copy («фруктовый сливовый сидр» ...), so the Russian names are taken from the labels.
+- White Phoenix added: Pomelo Pineapple (Telegram 10.04.2026), Bitter Lemon - gallery 12.05.26.
+- Not added: Double Tree 0% «Pomegranate Raspberry» and «Double Cherry» (frames 167/169) - the 0% line on this site is the verified ZER° trio; Sprizano (frame 176) - not a brand of this site.
+
+## Final refinement (2026-10-06)
+
+- Bumble Coffee and Migliore removed from the site (brand data, catalogue, formats, covers, routes, assets -> `archive-v1/removed-brands/`). The portfolio is four brands: Double Tree (+ D TREE PARTY), White Phoenix, Mister Bee, ZER° CIDER.
+- ZER° CIDER is shown with its lockup (`/assets/brand/zero-lockup-purple.svg`) in the hero plate, the corridor, the brand tile and the catalogue cover.
+- Photo-source captions («студийная съёмка») removed from the interface; captions now name the product.
+- Corridor: one photograph per slide, no packshots layered over photographs. Brand pages: the poster cover carries the photography; the extra photo spread was removed.
+- Hero plates are static (no Draggable); the contact form (`src/components/ContactForm.tsx`) composes a letter to info@ciderhouse.ru via mailto - no third-party form service.
+

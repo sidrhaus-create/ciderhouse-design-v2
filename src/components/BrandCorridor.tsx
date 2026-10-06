@@ -4,18 +4,19 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useIsoLayoutEffect, useMotion } from "@/lib/motion";
 import { brandBySlug, brandType, brandVars, siteLabel, type BrandSlug } from "@/data/brands";
 import { BrandLink } from "./BrandLink";
-import { PRODUCTS, productsOf } from "@/data/catalog";
+import { Formats } from "./Formats";
+import { BRAND_FORMATS } from "@/data/formats";
+import { PRODUCTS, productsOf, partyLine } from "@/data/catalog";
 import { Pack } from "./primitives";
 
 const ORDER: BrandSlug[] = ["double-tree", "white-phoenix", "mister-bee", "zero"];
 const LABEL: Partial<Record<BrandSlug, string>> = { zero: "0%" };
 const P = "/assets/photography/";
 const photoSet = (name: string) => ({ src: `${P}${name}-900.webp`, srcSet: `${P}${name}-900.webp 900w, ${P}${name}-1800.webp 1800w` });
-const packs = (...slugs: string[]) => slugs.map((s) => PRODUCTS.find((p) => p.slug === s)!).filter(Boolean);
 
 /** Official photograph as a campaign crop; the image is slightly wider than its frame so it can drift inside it. */
 function Photo({ name, alt, className = "", sizes = "(max-width: 1024px) 88vw, 55vw", pos = "50% 50%" }: { name: string; alt: string; className?: string; sizes?: string; pos?: string }) {
-  const set = name.startsWith("/") ? { src: `${name}-1100.webp`, srcSet: `${name}-640.webp 640w, ${name}-1100.webp 1100w` } : photoSet(name);
+  const set = name.startsWith("/assets/studio/") ? { src: `${name}-900.webp`, srcSet: `${name}-900.webp 900w, ${name}-1800.webp 1800w` } : name.startsWith("/") ? { src: `${name}-1100.webp`, srcSet: `${name}-640.webp 640w, ${name}-1100.webp 1100w` } : photoSet(name);
   return (
     <div className={`overflow-hidden ${className}`}>
       <img data-cor-photo {...set} sizes={sizes} alt={alt} loading="lazy" decoding="async" className="h-full w-[112%] max-w-none object-cover" style={{ objectPosition: pos, marginLeft: "-6%" }} />
@@ -98,6 +99,7 @@ export function BrandCorridor() {
   const nameCls = "text-[clamp(34px,5vw,88px)] leading-[0.94]";
   const packH = "h-[24svh] lg:h-[clamp(220px,42svh,400px)]";
 
+  const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "вкус" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "вкуса" : "вкусов");
   const Copy = ({ slug, n, children }: { slug: BrandSlug; n: number; children?: ReactNode }) => {
     const b = brandBySlug(slug)!;
     const count = productsOf(slug).length;
@@ -107,9 +109,12 @@ export function BrandCorridor() {
         <h3 className={nameCls} style={brandType(b)}>{b.name}</h3>
         <p className="max-w-[34ch] text-[15px] leading-snug lg:text-[17px]">{b.line}</p>
         {children}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          {BRAND_FORMATS[slug] && <Formats ids={BRAND_FORMATS[slug]!} strong="keg" label={`${String(count).padStart(2, "0")} ${plural(count)}`} />}
+          {b.subline && <span className="chip">+ {b.subline.name} · {partyLine(productsOf(slug)).length}</span>}
+        </div>
         <div className="mt-1 flex flex-wrap items-center gap-4">
           <BrandLink b={b} className="btn btn-solid">{b.site ? siteLabel(b) : "К бренду"}</BrandLink>
-          <span className="t-tag t-num opacity-80">{String(count).padStart(2, "0")} в ассортименте</span>
         </div>
       </>
     );
@@ -128,22 +133,19 @@ export function BrandCorridor() {
         <div ref={rail} className="snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] lg:h-full lg:snap-none lg:overflow-visible">
           <div ref={track} className="flex w-max gap-3 px-[6vw] lg:h-full lg:gap-0 lg:px-0">
 
-            {/* 01 — Double Tree: dark, structural. Photograph on the left, the bottle group steps over its edge. */}
+            {/* 01 — Double Tree: dark, structural. One photograph on the left, the copy ruled off on the right. */}
             <article data-scene className={scene} style={brandVars(dt)} aria-label="Double Tree">
               <div className={body}>
                 <div className="relative h-[40svh] lg:col-span-7 lg:-ml-[var(--gutter)] lg:-mt-[88px] lg:-mb-16 lg:h-auto">
-                  <Photo name="double-tree-apple-bottles-cans" alt="Double Tree: бутылки и банки яблочного сидра с зелёными яблоками" className="absolute inset-0" pos="50% 62%" />
+                  <Photo name="/assets/studio/dt-075-apples-sage" alt="Double Tree 0,75 л: три бутылки с красным и зелёным яблоками" className="absolute inset-0" pos="50% 58%" />
                 </div>
                 <div className={`${copyBox} lg:col-span-4 lg:col-start-9 lg:justify-center lg:border-l lg:border-current lg:pl-8`}>
                   <Copy slug="double-tree" n={1} />
                 </div>
-                <div data-cor-packs className="pointer-events-none absolute right-3 top-[19svh] z-10 flex items-end gap-1 lg:bottom-16 lg:left-[47%] lg:right-auto lg:top-auto lg:gap-2">
-                  {packs("double-tree-green-apple", "double-tree-dark-cherry", "double-tree-red-apple").map((p, i) => <Pack key={p.slug} p={p} sizes="12vw" className={i === 1 ? packH : "h-[21svh] lg:h-[clamp(190px,37svh,350px)]"} />)}
-                </div>
               </div>
             </article>
 
-            {/* 02 — White Phoenix: light paper, atmospheric. Text first, two photographs, bottles standing in front of the image. */}
+            {/* 02 — White Phoenix: light paper, atmospheric. Text first, one photograph. */}
             <article data-scene className={scene} style={brandVars(wp)} aria-label="White Phoenix">
               <div className={body}>
                 <div className={`${copyBox} order-2 lg:order-1 lg:col-span-4 lg:justify-end lg:pb-6`}>
@@ -151,24 +153,17 @@ export function BrandCorridor() {
                   <Copy slug="white-phoenix" n={2} />
                 </div>
                 <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-8 lg:h-auto">
-                  <Photo name="white-phoenix-mango-citrus-fruit-bowl" alt="White Phoenix «Манго — цитрус» среди манго и цитрусов" className="absolute inset-y-0 left-0 hidden w-[44%] lg:block lg:top-[14%] lg:bottom-[20%]" sizes="26vw" />
-                  <Photo name="white-phoenix-black-cherry-cocktail" alt="White Phoenix «Тёмная вишня» с коктейлем и вишней" className="absolute inset-0 lg:left-[50%] lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:-mb-16" pos="50% 40%" />
-                  <div data-cor-packs className="pointer-events-none absolute bottom-2 left-3 z-10 flex items-end gap-1 lg:bottom-0 lg:left-[30%] lg:gap-2">
-                    {packs("white-phoenix-passionfruit-cherry", "white-phoenix-dragon-fruit-kiwi").map((p) => <Pack key={p.slug} p={p} sizes="12vw" className={packH} />)}
-                  </div>
+                  <Photo name="white-phoenix-black-cherry-cocktail" alt="White Phoenix «Тёмная вишня» с коктейлем и вишней" className="absolute inset-0 lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:-mb-16" pos="50% 42%" />
                 </div>
               </div>
             </article>
 
-            {/* 03 — Mister Bee: classic and symmetric, built from the packaging itself (no lifestyle photography exists for it). */}
+            {/* 03 — Mister Bee: classic and symmetric, built around the studio group shot of the three flavours. */}
             <article data-scene className={scene} style={brandVars(mb)} aria-label="Mister Bee">
               <div className={body}>
                 <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-6 lg:col-start-4 lg:h-auto">
-                  <div aria-hidden="true" className="absolute inset-x-[12%] bottom-0 top-[10%] lg:top-[4%]" style={{ background: mb.theme.accent }} />
+                  <Photo name="/assets/studio/mb-trio-beige" alt="Mister Bee: «Апельсин — грейпфрут», «Цветочная вишня» и «Мандарин»" className="absolute inset-x-[12%] bottom-0 top-[10%] lg:top-[4%]" sizes="(max-width: 1024px) 70vw, 38vw" pos="50% 70%" />
                   <div aria-hidden="true" className="absolute inset-x-[12%] bottom-0 top-[10%] border border-current lg:top-[4%] lg:translate-x-3 lg:-translate-y-3" />
-                  <div data-cor-packs className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-end justify-center gap-2 lg:gap-4">
-                    {packs("mister-bee-orange-grapefruit", "mister-bee-mandarin", "mister-bee-cherry-blossom").map((p, i) => <Pack key={p.slug} p={p} sizes="12vw" className={i === 1 ? "h-[34svh] lg:h-[clamp(260px,52svh,480px)]" : "h-[30svh] lg:h-[clamp(230px,46svh,430px)]"} />)}
-                  </div>
                 </div>
                 <div className={`${copyBox} order-2 lg:order-1 lg:col-span-3 lg:col-start-1 lg:row-start-1 lg:justify-end lg:pb-6`}>
                   <Copy slug="mister-bee" n={3} />
@@ -184,7 +179,7 @@ export function BrandCorridor() {
             <article data-scene className={scene} style={brandVars(zero)} aria-label="Направление 0%">
               <div className={`${body} voice-zero`}>
                 <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-8 lg:col-start-5 lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:h-[62svh]">
-                  <Photo name="/assets/zero/still-trio" alt="Студийная съёмка: три бутылки ZER° CIDER 0,0%" className="absolute inset-0" sizes="(max-width: 1024px) 88vw, 66vw" />
+                  <Photo name="/assets/studio/zero-trio-fruit-sage" alt="Безалкогольный сидр 0%: три вкуса с яблоком, гранатом и вишней" className="absolute inset-0" sizes="(max-width: 1024px) 88vw, 66vw" pos="50% 22%" />
                 </div>
                 <div className={`${copyBox} order-2 lg:order-1 lg:col-span-4 lg:row-span-2 lg:justify-center`}>
                   <Copy slug="zero" n={4}>
@@ -192,7 +187,7 @@ export function BrandCorridor() {
                   </Copy>
                 </div>
                 <div className="relative order-3 hidden items-center gap-6 lg:col-span-8 lg:col-start-5 lg:flex">
-                  <img src="/assets/brand/zero-percent-480.webp" alt="Знак 0% безалкогольной линейки" width={480} height={480} loading="lazy" className="h-[clamp(90px,16svh,150px)] w-auto" />
+                  <img src={zero.logo} alt="ZER° CIDER" width={373} height={105} loading="lazy" className="h-[clamp(36px,7svh,64px)] w-auto" />
                   <ul className="flex flex-wrap gap-2">
                     {productsOf("zero").map((p) => <li key={p.slug}><Link href={`/katalog/${p.slug}/`} className="chip transition-colors duration-300 hover:bg-black hover:text-white">{p.nameRu} · {p.abv}</Link></li>)}
                   </ul>

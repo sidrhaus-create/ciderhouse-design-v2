@@ -6,6 +6,7 @@ import { BrandCorridor } from "@/components/BrandCorridor";
 import { ZeroScrub } from "@/components/ZeroScrub";
 import { ProcessTeaser } from "@/components/ProcessTeaser";
 import { HomeNews } from "@/components/HomeNews";
+import { PhotoBand } from "@/components/Studio";
 import { Formats } from "@/components/Formats";
 import { PartnersBand } from "@/components/PartnersBand";
 import { Chapter, Reveal } from "@/components/primitives";
@@ -63,6 +64,10 @@ export default function Home() {
       {/* 06 — news: what is happening in the house now */}
       <HomeNews n="06" />
 
+      <PhotoBand k="dt-075-lying-purple" caption="Double Tree · бутылки 0,75 л" pos="50% 50%">
+        <Link href="/brands/double-tree/" className="fill-link">К бренду →</Link>
+      </PhotoBand>
+
       {/* 07 — shelves */}
       <section aria-labelledby="shelf-title" className="field-white relative overflow-hidden">
         <div className="wrap flex flex-col gap-6 pb-10 pt-[clamp(60px,7.3vw,109px)] md:flex-row md:items-end md:justify-between">
@@ -93,7 +98,7 @@ export default function Home() {
             <div className="flex flex-wrap md:col-span-6 md:justify-end">
               <a className="btn btn-solid" href={mailto("Сотрудничество с CIDERHOUSE")}>{EMAIL}</a>
               <a className="btn -ml-px" href={CONTACTS.phone.href}>{CONTACTS.phone.label}</a>
-              <Link className="btn -ml-px" href="/contact/">Контакты</Link>
+              <Link className="btn -ml-px" href="/contact/#form">Написать</Link>
             </div>
           </div>
         </div>

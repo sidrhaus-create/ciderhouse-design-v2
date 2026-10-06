@@ -2,17 +2,19 @@
 import Link from "next/link";
 import { BrandLink } from "./BrandLink";
 import { useEffect, useMemo, useState } from "react";
-import { PRODUCTS } from "@/data/catalog";
+import { PRODUCTS, mainLine, partyLine } from "@/data/catalog";
 import { brandBySlug, brandType, brandVars, type BrandSlug } from "@/data/brands";
 import { BrandRange } from "./BrandRange";
 import { FormatMark, Formats } from "./Formats";
+import { CatalogCover } from "./BrandCover";
+import { PartyLine } from "./PartyLine";
 import { BRAND_FORMATS, FORMATS, brandsWith, formatOf, type FormatId } from "@/data/formats";
 
 type World = "all" | BrandSlug;
 type Fmt = "all" | FormatId;
 // exact per-position formats come from the labels; kegs are verified for a family, so "Кеги" opens a family-level sheet instead of a product list
-const FMTS: Fmt[] = ["all", "bottle-045", "bottle-075", "can", "keg"];
-const ORDER: BrandSlug[] = ["zero", "white-phoenix", "double-tree", "mister-bee", "bumble-coffee"];
+const FMTS: Fmt[] = ["all", "bottle-045", "bottle-075", "keg"];
+const ORDER: BrandSlug[] = ["zero", "white-phoenix", "double-tree", "mister-bee"];
 const WORLDS: { id: World; label: string }[] = [{ id: "all", label: "Все" }, ...ORDER.map((id) => ({ id, label: brandBySlug(id)!.name }))];
 
 function readParams() {
@@ -86,15 +88,14 @@ export function CatalogExplorer() {
 
       {fmt !== "keg" && groups.map(({ b, items }) => (
         <section key={b.slug} aria-labelledby={`g-${b.slug}`} className="field-brand relative" style={brandVars(b)}>
-          <header className="wrap flex flex-wrap items-end justify-between gap-4 pb-6 pt-[clamp(40px,4.6vw,70px)]">
-            <h2 id={`g-${b.slug}`} className="text-[clamp(34px,5.6vw,96px)] leading-[0.96]" style={brandType(b)}>{b.name}</h2>
-            <div className="flex items-center gap-3 pb-2">
-              {BRAND_FORMATS[b.slug] && <Formats ids={BRAND_FORMATS[b.slug]!} strong="keg" className="hidden lg:flex" />}
-              <span className="chip t-num">{String(items.length).padStart(2, "0")} в индексе</span>
-              <BrandLink b={b} className="btn">О бренде</BrandLink>
-            </div>
-          </header>
-          <BrandRange b={b} items={items} offset={49} />
+          <CatalogCover
+            b={b}
+            aside={<><span className="chip t-num">{String(items.length).padStart(2, "0")} в индексе</span><BrandLink b={b} className="btn">О бренде</BrandLink></>}
+          >
+            {BRAND_FORMATS[b.slug] && <Formats ids={BRAND_FORMATS[b.slug]!} strong="keg" />}
+          </CatalogCover>
+          <BrandRange b={b} items={mainLine(items)} offset={49} />
+          <PartyLine b={b} items={partyLine(items)} compact offset={49} />
         </section>
       ))}
     </div>

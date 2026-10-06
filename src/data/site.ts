@@ -8,7 +8,7 @@ export const SITE = {
   legalName: "Cider House",
   tagline: "Мы создаём настоящий сидр", // official homepage title
   description:
-    "CIDERHOUSE — производитель сидра и медовухи: White Phoenix, Mister Bee, Double Tree и безалкогольное направление 0% — ZER° CIDER, Bumble Coffee, Migliore.",
+    "CIDERHOUSE — производитель сидра и медовухи: Double Tree, White Phoenix, Mister Bee и безалкогольное направление 0% — ZER° CIDER.",
   since: 2017, // on the market since — official site
   locale: "ru_RU",
 };
@@ -31,7 +31,7 @@ export const SOCIALS = [
 export const NAV = [
   { href: "/", label: "Дом", hint: "CIDERHOUSE" },
   { href: "/about/", label: "О компании", hint: `с ${SITE.since} года` },
-  { href: "/brands/", label: "Бренды", hint: "6 характеров" },
+  { href: "/brands/", label: "Бренды", hint: "4 характера" },
   { href: "/katalog/", label: "Ассортимент", hint: "каталог" },
   { href: "/non-alcoholic/", label: "0%", hint: "безалкогольное" },
   { href: "/production/", label: "Производство", hint: "от сока и мёда до розлива" },

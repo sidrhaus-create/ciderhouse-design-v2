@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { gsap, ScrollTrigger, throwables } from "@/lib/motion";
+import { gsap, ScrollTrigger } from "@/lib/motion";
 import { onHouseEnter } from "./Threshold";
 import { Bottle, Fit, Plate, Swatch } from "./primitives";
 import { VERIFIED } from "@/data/catalog";
@@ -52,9 +52,8 @@ export function Hero() {
     const xTo = stage && gsap.quickTo(stage, "x", { duration: 0.9, ease: "power3" });
     const move = (e: PointerEvent) => xTo?.((e.clientX / innerWidth - 0.5) * -24);
     if (fine) window.addEventListener("pointermove", move, { passive: true });
-    const undrag = throwables(el);
 
-    return () => { off(); undrag(); ctx?.revert(); window.removeEventListener("pointermove", move); ScrollTrigger.refresh(); };
+    return () => { off(); ctx?.revert(); window.removeEventListener("pointermove", move); ScrollTrigger.refresh(); };
   }, []);
 
   const order = ["zero-cherry", "zero-green-apple", "zero-pomegranate-raspberry"].map((s) => VERIFIED.find((p) => p.slug === s)!);
@@ -64,7 +63,7 @@ export function Hero() {
       <div className="wrap pt-[72px] md:pt-[84px]" data-h="fade">
         <div className="flex items-center justify-between border-b border-current pb-3">
           <p className="t-tag">Производитель сидра и медовухи</p>
-          <p className="t-tag hidden md:block">6 брендов · алкогольный портфель + 0%</p>
+          <p className="t-tag hidden md:block">4 бренда · сидр, медовуха и 0%</p>
         </div>
       </div>
 
@@ -92,19 +91,19 @@ export function Hero() {
         </div>
       </div>
 
-      {/* plates — strict labels on the grid; they can be dragged */}
+      {/* plates — strict labels on the grid */}
       <div className="absolute inset-0 z-30 [&>*]:absolute [&>*]:pointer-events-none [&_.plate]:pointer-events-auto">
         <div data-par="0.5" className="right-[var(--gutter)] top-[46%] md:top-[42%]">
-          <div data-h="pop"><Plate drag bg="var(--ch-ink)" fg="var(--ch-paper)" className="flex-col px-4 py-3 text-[clamp(28px,2.8vw,44px)]"><span>0,0%<small>ZER° CIDER</small></span></Plate></div>
+          <div data-h="pop"><Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="px-4 py-3"><img src="/assets/brand/zero-lockup-purple.svg" alt="ZER° CIDER" width={373} height={105} className="h-[clamp(26px,2.6vw,40px)] w-auto" /></Plate></div>
         </div>
         <div data-par="0.8" className="left-[var(--gutter)] top-[44%] md:hidden">
-          <div data-h="pop"><Plate drag bg="var(--ch-paper)" line="var(--ch-ink)" className="text-[15px]">сидр &amp; медовуха</Plate></div>
+          <div data-h="pop"><Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="text-[15px]">сидр &amp; медовуха</Plate></div>
         </div>
         {/* flavour plates: one ruled column on the right edge, aligned to the grid */}
         {order.map((p, i) => (
           <div key={p.slug} data-par={[0.3, 0.45, 0.6][i]} className={["top-[60%]", "top-[calc(60%+46px)]", "top-[calc(60%+92px)]"][i] + " right-[var(--gutter)] hidden md:block"}>
             <div data-h="pop">
-              <Plate drag bg="var(--ch-paper)" line="var(--ch-ink)" className="w-[clamp(180px,15vw,230px)] justify-start gap-[0.6em] text-[clamp(12px,1vw,15px)]"><Swatch color={flavourAccent(p.name)} />{p.nameRu}</Plate>
+              <Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="w-[clamp(180px,15vw,230px)] justify-start gap-[0.6em] text-[clamp(12px,1vw,15px)]"><Swatch color={flavourAccent(p.name)} />{p.nameRu}</Plate>
             </div>
           </div>
         ))}

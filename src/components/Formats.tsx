@@ -6,7 +6,6 @@ const MARK: Record<FormatId, string> = {
   "bottle-045": "M10 2h4v5c0 2 3 4 3 9v10c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2V16c0-5 3-7 3-9Z",
   "bottle-075": "M10.5 1h3v8c0 2 3.5 3 3.5 8v9c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2v-9c0-5 3.5-6 3.5-8Z",
   keg: "M5 6h14c.6 0 1 .4 1 1v20c0 .6-.4 1-1 1H5c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1ZM4 12h16M4 22h16M8 6V3h8v3",
-  can: "M8 3h8l1 3v19l-1 3H8l-1-3V6ZM7 6h10M7 25h10",
 };
 
 export function FormatMark({ id, className = "h-7 w-6" }: { id: FormatId; className?: string }) {
