@@ -3,129 +3,142 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger } from "@/lib/motion";
 import { onHouseEnter } from "./Threshold";
-import { Bottle, Fit, Plate, Swatch } from "./primitives";
+import { Bottle, FlavourLegend } from "./primitives";
+import { PhoenixMark } from "./HeroLogo";
+import { BRANDS } from "@/data/brands";
 import { VERIFIED } from "@/data/catalog";
 import { flavourAccent } from "@/lib/flavour";
 
-const chars = (w: string) => w.split("").map((c, i) => <span key={i} data-h="ch" className="inline-block">{c}</span>);
-
+/** The opening: one poster in two masses of equal height. Left — the editorial column (kicker, headline, lead, actions, and the
+ *  house index on its last line); right — the ZER° still life on the purple plane with its legend on the same last line.
+ *  Both columns are --hero-h tall and share one baseline, so the composition reads as one object, not two. The phoenix is a quiet
+ *  mark bridging the gap. Reveal: phoenix → copy → plane → bottles. */
 export function Hero() {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = root.current!;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return; // the finished composition is the markup itself
     const q = gsap.utils.selector(el);
-    if (reduced) return;
+    const phone = !window.matchMedia("(min-width: 768px)").matches;
 
-    gsap.set(q("[data-h='ch']"), { yPercent: 115 });
+    gsap.set(q("[data-h='phoenix']"), { opacity: 0, y: 48, scale: 1.06, transformOrigin: "50% 100%", clipPath: "inset(100% 0 0 0)" });
     gsap.set(q("[data-h='plane']"), { scaleY: 0, transformOrigin: "50% 100%" });
     gsap.set(q("[data-h='bottle']"), { yPercent: 112 });
-    gsap.set(q("[data-h='pop']"), { clipPath: "inset(0 100% 0 0)" });
     gsap.set(q("[data-h='fade']"), { opacity: 0, y: 14 });
 
     let ctx: gsap.Context | undefined;
     const off = onHouseEnter(() => {
       ctx = gsap.context(() => {
-        const tl = gsap.timeline({ delay: 0.15 });
-        tl.to(q("[data-h='ch']"), { yPercent: 0, duration: 1.1, ease: "expo.out", stagger: 0.035 })
-          .to(q("[data-h='plane']"), { scaleY: 1, duration: 1, ease: "power4.inOut" }, 0.1)
-          .to(q("[data-h='bottle']"), { yPercent: 0, duration: 1.2, ease: "power4.out", stagger: 0.09 }, 0.45)
-          .to(q("[data-h='pop']"), { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "power4.inOut", stagger: 0.07 }, 0.9)
-          .to(q("[data-h='fade']"), { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.06 }, 0.9);
+        const tl = gsap.timeline({ delay: 0.1 });
+        tl.timeScale(phone ? 1.6 : 1);
+        tl.to(q("[data-h='phoenix']"), { opacity: 0.08, y: 0, scale: 1, clipPath: "inset(0% 0 0 0)", duration: 1.4, ease: "power3.inOut" }, 0)
+          .to(q("[data-h='fade']"), { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.08 }, 0.6)
+          .to(q("[data-h='plane']"), { scaleY: 1, duration: 0.9, ease: "power4.inOut" }, 0.8)
+          .to(q("[data-h='bottle']"), { yPercent: 0, duration: 1.1, ease: "power4.out", stagger: 0.08 }, 0.95);
 
-        // scroll: the purple plane widens into a full-bleed field, the bottles scale up, the wordmark sinks behind them
+        // scroll: the plane widens into a field, the bottles grow a little, the mark drifts slower than the page
         const st = { trigger: el, start: "top top", end: "bottom top", scrub: 0.4 };
         tl.add(() => {
           const plane = el.querySelector<HTMLElement>("[data-h='plane']")!;
           gsap.to(plane, { scaleX: () => (innerWidth / plane.offsetWidth) * 1.3, ease: "none", scrollTrigger: { ...st, invalidateOnRefresh: true } });
-          gsap.to(q("[data-h='trio']"), { scale: 1.12, yPercent: -4, transformOrigin: "50% 100%", ease: "none", scrollTrigger: st });
-          gsap.to(q("[data-h='word']"), { yPercent: 26, ease: "none", scrollTrigger: st });
-          q("[data-par]").forEach((p) => gsap.to(p, { y: () => -Number((p as HTMLElement).dataset.par) * innerHeight * 0.45, ease: "none", scrollTrigger: st }));
+          gsap.to(q("[data-h='trio']"), { scale: 1.1, yPercent: -4, transformOrigin: "50% 100%", ease: "none", scrollTrigger: st });
+          gsap.to(q("[data-h='phoenix']"), { yPercent: 22, ease: "none", scrollTrigger: st });
         });
       }, el);
     });
 
-    // pointer moves the still life along one axis only
+    // fine pointers: the still life drifts along one axis, very little
     const fine = window.matchMedia("(pointer: fine)").matches;
     const stage = el.querySelector<HTMLElement>("[data-h='stage']");
     const xTo = stage && gsap.quickTo(stage, "x", { duration: 0.9, ease: "power3" });
-    const move = (e: PointerEvent) => xTo?.((e.clientX / innerWidth - 0.5) * -24);
+    const move = (e: PointerEvent) => xTo?.((e.clientX / innerWidth - 0.5) * -16);
     if (fine) window.addEventListener("pointermove", move, { passive: true });
 
-    return () => { off(); ctx?.revert(); window.removeEventListener("pointermove", move); ScrollTrigger.refresh(); };
+    // the left column's rhythm: one gap, measured so that the headline starts exactly at the top of the purple plane and the
+    // index ends on the legend's baseline — kicker · headline · lead · actions · index, evenly spaced
+    const col = el.querySelector<HTMLElement>("[data-h='col']")!;
+    const planeBox = el.querySelector<HTMLElement>("[data-h='planebox']")!;
+    const rhythm = () => {
+      if (!window.matchMedia("(min-width: 768px)").matches) { col.style.removeProperty("--g"); return; }
+      const items = Array.from(col.querySelectorAll<HTMLElement>("[data-h='fade']")).slice(1); // headline … index
+      const used = items.reduce((a, n) => a + n.offsetHeight, 0);
+      const span = col.getBoundingClientRect().height - (planeBox.getBoundingClientRect().top - col.getBoundingClientRect().top);
+      col.style.setProperty("--g", `${Math.max(16, (span - used) / (items.length - 1))}px`);
+    };
+    const ro = new ResizeObserver(rhythm);
+    ro.observe(el); ro.observe(col);
+    rhythm();
+
+    return () => { off(); ctx?.revert(); ro.disconnect(); window.removeEventListener("pointermove", move); ScrollTrigger.refresh(); };
   }, []);
 
   const order = ["zero-cherry", "zero-green-apple", "zero-pomegranate-raspberry"].map((s) => VERIFIED.find((p) => p.slug === s)!);
+  const legend = order.map((p) => ({ id: p.slug, name: p.nameRu, color: flavourAccent(p.name), href: `/katalog/${p.slug}/` }));
 
   return (
-    <section ref={root} className="field-white relative isolate flex min-h-[100svh] flex-col overflow-hidden" aria-labelledby="hero-title">
-      <div className="wrap pt-[72px] md:pt-[84px]" data-h="fade">
-        <div className="flex items-center justify-between border-b border-current pb-3">
-          <p className="t-tag">Производитель сидра и медовухи</p>
-          <p className="t-tag hidden md:block">4 бренда · сидр, медовуха и 0%</p>
+    <section
+      ref={root}
+      className="field-white relative isolate flex flex-col overflow-hidden [--hero-h:clamp(300px,52svh,460px)] md:[--hero-h:clamp(340px,46svh,470px)] lg:[--hero-h:clamp(460px,66svh,780px)]"
+      aria-labelledby="hero-title"
+    >
+      <div className="wrap relative grid flex-1 grid-cols-1 gap-x-8 gap-y-8 pb-10 pt-[88px] md:grid-cols-12 md:gap-y-5 md:pb-[clamp(36px,5svh,64px)] md:pt-[calc(64px+clamp(16px,2.5svh,32px))]">
+        {/* the phoenix: a translucent brand mark between the copy and the still life, spanning the gap */}
+        <div data-h="phoenix" aria-hidden="true" className="pointer-events-none absolute left-[-6%] top-[72px] z-0 h-[calc(var(--hero-h)*0.7)] text-purple [opacity:0.08] md:left-[33%] md:top-[calc(50%-var(--hero-h)*0.56)] md:h-[calc(var(--hero-h)*1.02)]">
+          <PhoenixMark className="block h-full w-auto" />
         </div>
-      </div>
 
-      {/* the plane: one purple rectangle the still life stands on */}
-      <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-[52svh] w-[84vw] -translate-x-1/2 md:left-[60%] md:h-[52svh] md:w-[33vw]">
-        <div data-h="plane" className="h-full w-full bg-purple" />
-      </div>
-
-      <h1 id="hero-title" data-h="word" className="wrap relative z-10 mt-4 md:mt-5">
-        <span className="sr-only">CIDERHOUSE — мы создаём настоящий сидр</span>
-        <span aria-hidden="true" className="hidden md:block"><Fit reveal={false} className="font-black">{chars("CIDERHOUSE")}</Fit></span>
-        <span aria-hidden="true" className="md:hidden"><Fit reveal={false} className="font-black">{chars("CIDER")}</Fit><Fit reveal={false} className="font-black">{chars("HOUSE")}</Fit></span>
-      </h1>
-
-      {/* the still life: original photography of the ZER° trio, upright, on the plane */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center md:inset-x-auto md:left-[60%] md:-translate-x-1/2">
-        <div data-h="stage">
-          <div data-h="trio" className="flex translate-y-[6%] items-end justify-center gap-[1.2svh] md:gap-[2.4svh]">
-            {order.map((p, i) => (
-              <div key={p.slug} data-h="bottle" className={i === 1 ? "z-10" : "translate-y-[3%]"}>
-                <Bottle base={p.image!} alt="" priority sizes="(max-width: 768px) 30vw, 16vw" className={i === 1 ? "h-[46svh] md:h-[68svh]" : "h-[42svh] md:h-[62svh]"} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* plates — strict labels on the grid */}
-      <div className="absolute inset-0 z-30 [&>*]:absolute [&>*]:pointer-events-none [&_.plate]:pointer-events-auto">
-        <div data-par="0.5" className="right-[var(--gutter)] top-[46%] md:top-[42%]">
-          <div data-h="pop"><Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="px-4 py-3"><img src="/assets/brand/zero-lockup-purple.svg" alt="ZER° CIDER" width={373} height={105} className="h-[clamp(26px,2.6vw,40px)] w-auto" /></Plate></div>
-        </div>
-        <div data-par="0.8" className="left-[var(--gutter)] top-[44%] md:hidden">
-          <div data-h="pop"><Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="text-[15px]">сидр &amp; медовуха</Plate></div>
-        </div>
-        {/* flavour plates: one ruled column on the right edge, aligned to the grid */}
-        {order.map((p, i) => (
-          <div key={p.slug} data-par={[0.3, 0.45, 0.6][i]} className={["top-[60%]", "top-[calc(60%+46px)]", "top-[calc(60%+92px)]"][i] + " right-[var(--gutter)] hidden md:block"}>
-            <div data-h="pop">
-              <Plate bg="var(--ch-paper)" line="var(--ch-ink)" className="w-[clamp(180px,15vw,230px)] justify-start gap-[0.6em] text-[clamp(12px,1vw,15px)]"><Swatch color={flavourAccent(p.name)} />{p.nameRu}</Plate>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* editorial column: everything a visitor needs sits left of the still life, above the fold */}
-      <div className="wrap relative z-30 mt-auto pb-5 md:pb-9">
-        <div className="flex flex-col items-center gap-4 md:max-w-[30vw] md:items-start md:gap-5">
-          <p data-h="fade" className="t-tag hidden md:block">01 <span className="mx-2 inline-block h-px w-8 bg-current align-middle" /> Дом</p>
-          <p data-h="fade" className="hidden text-[clamp(26px,2.6vw,44px)] font-light italic leading-[1.05] tracking-[-0.02em] md:block">Мы создаём<br />настоящий сидр</p>
-          <p data-h="fade" className="hidden max-w-[34ch] text-[15px] leading-snug md:block">
-            White Phoenix, Mister Bee, Double Tree и направление 0% — в одном доме.
+        {/* LEFT — the editorial column, exactly as tall as the still life. One even rhythm from the kicker to the index, anchored
+            to the bottom so the index shares the legend's baseline and the headline sits level with the top of the purple plane */}
+        <div data-h="col" className="relative z-10 flex flex-col gap-6 md:col-span-5 md:justify-end md:gap-[var(--g,clamp(22px,5.5svh,64px))] md:self-stretch">
+          <p data-h="fade" className="t-tag flex items-center gap-3"><span className="t-num">01</span><span className="inline-block h-px w-8 bg-current" />Дом</p>
+          <h1 id="hero-title" data-h="fade" className="text-[clamp(34px,4.1vw,70px)] font-extrabold leading-[0.98] tracking-[-0.035em]">
+            <span className="sr-only">CIDERHOUSE — </span>Мы создаём<br />настоящий сидр
+          </h1>
+          <p data-h="fade" className="max-w-[34ch] text-[clamp(16px,1.2vw,19px)] leading-[1.5]">
+            White Phoenix, Mister Bee, Double Tree и направление 0% — четыре характера в одном доме. Сидр и медовуха собственного производства.
           </p>
-          <div data-h="fade" className="flex gap-0">
+          <div data-h="fade" className="flex flex-wrap">
             <Link href="/katalog/" className="btn btn-solid">Ассортимент</Link>
             <Link href="/brands/" className="btn -ml-px bg-white">Бренды</Link>
           </div>
+          {/* the house index — the left column's last line; its baseline is the legend's baseline on the right */}
+          <ol data-h="fade" className="hidden min-h-[52px] flex-wrap items-center gap-x-6 gap-y-1 border-t border-current md:flex" aria-label="Бренды дома">
+            {BRANDS.map((b, i) => (
+              <li key={b.slug} className="flex items-center gap-2 whitespace-nowrap text-[12.5px] font-semibold tracking-[-0.01em]"><span className="t-num text-[10px] opacity-50">{String(i + 1).padStart(2, "0")}</span>{b.slug === "zero" ? "ZER° 0%" : b.name}</li>
+            ))}
+          </ol>
+        </div>
+
+        {/* RIGHT — the still life: a large plane behind the bottles, the legend as its last line */}
+        <div className="relative z-10 flex flex-col md:col-span-7">
+          <div className="relative h-[var(--hero-h)]">
+            <div data-h="planebox" aria-hidden="true" className="pointer-events-none absolute inset-x-[6%] bottom-0 h-[calc(var(--hero-h)*0.7)] md:inset-x-auto md:left-1/2 md:w-[min(100%,46vw)] md:-translate-x-1/2">
+              <div data-h="plane" className="h-full w-full bg-purple" />
+            </div>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center">
+              <div data-h="stage">
+                <div data-h="trio" className="flex translate-y-[5%] items-end justify-center gap-[clamp(10px,1.6vw,28px)]">
+                  {order.map((p, i) => (
+                    <div key={p.slug} data-h="bottle" className={i === 1 ? "z-10" : "translate-y-[3%]"}>
+                      <Bottle base={p.image!} alt="" priority sizes="(max-width: 768px) 26vw, 15vw" className={i === 1 ? "h-[calc(var(--hero-h)*0.98)]" : "h-[calc(var(--hero-h)*0.9)]"} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-h="fade" className="relative z-20 mt-4 md:mx-auto md:w-[min(100%,46vw)] md:mt-3">
+            <FlavourLegend
+              tone="plate"
+              items={legend}
+              note="0,0 %"
+              brand={<img src="/assets/brand/zerocider-logo.svg" alt="ZER° CIDER" width={374} height={112} className="h-6 w-auto md:h-7" />}
+            />
+          </div>
         </div>
       </div>
-      <p data-h="fade" className="t-tag absolute bottom-0 left-1/2 z-30 hidden -translate-x-1/2 whitespace-nowrap bg-black px-3 py-1.5 text-white md:left-[60%] xl:block">
-        На фото: ZER° CIDER 0,0% — вишня · зелёное яблоко · гранат — малина
-      </p>
     </section>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { brandBySlug } from "@/data/brands";
 import { isValidElement, type CSSProperties, type ElementType, type ReactNode } from "react";
 import { BOTTLE_RATIO, srcSet, type Product } from "@/data/catalog";
@@ -144,5 +145,66 @@ export function ToVerify() {
     <span className="t-tag inline-flex items-center border border-dashed border-current px-2 py-[3px] text-[9px] opacity-70" title="Название из открытых источников, сверяется с ciderhouse.ru">
       сверяется
     </span>
+  );
+}
+
+/** Flavour legend: one plate — an optional brand cell, then equal cells with a swatch and the flavour name.
+ *  `tone="plate"` sets it on the ink plane (under the hero still life); `tone="line"` draws it as a ruled row on the current plane.
+ *  Used wherever the three 0% flavours are named next to the bottles (hero, 0% film, the 0% brand card). */
+export function FlavourLegend({ items, brand, note, tone = "line", className = "" }: {
+  items: { id: string; name: string; sub?: string; color: string; href?: string }[];
+  brand?: ReactNode; note?: string; tone?: "plate" | "line"; className?: string;
+}) {
+  const n = items.length;
+  const plate = tone === "plate";
+  const cell = plate ? "bg-[var(--ch-ink)] text-[var(--ch-paper)]" : "bg-[var(--field)]";
+  return (
+    <div
+      className={`legend grid gap-px max-lg:grid-cols-3 ${plate ? "bg-[color-mix(in_srgb,var(--ch-paper)_22%,var(--ch-ink))]" : "border border-current bg-current"} ${className}`}
+      style={{ ["--legend-cols" as string]: `${brand ? "minmax(0,1.25fr) " : ""}repeat(${n}, minmax(0,1fr))` }}
+      role="list"
+      aria-label="Вкусы"
+    >
+      {brand && (
+        <p className={`flex min-w-0 items-center gap-3 px-4 py-3.5 ${plate ? "bg-[var(--ch-purple)] text-[var(--ch-paper)]" : "bg-[var(--on)] text-[var(--field)]"} max-lg:col-span-3`}>
+          {brand}
+          {note && <span className="ml-auto text-[13px] font-bold tracking-[-0.01em]">{note}</span>}
+        </p>
+      )}
+      {items.map((it) => {
+        const inner = (
+          <>
+            <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0" style={{ background: it.color }} />
+            <span className="min-w-0 leading-[1.2]">
+              <span className="block text-[13px] font-semibold tracking-[-0.01em]">{it.name}</span>
+              {it.sub && <span className="block text-[11px] opacity-60">{it.sub}</span>}
+            </span>
+          </>
+        );
+        const cls = `flex min-w-0 items-center gap-3 px-4 py-3.5 ${cell}`;
+        return it.href
+          ? <Link key={it.id} role="listitem" href={it.href} className={`${cls} transition-colors duration-300 ${plate ? "hover:bg-[var(--ch-purple)]" : "hover:bg-[var(--on)] hover:text-[var(--field)]"}`}>{inner}</Link>
+          : <span key={it.id} role="listitem" className={cls}>{inner}</span>;
+      })}
+    </div>
+  );
+}
+
+/** Range strip: the first packshots of a line in a row, then the full count — says "there is more" without a second photograph. */
+export function RangeStrip({ products, max = 5, href, className = "" }: { products: Product[]; max?: number; href?: string; className?: string }) {
+  const shown = products.filter((p) => p.pack || p.image).slice(0, max);
+  const word = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "вкус" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "вкуса" : "вкусов");
+  return (
+    <Link href={href ?? "/katalog/"} className={`group flex items-end gap-4 self-start ${className}`} aria-label={`В линейке ${products.length} ${word(products.length)} — смотреть все`}>
+      <span className="flex items-end gap-[clamp(6px,0.6vw,10px)]" aria-hidden="true">
+        {shown.map((p) => (
+          <span key={p.slug} className="flex h-[clamp(46px,5vw,64px)] items-end transition-transform duration-500 [transition-timing-function:var(--ease-out)] group-hover:-translate-y-1"><Pack p={p} className="h-full" sizes="40px" /></span>
+        ))}
+      </span>
+      <span className="pb-0.5 leading-none">
+        <span className="t-num block text-[22px] font-bold tracking-[-0.02em]">{String(products.length).padStart(2, "0")}</span>
+        <span className="t-tag block text-[9.5px] opacity-70">{word(products.length)} · все →</span>
+      </span>
+    </Link>
   );
 }

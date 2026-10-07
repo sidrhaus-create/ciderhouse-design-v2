@@ -6,24 +6,14 @@ import { brandBySlug, brandType, brandVars, siteLabel, type BrandSlug } from "@/
 import { BrandLink } from "./BrandLink";
 import { Formats } from "./Formats";
 import { BRAND_FORMATS } from "@/data/formats";
-import { PRODUCTS, productsOf, partyLine } from "@/data/catalog";
-import { Pack } from "./primitives";
+import { productsOf, partyLine, mainLine } from "@/data/catalog";
+import { FlavourLegend, RangeStrip } from "./primitives";
+import { flavourAccent } from "@/lib/flavour";
+import { StudioImg } from "./Studio";
+import type { ShotKey } from "@/data/photos";
 
 const ORDER: BrandSlug[] = ["double-tree", "white-phoenix", "mister-bee", "zero"];
 const LABEL: Partial<Record<BrandSlug, string>> = { zero: "0%" };
-const P = "/assets/photography/";
-const photoSet = (name: string) => ({ src: `${P}${name}-900.webp`, srcSet: `${P}${name}-900.webp 900w, ${P}${name}-1800.webp 1800w` });
-
-/** Official photograph as a campaign crop; the image is slightly wider than its frame so it can drift inside it. */
-function Photo({ name, alt, className = "", sizes = "(max-width: 1024px) 88vw, 55vw", pos = "50% 50%" }: { name: string; alt: string; className?: string; sizes?: string; pos?: string }) {
-  const set = name.startsWith("/assets/studio/") ? { src: `${name}-900.webp`, srcSet: `${name}-900.webp 900w, ${name}-1800.webp 1800w` } : name.startsWith("/") ? { src: `${name}-1100.webp`, srcSet: `${name}-640.webp 640w, ${name}-1100.webp 1100w` } : photoSet(name);
-  return (
-    <div className={`overflow-hidden ${className}`}>
-      <img data-cor-photo {...set} sizes={sizes} alt={alt} loading="lazy" decoding="async" className="h-full w-[112%] max-w-none object-cover" style={{ objectPosition: pos, marginLeft: "-6%" }} />
-    </div>
-  );
-}
-
 /** The brand corridor: four brand worlds side by side. Desktop — vertical scroll drives the track sideways inside one pinned frame;
  *  touch layouts — a native swipe rail with scroll-snap. The index underneath always shows where you are and jumps on click. */
 export function BrandCorridor() {
@@ -52,18 +42,17 @@ export function BrandCorridor() {
         },
       });
       st.current = tween.scrollTrigger ?? null;
-      // secondary motion only: photographs drift inside their frames, bottles counter-drift a little
+      // secondary motion only: photographs drift inside their frames
       gsap.utils.toArray<HTMLElement>("[data-scene]", t).forEach((scene) => {
         const base = { containerAnimation: tween, trigger: scene, start: "left right", end: "right left", scrub: true };
-        gsap.fromTo(scene.querySelectorAll("[data-cor-photo]"), { xPercent: -4 }, { xPercent: 4, ease: "none", scrollTrigger: base });
-        gsap.fromTo(scene.querySelectorAll("[data-cor-packs]"), { x: 46 }, { x: -46, ease: "none", scrollTrigger: base });
+        gsap.fromTo(scene.querySelectorAll("[data-cor-photo]"), { xPercent: -2 }, { xPercent: 2, ease: "none", scrollTrigger: base });
       });
       return () => { st.current = null; };
     });
     return () => mm.revert();
   }, [N]);
 
-  // touch layouts: the native rail reports the active panel
+  // tablet / phone: the cards stack; the index below reports which card is nearest the middle of the screen
   useEffect(() => {
     const r = rail.current;
     if (!r) return;
@@ -74,12 +63,13 @@ export function BrandCorridor() {
         raf = 0;
         if (window.matchMedia("(min-width: 1024px)").matches) return;
         const scenes = [...r.querySelectorAll<HTMLElement>("[data-scene]")];
-        const mid = r.scrollLeft + r.clientWidth / 2;
-        setActive(Math.max(0, scenes.findIndex((s) => s.offsetLeft <= mid && s.offsetLeft + s.offsetWidth > mid)));
+        const mid = window.innerHeight / 2;
+        const i = scenes.findIndex((s) => { const b = s.getBoundingClientRect(); return b.top <= mid && b.bottom > mid; });
+        if (i >= 0) setActive(i);
       });
     };
-    r.addEventListener("scroll", on, { passive: true });
-    return () => { r.removeEventListener("scroll", on); cancelAnimationFrame(raf); };
+    window.addEventListener("scroll", on, { passive: true });
+    return () => { window.removeEventListener("scroll", on); cancelAnimationFrame(raf); };
   }, []);
 
   const jump = (i: number) => {
@@ -87,111 +77,115 @@ export function BrandCorridor() {
     if (s) { // desktop: move the page to the scroll position of that scene
       const y = s.start + ((s.end - s.start) * i) / (N - 1);
       lenis ? lenis.scrollTo(y, { duration: 1 }) : window.scrollTo({ top: y, behavior: "smooth" });
-    } else { // rail: move the rail itself
-      const r = rail.current, scene = r?.querySelectorAll<HTMLElement>("[data-scene]")[i];
-      if (r && scene) r.scrollTo({ left: scene.offsetLeft - (r.clientWidth - scene.offsetWidth) / 2, behavior: "smooth" });
+    } else { // stacked: scroll the page to that card
+      const scene = rail.current?.querySelectorAll<HTMLElement>("[data-scene]")[i];
+      scene?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  const scene = "relative shrink-0 snap-center overflow-hidden w-[88vw] lg:w-screen lg:h-full field-brand";
-  const body = "relative grid h-full grid-cols-1 lg:grid-cols-12 lg:gap-x-8 lg:px-[var(--gutter)] lg:pb-16 lg:pt-[88px]";
-  const copyBox = "relative z-10 flex flex-col gap-4 p-5 lg:gap-5 lg:p-0";
-  const nameCls = "text-[clamp(34px,5vw,88px)] leading-[0.94]";
-  const packH = "h-[24svh] lg:h-[clamp(220px,42svh,400px)]";
+  /* ── One construction for every brand card ───────────────────────────────────────────────────────────────────
+     Desktop (≥1024): a 12-column scene, 100vh, moved sideways by the scroll. Columns 1–4: the copy, centred against the
+     photograph (index · mark · name · line · formats · range · action). Columns 5–12: one photograph bleeding to the right
+     and bottom edges. Tablet (768–1023): the same two columns, stacked as full-width cards, the photo a 4:5 frame.
+     Phone: the photograph above (4:5), the copy below. Brand colours and faces differ; the construction does not. */
+  const scene = "relative w-full overflow-hidden field-brand lg:h-full lg:w-screen lg:shrink-0";
+  const body = "relative grid grid-cols-1 md:grid-cols-12 md:items-center lg:h-full lg:gap-x-8 lg:px-[var(--gutter)] lg:pb-[64px] lg:pt-[88px]";
+  const copyBox = "relative z-10 order-2 flex flex-col gap-4 px-[var(--gutter)] py-7 md:order-1 md:col-span-5 md:py-10 lg:col-span-4 lg:gap-5 lg:px-0 lg:py-0";
+  const photoBox = "relative order-1 aspect-[4/5] w-full overflow-hidden md:order-2 md:col-span-7 md:self-stretch md:aspect-auto md:min-h-[520px] lg:col-span-8 lg:col-start-5 lg:min-h-0 lg:-mr-[var(--gutter)] [@media(min-width:1024px)_and_(max-height:820px)]:col-span-7 [@media(min-width:1024px)_and_(max-height:820px)]:col-start-6";
+  const nameCls = "text-[clamp(30px,4.2vw,76px)] leading-[0.94]";
 
   const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "вкус" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? "вкуса" : "вкусов");
-  const Copy = ({ slug, n, children }: { slug: BrandSlug; n: number; children?: ReactNode }) => {
+
+  /** The copy of a card, in one rhythm: index · mark · name · line · formats · range · action. */
+  const Copy = ({ slug, n, lockup, mark, range, children }: { slug: BrandSlug; n: number; lockup?: { src: string; w: number; h: number; cls: string }; mark?: ReactNode; range?: ReactNode; children?: ReactNode }) => {
     const b = brandBySlug(slug)!;
-    const count = productsOf(slug).length;
+    const items = productsOf(slug);
+    const count = items.length;
     return (
       <>
         <p className="t-tag flex items-center gap-3"><span className="t-num">{String(n).padStart(2, "0")} / {String(N).padStart(2, "0")}</span><span className="h-px w-8 bg-current" />{b.kind}</p>
-        <h3 className={nameCls} style={brandType(b)}>{b.name}</h3>
+        {mark}
+        {lockup
+          ? <h3 className="pt-1"><img src={lockup.src} alt={b.name} width={lockup.w} height={lockup.h} loading="lazy" className={`w-auto ${lockup.cls}`} /></h3>
+          : <h3 className={nameCls} style={brandType(b)}>{b.name}</h3>}
         <p className="max-w-[34ch] text-[15px] leading-snug lg:text-[17px]">{b.line}</p>
         {children}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          {BRAND_FORMATS[slug] && <Formats ids={BRAND_FORMATS[slug]!} strong="keg" label={`${String(count).padStart(2, "0")} ${plural(count)}`} />}
-          {b.subline && <span className="chip">+ {b.subline.name} · {partyLine(productsOf(slug)).length}</span>}
-        </div>
-        <div className="mt-1 flex flex-wrap items-center gap-4">
+        {BRAND_FORMATS[slug] && <Formats ids={BRAND_FORMATS[slug]!} strong="keg" label={`${String(count).padStart(2, "0")} ${plural(count)}`} className="mt-1" />}
+        {range ?? <RangeStrip products={b.subline ? mainLine(items) : items} href={b.site ? undefined : `/brands/${slug}/`} className="mt-2" />}
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
           <BrandLink b={b} className="btn btn-solid">{b.site ? siteLabel(b) : "К бренду"}</BrandLink>
+          {b.subline && <span className="chip">+ {b.subline.name} · {partyLine(items).length}</span>}
         </div>
       </>
     );
   };
 
+  /** The photograph of a card. `zoom` enlarges the subject inside the frame (crops only the studio plane around it). */
+  const Picture = ({ k, caption, pos = "50% 50%", zoom = 1, sizes = "(max-width: 767px) 100vw, (max-width: 1023px) 58vw, 62vw" }: { k: ShotKey; caption: string; pos?: string; zoom?: number; sizes?: string }) => (
+    <div className={photoBox}>
+      <StudioImg k={k} sizes={sizes} pos={pos} decorative className="absolute inset-0 h-full w-full object-cover" data-cor-photo="" style={{ objectPosition: pos, transform: `scale(${zoom})` }} />
+      <p className="t-tag absolute bottom-0 left-0 z-10 max-w-[82%] bg-[var(--ch-ink)] px-4 py-2.5 text-[var(--ch-paper)]">{caption}</p>
+    </div>
+  );
+
   const dt = brandBySlug("double-tree")!, wp = brandBySlug("white-phoenix")!, mb = brandBySlug("mister-bee")!, zero = brandBySlug("zero")!;
+  const zeroLegend = (
+    <FlavourLegend
+      className="mt-2 w-full max-w-[440px] md:max-lg:grid-cols-1!"
+      items={productsOf("zero").map((p) => ({ id: p.slug, name: p.nameRu, sub: p.character, color: flavourAccent(p.name), href: `/katalog/${p.slug}/` }))}
+    />
+  );
 
   return (
     <section ref={root} aria-labelledby="corridor-title" className="field-black relative overflow-hidden">
-      <div className="wrap flex items-end justify-between gap-4 pb-5 pt-10 lg:hidden">
+      <div className="wrap flex items-end justify-between gap-4 pb-6 pt-12 lg:hidden">
         <h2 className="t-l">Четыре мира<br />одного дома</h2>
-        <p className="t-tag pb-1">листайте →</p>
+        <p className="t-tag pb-1">{N} бренда</p>
       </div>
       <div ref={frame} className="relative lg:h-[100svh] lg:overflow-hidden">
         <h2 id="corridor-title" className="sr-only">Бренды CIDERHOUSE: Double Tree, White Phoenix, Mister Bee и направление 0%</h2>
-        <div ref={rail} className="snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] lg:h-full lg:snap-none lg:overflow-visible">
-          <div ref={track} className="flex w-max gap-3 px-[6vw] lg:h-full lg:gap-0 lg:px-0">
+        <div ref={rail} className="lg:h-full">
+          <div ref={track} className="flex flex-col gap-3 lg:h-full lg:w-max lg:flex-row lg:gap-0">
 
-            {/* 01 — Double Tree: dark, structural. One photograph on the left, the copy ruled off on the right. */}
+            {/* 01 — Double Tree: the 0,75 l line on the master purple */}
             <article data-scene className={scene} style={brandVars(dt)} aria-label="Double Tree">
               <div className={body}>
-                <div className="relative h-[40svh] lg:col-span-7 lg:-ml-[var(--gutter)] lg:-mt-[88px] lg:-mb-16 lg:h-auto">
-                  <Photo name="/assets/studio/dt-075-apples-sage" alt="Double Tree 0,75 л: три бутылки с красным и зелёным яблоками" className="absolute inset-0" pos="50% 58%" />
+                <div className={copyBox}>
+                  <Copy slug="double-tree" n={1} mark={dt.logo && <img src={dt.logo} alt="" width={120} height={40} loading="lazy" className="h-9 w-auto self-start" />} />
                 </div>
-                <div className={`${copyBox} lg:col-span-4 lg:col-start-9 lg:justify-center lg:border-l lg:border-current lg:pl-8`}>
-                  <Copy slug="double-tree" n={1} />
-                </div>
+                <Picture k="dt-075-standing-purple" caption="Бутылки 0,75 л · яблоко, груша, гранат, вишня" pos="50% 54%" zoom={1.08} />
               </div>
             </article>
 
-            {/* 02 — White Phoenix: light paper, atmospheric. Text first, one photograph. */}
+            {/* 02 — White Phoenix: four flavours on white, label paper behind the copy */}
             <article data-scene className={scene} style={brandVars(wp)} aria-label="White Phoenix">
               <div className={body}>
-                <div className={`${copyBox} order-2 lg:order-1 lg:col-span-4 lg:justify-end lg:pb-6`}>
-                  {wp.logo && <img src={wp.logo} alt="Логотип White Phoenix" className="hidden h-12 w-auto self-start lg:block" />}
-                  <Copy slug="white-phoenix" n={2} />
+                <div className={copyBox}>
+                  <Copy slug="white-phoenix" n={2} mark={wp.logo && <img src={wp.logo} alt="" width={160} height={48} loading="lazy" className="h-10 w-auto self-start" />} />
                 </div>
-                <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-8 lg:h-auto">
-                  <Photo name="white-phoenix-black-cherry-cocktail" alt="White Phoenix «Тёмная вишня» с коктейлем и вишней" className="absolute inset-0 lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:-mb-16" pos="50% 42%" />
-                </div>
+                <Picture k="wp-four-white" caption="Помело — ананас · чёрная вишня · горький лимон · кокос — цитрус" pos="50% 4%" />
               </div>
             </article>
 
-            {/* 03 — Mister Bee: classic and symmetric, built around the studio group shot of the three flavours. */}
+            {/* 03 — Mister Bee: the honey line; the range strip shows the line is wider than three */}
             <article data-scene className={scene} style={brandVars(mb)} aria-label="Mister Bee">
               <div className={body}>
-                <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-6 lg:col-start-4 lg:h-auto">
-                  <Photo name="/assets/studio/mb-trio-beige" alt="Mister Bee: «Апельсин — грейпфрут», «Цветочная вишня» и «Мандарин»" className="absolute inset-x-[12%] bottom-0 top-[10%] lg:top-[4%]" sizes="(max-width: 1024px) 70vw, 38vw" pos="50% 70%" />
-                  <div aria-hidden="true" className="absolute inset-x-[12%] bottom-0 top-[10%] border border-current lg:top-[4%] lg:translate-x-3 lg:-translate-y-3" />
-                </div>
-                <div className={`${copyBox} order-2 lg:order-1 lg:col-span-3 lg:col-start-1 lg:row-start-1 lg:justify-end lg:pb-6`}>
+                <div className={copyBox}>
                   <Copy slug="mister-bee" n={3} />
                 </div>
-                <div className="relative z-10 order-3 hidden flex-col justify-end pb-6 text-right lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:flex">
-                  <p className="t-tag">на этикетке</p>
-                  <p className="mt-3 text-[clamp(20px,1.8vw,28px)] leading-[1.1]" style={brandType(mb)}>Hand crafted<br />brewed mead</p>
-                </div>
+                <Picture k="mb-trio-beige-wide" caption="Клюква · классик · лимон · медовуха 0,45 л" pos="50% 58%" zoom={1.06} />
               </div>
             </article>
 
-            {/* 04 — 0%: clean and graphic. A wide studio frame, the 0% mark and the approved slogan. */}
+            {/* 04 — 0%: the official ZER° CIDER lockup in place of a typeset name; the three flavours named in Russian */}
             <article data-scene className={scene} style={brandVars(zero)} aria-label="Направление 0%">
               <div className={`${body} voice-zero`}>
-                <div className="relative order-1 h-[40svh] lg:order-2 lg:col-span-8 lg:col-start-5 lg:-mr-[var(--gutter)] lg:-mt-[88px] lg:h-[62svh]">
-                  <Photo name="/assets/studio/zero-trio-fruit-sage" alt="Безалкогольный сидр 0%: три вкуса с яблоком, гранатом и вишней" className="absolute inset-0" sizes="(max-width: 1024px) 88vw, 66vw" pos="50% 22%" />
-                </div>
-                <div className={`${copyBox} order-2 lg:order-1 lg:col-span-4 lg:row-span-2 lg:justify-center`}>
-                  <Copy slug="zero" n={4}>
-                    <p className="max-w-[20ch] text-[clamp(17px,1.5vw,22px)] font-light italic leading-snug text-purple" style={{ fontFamily: "var(--f-master)" }}>Свобода выбирать вкус, а не градусы</p>
+                <div className={copyBox}>
+                  <Copy slug="zero" n={4} lockup={{ src: zero.logo!, w: 373, h: 105, cls: "h-[clamp(40px,4.2vw,72px)]" }} range={zeroLegend}>
+                    <p className="max-w-[22ch] text-[clamp(17px,1.5vw,22px)] font-light italic leading-snug text-purple" style={{ fontFamily: "var(--f-master)" }}>Свобода выбирать вкус, а не градусы</p>
                   </Copy>
                 </div>
-                <div className="relative order-3 hidden items-center gap-6 lg:col-span-8 lg:col-start-5 lg:flex">
-                  <img src={zero.logo} alt="ZER° CIDER" width={373} height={105} loading="lazy" className="h-[clamp(36px,7svh,64px)] w-auto" />
-                  <ul className="flex flex-wrap gap-2">
-                    {productsOf("zero").map((p) => <li key={p.slug}><Link href={`/katalog/${p.slug}/`} className="chip transition-colors duration-300 hover:bg-black hover:text-white">{p.nameRu} · {p.abv}</Link></li>)}
-                  </ul>
-                </div>
+                <Picture k="zero-trio-fruit-sage" caption="Безалкогольный сидр 0,0 % · три вкуса" pos="50% 50%" zoom={1.06} />
               </div>
             </article>
           </div>

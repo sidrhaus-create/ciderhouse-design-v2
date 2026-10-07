@@ -40,11 +40,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="wrap select-none border-t border-current/25 py-[clamp(24px,3vw,44px)]" aria-hidden="true">
-        <img src="/assets/brand/ciderhouse-logo-purple.svg" alt="" width={524} height={137} loading="lazy" className="h-auto w-[min(100%,920px)]" />
-      </div>
-
-      <div className="wrap mt-6 flex flex-col gap-3 border-t border-current/25 py-6 text-xs md:flex-row md:items-center md:justify-between">
+      <div className="wrap flex flex-col gap-3 border-t border-current/25 py-6 text-xs md:flex-row md:items-center md:justify-between">
         <p className="opacity-70">© {new Date().getFullYear()} {SITE.legalName}. Продукция для лиц старше 18 лет.</p>
         <p className="font-semibold uppercase tracking-[0.08em]">18+ · Чрезмерное употребление алкоголя вредит вашему здоровью</p>
       </div>

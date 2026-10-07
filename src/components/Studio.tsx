@@ -1,13 +1,13 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { FLAVOUR_SHOTS, shot, type ShotKey } from "@/data/photos";
 import { VERIFIED } from "@/data/catalog";
 import { Chapter } from "./primitives";
 
 /** A studio photograph with intrinsic size (no layout shift). Crops are set by the frame around it, never by stretching. */
-export function StudioImg({ k, sizes, className = "", pos, priority = false, decorative = false }: { k: ShotKey; sizes: string; className?: string; pos?: string; priority?: boolean; decorative?: boolean }) {
+export function StudioImg({ k, sizes, className = "", pos, priority = false, decorative = false, style, ...rest }: { k: ShotKey; sizes: string; className?: string; pos?: string; priority?: boolean; decorative?: boolean; style?: CSSProperties } & Record<`data-${string}`, string | boolean>) {
   const s = shot(k);
-  return <img {...s} alt={decorative ? "" : s.alt} sizes={sizes} loading={priority ? "eager" : "lazy"} decoding="async" className={className} style={pos ? { objectPosition: pos } : undefined} />;
+  return <img {...s} {...rest} alt={decorative ? "" : s.alt} sizes={sizes} loading={priority ? "eager" : "lazy"} decoding="async" className={className} style={{ ...(pos ? { objectPosition: pos } : {}), ...style }} />;
 }
 
 /** A full-bleed photographic divider: one frame and one hairline caption that names what is in it. The image drifts slightly. */

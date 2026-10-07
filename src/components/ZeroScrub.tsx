@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useIsoLayoutEffect } from "@/lib/motion";
 import { VERIFIED } from "@/data/catalog";
-import { Chapter, Swatch } from "./primitives";
+import { Chapter, FlavourLegend } from "./primitives";
 import { flavourAccent } from "@/lib/flavour";
 
 const N = 49;
@@ -79,7 +79,10 @@ export function ZeroScrub() {
       <div ref={pin} className="relative overflow-hidden lg:h-[100svh]">
         <div className="wrap grid h-full grid-cols-1 items-center gap-8 py-[clamp(60px,7.3vw,96px)] lg:grid-cols-12 lg:gap-10 lg:py-0">
           <div className="lg:col-span-5">
-            <Chapter n="04" label="Направление 0%" className="mb-6" />
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <Chapter n="04" label="Направление 0%" />
+              <img src="/assets/brand/zero-lockup-purple.svg" alt="ZER° CIDER" width={373} height={105} loading="lazy" className="h-7 w-auto md:h-8" />
+            </div>
             <h2 id="zero-title" className="sr-only">ZER° CIDER — безалкогольный сидр 0,0%</h2>
             <p aria-hidden="true" className="font-bold leading-[0.8] tracking-[-0.05em] text-[clamp(96px,13vw,220px)]">
               <span ref={num} className="t-num inline-block">0,5</span><span className="text-[0.42em] text-plum">%</span>
@@ -100,19 +103,16 @@ export function ZeroScrub() {
 
           <div className="relative lg:col-span-7">
             <div className="relative aspect-[1100/618] w-full overflow-hidden border border-current bg-black ">
-              <img src="/assets/zero/still-caps-1100.webp" srcSet="/assets/zero/still-caps-640.webp 640w, /assets/zero/still-caps-1100.webp 1100w" sizes="(max-width: 1024px) 100vw, 58vw" alt="Студийная съёмка: три бутылки ZER° CIDER 0,0%" loading="lazy" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${ready ? "opacity-0" : "opacity-100"}`} />
+              <img src="/assets/zero/still-caps-1100.webp" srcSet="/assets/zero/still-caps-640.webp 640w, /assets/zero/still-caps-1100.webp 1100w" sizes="(max-width: 1024px) 100vw, 58vw" alt="Три бутылки ZER° CIDER 0,0%: вишня, зелёное яблоко, гранат — малина" loading="lazy" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${ready ? "opacity-0" : "opacity-100"}`} />
               <canvas ref={cv} aria-hidden="true" className="absolute inset-0 h-full w-full" />
-              <span className="t-tag absolute left-0 top-0 bg-white px-3 py-2 text-black">плёнка · 49 кадров · листайте</span>
+              <span className="t-tag absolute left-0 top-0 bg-[var(--ch-ink)] px-3 py-2 text-[var(--ch-paper)]">от крышки к этикетке · листайте</span>
             </div>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {VERIFIED.map((p, i) => (
-                <li key={p.slug}>
-                  <Link href={`/katalog/${p.slug}/`} className="block" aria-label={`${p.nameRu} — ${p.character}, 0,0%`}>
-                    <span className="chip bg-white text-black transition-colors duration-300 hover:bg-black hover:text-white"><Swatch color={flavourAccent(p.name)} className="text-[14px]" />{p.nameRu} · {p.character}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <FlavourLegend
+              className="-mt-px"
+              brand={<span className="text-[13px] font-bold">Три вкуса</span>}
+              note="0,0 % · 0,45 л"
+              items={VERIFIED.map((p) => ({ id: p.slug, name: p.nameRu, sub: p.character, color: flavourAccent(p.name), href: `/katalog/${p.slug}/` }))}
+            />
           </div>
         </div>
       </div>
